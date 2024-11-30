@@ -71,7 +71,7 @@ function Registered(props: PageProps) {
 
   useEffect(() => {
     if (!registerEnabled) {
-      navigate('/login');
+      window.location.href = `${window.location.origin}/login`;
     }
     // disabling as we dont need to check for any changes in the navigate function
     // eslint-disable-next-line react-hooks/exhaustive-deps

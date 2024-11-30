@@ -124,9 +124,121 @@ export default function ThemeFrame(props: ThemeFrameProps) {
       doc.head.appendChild(font);
     }
     if (customStyles) {
+      const tw = doc.createElement('script');
+      tw.setAttribute('src', 'https://cdn.tailwindcss.com');
+      doc.head.appendChild(tw);
+      const tailwindConfig = document.createElement('script');
+      tailwindConfig.textContent = `tailwind.config = {
+          theme: {
+            screens: {
+              xsm: '480px',
+              sm: '667px',
+              md: '768px',
+              lg: '1024px',
+              xl: '1280px',
+              '2xl': '1440px',
+              '3xl': '1630px',
+            },
+            container: {
+              center: true,
+              padding: '1.875rem',
+            },
+            extend: {
+              colors: {
+                transparent: 'transparent',
+                primary: '#004270',
+                primaryHover: '#006892',
+                borderColor: '#dddddd',
+                white: '#ffffff',
+                black: '#000000',
+                yellow: '#EA7030',
+                green: '#00873c',
+                brown: '#760d17',
+                blue: '#3498DB',
+                orange: '#ea9137',
+                orangeLight: '#e0a800',
+                gray: {
+                  10: '#cccccc',
+                  20: '#eaebec',
+                  30: '#e5e5e5',
+                  40: '#e4e2e2',
+                  50: '#ebebeb',
+                  100: '#626366',
+                  200: '#808285',
+                  300: '#939597',
+                  400: '#d1d2d4',
+                  500: '#8f8f8f',
+                  600: '#f7f8f8',
+                  700: '#6d6e71',
+                  800: '#f5f5f5',
+                  900: '#696b73',
+                },
+                neutral: {
+                  10: '#dadcdd',
+                  20: '#eceded',
+                  30: '#ceced1',
+                  40: '#999999',
+                },
+              },
+              fontFamily: {
+                primary: ['proxima-nova', 'Arial'],
+              },
+              fontSize: {
+                xs: '0.75rem',
+                sm: '0.875rem',
+                base: '1rem',
+                lg: '1.125rem',
+                xl: '1.25rem',
+                '2xl': '1.5rem',
+                '3xl': '1.875rem',
+                '4xl': ['2.1875rem', '2.625rem'],
+                '5xl': '3.125rem',
+                '6xl': '4rem',
+                '7xl': '4.5rem',
+              },
+              backgroundImage: {
+                pdficon: "url('@images/pdf.png')",
+                rightIcon: 'url(@icons/icon-check.svg)',
+                arrowDownFill: 'url(@icons/arrow-down-fill.svg)',
+              },
+              keyframes: {
+                skBouncedelay: {
+                  '0%, 100%, 80%': { transform: 'scale(.9)' },
+                  '40%': { transform: 'scale(1)' },
+                },
+                smoothScroll: {
+                  '0%': { transform: 'translateY(-200px)' },
+                  '100%': { transform: 'translateY(0)' },
+                },
+                bottomTop: {
+                  '0%': { transform: 'translateY(0)' },
+                  '100%': { transform: 'translateY(-100%)' },
+                },
+                showToHide: {
+                  '0%': { opacity: '0' },
+                  '100%': { opacity: '1' },
+                },
+                topToBottom: {
+                  '0%': { top: '-200px' },
+                  '100%': { top: '0' },
+                },
+              },
+              animation: {
+                skBouncedelay: 'skBouncedelay 1.4s infinite ease-in-out both',
+                smoothScroll: 'smoothScroll 0.8s ease',
+                bottomTop: 'bottomTop 0.8s ease',
+                showToHide: 'showToHide 0.8s ease',
+                'top-to-bottom': 'topToBottom .8s ease',
+              },
+            },
+          },
+        };`;
       const customStyleElement = doc.createElement('style');
       customStyleElement.appendChild(document.createTextNode(customStyles));
       doc.head.appendChild(customStyleElement);
+      tw.onload = () => {
+        doc.head.appendChild(tailwindConfig);
+      };
     }
 
     const emotionCacheObj = createCache({
@@ -157,6 +269,7 @@ export default function ThemeFrame(props: ThemeFrameProps) {
 
   return (
     <iframe
+      id={'b2b-iframe'}
       allowFullScreen
       className={isSetupComplete ? className : undefined}
       title={title}

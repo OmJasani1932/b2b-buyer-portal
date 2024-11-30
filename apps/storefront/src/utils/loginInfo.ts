@@ -297,7 +297,6 @@ export const getCurrentCustomerInfo: (b2bToken?: string) => Promise<
 
     if (companyUserInfo && customerId) {
       const { userType, role, id, companyRoleName, permissions } = companyUserInfo;
-
       const [companyInfo] = await Promise.all([
         getCompanyInfo(role, id, userType),
         agentInfo(customerId, role),
@@ -308,7 +307,7 @@ export const getCurrentCustomerInfo: (b2bToken?: string) => Promise<
           companyInfo?.companyStatus === CompanyStatus.APPROVED) ||
         +role === CustomerRole.SUPER_ADMIN;
 
-      const customerInfo = {
+        const customerInfo = {
         id: customerId,
         userType,
         phoneNumber,

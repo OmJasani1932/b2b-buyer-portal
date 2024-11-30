@@ -50,29 +50,8 @@ function B3FilterSearch({
 
   return (
     <Paper
-      component="div"
-      sx={{
-        p: '2px 4px',
-        display: 'flex',
-        alignItems: 'center',
-        width: w,
-        maxWidth: w,
-        border: 'none',
-        boxShadow: 'none',
-        height: h || '50px',
-        borderBottomLeftRadius: '0',
-        borderBottomRightRadius: '0',
-        borderBottom: '1px solid rgba(0, 0, 0, 0.42)',
-        backgroundColor: searchBGColor,
-      }}
-    >
-      <SearchIcon
-        sx={{
-          p: '10px',
-          color: 'rgba(0, 0, 0, 0.54)',
-          fontSize: '2.7rem',
-        }}
-      />
+      component="div" className='shadow-none rounded-none block border border-gray-300 text-base leading-5 py-2.5 w-full px-5 placeholder-gray-200 bg-white focus-visible:shadow-none focus-visible:outline-none focus-visible:border-primary'>
+      <SearchIcon />
       <InputBase
         sx={{
           ml: 1,

@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useB3Lang } from '@b3/lang';
 import { Box } from '@mui/material';
+import Cookies from 'js-cookie';
 import trim from 'lodash-es/trim';
 
 import { B3CustomForm } from '@/components';
@@ -63,8 +63,6 @@ function AccountSetting() {
   const b3Lang = useB3Lang();
 
   const [isMobile] = useMobile();
-
-  const navigate = useNavigate();
 
   const [accountInfoFormFields, setAccountInfoFormFields] = useState<Partial<Fields>[]>([]);
 
@@ -291,7 +289,8 @@ function AccountSetting() {
             (data.password && data.currentPassword) ||
             customer.emailAddress !== trim(data.email)
           ) {
-            navigate('/login?loginFlag=3');
+            localStorage.removeItem('persist:company');
+            window.dispatchEvent(new Event('LOGOUT_FROM_B2B'));
           } else {
             B3SStorage.clear();
             setIsFinshUpdate(true);

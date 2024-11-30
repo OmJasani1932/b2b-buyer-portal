@@ -29,6 +29,11 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3001,
       proxy: {
+        '^.*/content/v1/|/public/.*': {
+          target: 'http://localhost:5050',
+          changeOrigin: true,
+          secure: false,
+        },
         '/bigcommerce': {
           target:
             env?.VITE_PROXY_SHOPPING_URL || 'https://msfremote-frontend-demo.mybigcommerce.com/',

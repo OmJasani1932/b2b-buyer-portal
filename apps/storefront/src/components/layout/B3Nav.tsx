@@ -104,23 +104,7 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
 
   return (
     <List
-      sx={{
-        width: '100%',
-        maxWidth: 360,
-        bgcolor: `${isMobile ? 'background.paper' : 'background.default'}`,
-        color: primaryColor || 'info.main',
-        '& .MuiListItem-root': {
-          '& .MuiButtonBase-root.Mui-selected': {
-            color: getContrastColor(primaryColor) || '#fff',
-            bgcolor: 'primary.main',
-            borderRadius: '4px',
-          },
-          '& .MuiButtonBase-root:hover:not(.Mui-selected)': {
-            bgcolor: b3HexToRgb(primaryColor, 0.12),
-            borderRadius: '4px',
-          },
-        },
-      }}
+      className='text-primary [&_.Mui-selected]:text-white [&_.Mui-selected]:bg-primary py-0'
       component="nav"
       aria-labelledby="nested-list-subheader"
     >

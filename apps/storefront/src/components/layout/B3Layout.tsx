@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useB3Lang } from '@b3/lang';
 import { Box, useMediaQuery } from '@mui/material';
 
@@ -11,11 +11,10 @@ import { useAppSelector } from '@/store';
 import B3Dialog from '../B3Dialog';
 import CompanyCredit from '../CompanyCredit';
 
-import B3CloseAppButton from './B3CloseAppButton';
-import B3Logo from './B3Logo';
-import B3Mainheader from './B3Mainheader';
 import B3MobileLayout from './B3MobileLayout';
 import B3Nav from './B3Nav';
+import Header from '../experro/header';
+import Footer from '../experro/footer';
 
 const SPECIAL_PATH_TEXTS = {
   '/purchased-products': 'global.purchasedProducts.title',
@@ -23,9 +22,18 @@ const SPECIAL_PATH_TEXTS = {
   '/company-orders': 'global.companyOrders.title',
 } as const;
 
-export default function B3Layout({ children }: { children: ReactNode }) {
+export default function B3Layout({
+  children,
+  globalsettings,
+  categories,
+  isCategoryLoading,
+}: {
+  children: ReactNode;
+  globalsettings?: any;
+  categories?: any;
+  isCategoryLoading?: undefined | boolean;
+}) {
   const [isMobile] = useMobile();
-  const isDesktopLimit = useMediaQuery('(min-width:1775px)');
 
   const location = useLocation();
 
@@ -41,11 +49,9 @@ export default function B3Layout({ children }: { children: ReactNode }) {
     dispatch,
   } = useContext(DynamicallyVariableedContext);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     if ((!emailAddress || !customerId) && !getIsTokenGotoPage(location.pathname)) {
-      navigate('/login');
+      window.location.href = `${window.location.origin}/login`;
     }
     // disabling cause navigate dispatcher is not necessary here
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,96 +98,77 @@ export default function B3Layout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <Box>
-      {isMobile ? (
-        <B3MobileLayout title={title}>{children}</B3MobileLayout>
-      ) : (
-        // <Box
-        //   sx={{
-        //     p: '40px 30px',
-        //     minHeight: '100vh',
-        //     display: 'flex',
-        //     backgroundColor: '#d2d2d3',
-        //   }}
-        // >
-        <Box
-          id="app-mainPage-layout"
-          sx={{
-            display: 'flex',
-            minHeight: '100vh',
-            margin: 'auto',
-            width: !isDesktopLimit ? '100%' : 1775,
-            minWidth: !isDesktopLimit ? '100%' : 1775,
-            maxWidth: !isDesktopLimit ? '100%' : 1775,
-            flexDirection: 'row',
-            p: '32px 63px 70px 63px',
-          }}
+    <>
+      <Box>
+        <Header
+          globalsettings={globalsettings}
+          categories={categories}
+          isCategoryLoading={isCategoryLoading}
+        />
+        {isMobile ? (
+          <B3MobileLayout title={title}>{children}</B3MobileLayout>
+        ) : (
+          // <Box
+          //   sx={{
+          //     p: '40px 30px',
+          //     minHeight: '100vh',
+          //     display: 'flex',
+          //     backgroundColor: '#d2d2d3',
+          //   }}
+          // >
+          <div className="bg-white">
+            <Box
+              className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto"
+              id="app-mainPage-layout"
+            >
+              <div className="flex pt-16">
+
+              <Box className="w-[200px]">
+                <Box>
+                  <B3Nav />
+                </Box>
+              </Box>
+
+              <Box className="w-[calc(100%_-_200px)] pl-10">
+                <CompanyCredit />
+                <Box
+                  component="main"
+                  sx={{
+                    mt: !isMobile && !title ? '24px' : '0',
+                  }}
+                >
+                  {children}
+                </Box>
+              </Box>
+              </div>
+            </Box>
+          </div>
+
+          // </Box>
+        )}
+
+        <B3Dialog
+          isOpen={globalMessageDialog.open}
+          title={globalMessageDialog.title}
+          leftSizeBtn={globalMessageDialog.cancelText}
+          rightSizeBtn={globalMessageDialog.saveText}
+          handleLeftClick={globalMessageDialog.cancelFn || messageDialogClose}
+          handRightClick={globalMessageDialog.saveFn}
+          showRightBtn={!!globalMessageDialog.saveText}
         >
-          <B3CloseAppButton />
           <Box
             sx={{
               display: 'flex',
-              flexDirection: 'column',
-              width: '200px',
-              displayPrint: 'none',
+              justifyContent: `${isMobile ? 'center' : 'start'}`,
+              width: `${isMobile ? '100%' : '450px'}`,
+              height: '100%',
             }}
           >
-            <B3Logo />
-            <Box
-              sx={{
-                pt: '24px',
-              }}
-            >
-              <B3Nav />
-            </Box>
+            {globalMessageDialog.message}
           </Box>
-
-          <Box
-            sx={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              maxWidth: '1450px',
-              width: '100%',
-              p: '0 0px 0px 50px',
-            }}
-          >
-            <B3Mainheader title={title} />
-            <CompanyCredit />
-            <Box
-              component="main"
-              sx={{
-                mt: !isMobile && !title ? '24px' : '0',
-              }}
-            >
-              {children}
-            </Box>
-          </Box>
-        </Box>
-
-        // </Box>
-      )}
-
-      <B3Dialog
-        isOpen={globalMessageDialog.open}
-        title={globalMessageDialog.title}
-        leftSizeBtn={globalMessageDialog.cancelText}
-        rightSizeBtn={globalMessageDialog.saveText}
-        handleLeftClick={globalMessageDialog.cancelFn || messageDialogClose}
-        handRightClick={globalMessageDialog.saveFn}
-        showRightBtn={!!globalMessageDialog.saveText}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: `${isMobile ? 'center' : 'start'}`,
-            width: `${isMobile ? '100%' : '450px'}`,
-            height: '100%',
-          }}
-        >
-          {globalMessageDialog.message}
-        </Box>
-      </B3Dialog>
-    </Box>
+        </B3Dialog>
+        <Footer globalSettings={globalsettings} />
+      </Box>
+    </>
   );
 }
