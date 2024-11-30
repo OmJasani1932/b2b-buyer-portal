@@ -42,7 +42,7 @@ function B3ThemeProvider({ children }: Props) {
             default: backgroundColor,
           },
           primary: {
-            main: primaryColor || '#1976d2',
+            main: primaryColor || '#004270',
           },
         },
       },

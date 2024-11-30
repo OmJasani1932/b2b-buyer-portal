@@ -19,6 +19,7 @@ import {
   removeBCMenus,
 } from '@/utils';
 
+// import {getMenuById} from
 import clearInvoiceCart from './utils/b3ClearCart';
 import b2bLogger from './utils/b3Logger';
 import { isUserGotoLogin } from './utils/b3logout';
@@ -37,6 +38,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from './store';
+import { ExpGraphQl } from './components/experro/api';
 
 const B3GlobalTip = lazy(() => import('@/components/B3GlobalTip'));
 
@@ -53,6 +55,10 @@ const ThemeFrame = lazy(() => import('@/components/ThemeFrame'));
 const FONT_URL = 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap';
 
 export default function App() {
+  const [globalSettings, setGlobalSettings] = useState<any>({});
+  const [categories, setCategories] = useState<any>([]);
+  const [isCategoryLoading, setIsCategoryLoading] = useState<boolean>(true);
+
   const showPageMask = usePageMask();
   const {
     state: { quoteConfig, storefrontConfig, productQuoteEnabled, registerEnabled },
@@ -89,7 +95,6 @@ export default function App() {
       if (getOrderPermission)
         currentAuthorizedPages = IsRealJuniorBuyer ? currentAuthorizedPages : '/orders';
     }
-
     setAuthorizedPages(currentAuthorizedPages);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [IsRealJuniorBuyer, getShoppingListPermission, getOrderPermission]);
@@ -113,7 +118,6 @@ export default function App() {
 
   const {
     state: {
-      portalStyle: { backgroundColor },
       cssOverride,
     },
     dispatch: styleDispatch,
@@ -121,7 +125,6 @@ export default function App() {
 
   const CUSTOM_STYLES = `
   body {
-    background: ${backgroundColor};
     font-family: Roboto;
   }`;
 
@@ -262,6 +265,72 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isB2BUser, isAgenting, role, quoteConfig, storefrontConfig]);
 
+  const getGlobalSettings = async () => {
+    const headers = new Headers();
+    headers.append('content-type', 'application/json');
+
+    const requestOptions: any = {
+      method: 'GET',
+      headers: headers,
+      redirect: 'follow',
+    };
+
+    let globalSettingsResponse: any = await fetch(
+      '/apis/content/v1/single/global_settings/detail?locale=en-us',
+      requestOptions,
+    );
+    globalSettingsResponse = await globalSettingsResponse?.json();
+    if (globalSettingsResponse.Status === 'success') {
+      setGlobalSettings(globalSettingsResponse.Data);
+    }
+  };
+
+  const categoryTree = ` {
+    site {
+      categoryTree {
+        name
+        path
+        entityId
+        children {
+          name
+          path
+          entityId
+        }
+      }
+    }
+  }`;
+
+  const getCategoryTree = async () => {
+    const data = await ExpGraphQl(categoryTree);
+
+    const ensureChildrenArray = (data: any[]) => {
+      return data.map((item, index) => {
+        const newItem = {
+          ...item,
+          index,
+        };
+
+        if (newItem.children && Array.isArray(newItem.children)) {
+          newItem.children = newItem.children.map((child: any) => ({
+            ...child,
+            children: child.children || [],
+          }));
+        }
+
+        return newItem;
+      });
+    };
+
+    const updatedData = ensureChildrenArray(data.site?.categoryTree);
+    const sortedItems = updatedData?.sort((a: any, b: any) => {
+      if (a.name.toLowerCase() === 'brands') return -1;
+      if (b.name.toLowerCase() === 'brands') return 1;
+      return 0;
+    });
+    setCategories(sortedItems);
+    setIsCategoryLoading(false);
+  };
+
   useEffect(() => {
     if (isOpen) {
       showPageMask(false);
@@ -339,7 +408,8 @@ export default function App() {
     const handleHashChange = () => (!hash || hash === '#/') && setOpenPage({ isOpen: false });
 
     window.addEventListener('hashchange', handleHashChange);
-
+    getGlobalSettings();
+    getCategoryTree();
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
@@ -366,7 +436,14 @@ export default function App() {
             customStyles={customStyles}
           >
             {isOpen ? (
-              <B3RenderRouter isOpen={isOpen} openUrl={openUrl} setOpenPage={setOpenPage} />
+              <B3RenderRouter
+                isOpen={isOpen}
+                openUrl={openUrl}
+                setOpenPage={setOpenPage}
+                globalSettings={globalSettings}
+                categories={categories}
+                isCategoryLoading={isCategoryLoading}
+              />
             ) : null}
           </ThemeFrame>
         </div>

@@ -48,7 +48,6 @@ export function ForgotPassword({
     mode: 'onSubmit',
   });
 
-  const navigate = useNavigate();
   const emailAddressReset = watch('emailAddress');
 
   useEffect(() => {
@@ -68,7 +67,7 @@ export function ForgotPassword({
       if (isEnabledOnStorefront && captchaKey) {
         try {
           await requestResetPassword(captchaKey, emailAddressReset);
-          navigate('/login?loginFlag=2');
+          window.location.href = `${window.location.origin}/login`;
           setLoading(false);
         } catch (e) {
           b2bLogger.error(e);
@@ -78,7 +77,7 @@ export function ForgotPassword({
       if (!isEnabledOnStorefront) {
         await sendEmail(emailAddress);
         setLoading(false);
-        navigate('/login?loginFlag=2');
+        window.location.href = `${window.location.origin}/login`;
       }
     } catch (e) {
       b2bLogger.error(e);

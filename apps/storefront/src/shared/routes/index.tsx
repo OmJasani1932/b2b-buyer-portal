@@ -434,7 +434,7 @@ const gotoAllowedAppPage = async (
 
     if (!customer && isB2bTokenPage()) {
       logoutSession();
-      gotoPage('/login?loginFlag=6');
+      window.location.href = `${window.location.origin}/login`;
       return;
     }
   } catch (err: unknown) {

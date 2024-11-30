@@ -15,7 +15,8 @@ import { channelId } from '@/utils';
 
 import Loading from '../loading/Loading';
 
-const B3Layout = lazy(() => import('@/components/layout/B3Layout'));
+import B3Layout from '@/components/layout/B3Layout';
+// const B3Layout = lazy(() => import('@/components/layout/B3Layout'));
 
 const B3LayoutTip = lazy(() => import('@/components/layout/B3LayoutTip'));
 
@@ -23,10 +24,13 @@ interface B3RenderRouterProps {
   setOpenPage: SetOpenPage;
   openUrl?: string;
   isOpen: boolean;
+  globalSettings?: any;
+  categories?: any;
+  isCategoryLoading?: boolean;
 }
 
 export default function B3RenderRouter(props: B3RenderRouterProps) {
-  const { setOpenPage, openUrl, isOpen } = props;
+  const { setOpenPage, openUrl, isOpen, globalSettings, categories, isCategoryLoading } = props;
   const { state: globaledState } = useContext(GlobalContext);
   const newRoutes = () => getAllowedRoutes(globaledState);
   const location = useLocation();
@@ -74,7 +78,7 @@ export default function B3RenderRouter(props: B3RenderRouterProps) {
         <Route
           // path="/"
           element={
-            <B3Layout>
+            <B3Layout globalsettings={globalSettings} categories={categories} isCategoryLoading={isCategoryLoading}>
               <Outlet />
             </B3Layout>
           }

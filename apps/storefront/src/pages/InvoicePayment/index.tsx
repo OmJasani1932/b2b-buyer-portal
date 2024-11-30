@@ -21,8 +21,6 @@ function Payment() {
 
   const params = useParams();
 
-  const navigate = useNavigate();
-
   const b3Lang = useB3Lang();
 
   useEffect(() => {
@@ -78,7 +76,7 @@ function Payment() {
   }, [platform, params.id]);
 
   const handleConfirm = () => {
-    navigate('/login');
+    window.location.href = `${window.location.origin}/login`;
   };
 
   return (

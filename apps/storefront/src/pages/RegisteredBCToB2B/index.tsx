@@ -120,7 +120,7 @@ export default function RegisteredBCToB2B(props: PageProps) {
   useEffect(() => {
     showLoading(false);
     if (!registerEnabled) {
-      navigate('/login');
+      window.location.href = `${window.location.origin}/login`;
     }
     // disabling this rule as we don't need to add showLoading dispatcher and navigate fn into the dep array
     // eslint-disable-next-line react-hooks/exhaustive-deps
