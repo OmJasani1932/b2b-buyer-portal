@@ -27,7 +27,6 @@ const ExpSearchAutoSuggest = async ({ searchObj, signal }: ExpSearchAutoSuggestP
     }
 
     const data = await response.json();
-    console.log(data, 'data from auto-suggest');
     return data;
   } catch (error: any) {
     return {};

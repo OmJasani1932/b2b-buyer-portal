@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { ExpSearch, ExpSearchAutoSuggest, ExpSearchCount } from '../api';
+import { ExpGetCart, ExpSearch, ExpSearchAutoSuggest, ExpSearchCount } from '../api';
 import { ExpNavigate } from '../utils/link-parser';
-
-// import { getFilteredAccessibleCategoryQuery } from '../../utils/customer-group';
+import { getFilteredAccessibleCategoryQuery } from '../utils/customer-group';
 
 declare let window: any;
 
@@ -21,6 +20,7 @@ const HeaderController = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [cartQuantity, setCartQuantity] = useState<number>(0);
   const [isOpenCartPreview, setIsOpenCartPreview] = useState<boolean>(false);
+  const [cartDetails, setCartDetails] = useState<any>({});
 
   let b2bIframe: any = document.getElementById('b2b-iframe');
   let iframeWindow: any = null;
@@ -46,7 +46,6 @@ const HeaderController = () => {
         iframeDocument.body.style.paddingTop = `0px`;
       }
     } else {
-      console.log('this is working..down');
       // Scrolling down
       // eslint-disable-next-line no-lonely-if
       if (currentScrollPos > scrlOffsetDown) {
@@ -186,12 +185,13 @@ const HeaderController = () => {
         sortBy: 'relevance',
       };
 
-      // const accessibleCategories = getFilteredAccessibleCategoryQuery();
-      // if (accessibleCategories) {
-      //   searchObj.body.filter = {
-      //     fq: `provider_categories_id_esai:${accessibleCategories}`,
-      //   };
-      // }
+      const accessibleCategories = getFilteredAccessibleCategoryQuery();
+
+      if (accessibleCategories) {
+        searchObj.body.filter = {
+          fq: `provider_categories_id_esai:${accessibleCategories}`,
+        };
+      }
 
       const searchPromise = [];
       const searchApiPromise = ExpSearch({
@@ -353,9 +353,10 @@ const HeaderController = () => {
     ExpNavigate('login/');
   };
 
-  const getCart = () => {
-    // const userDetails = AuthService.getUserDetails();
-    // getCartQuantity(userDetails?.userCartObj);
+  const getCart = async () => {
+    const userCartObj = await ExpGetCart();
+    setCartDetails(userCartObj);
+    getCartQuantity(userCartObj);
   };
 
   useEffect(() => {
@@ -424,10 +425,8 @@ const HeaderController = () => {
     window.addEventListener('LOGOUT_FROM_B2B', () => {
       handleLogout(false);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  useEffect(() => {
+    getCart();
     const handlePushstate = () => {
       if (iframeDocument.body.classList.contains('mobile-menu-open')) {
         const element: any = iframeDocument.getElementById('hamburger-menu');
@@ -438,6 +437,7 @@ const HeaderController = () => {
     return () => {
       window.removeEventListener('pushstate', handlePushstate);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
@@ -460,7 +460,7 @@ const HeaderController = () => {
     openCartSlider,
     isOpenCartPreview,
     setIsOpenCartPreview,
-    // userLoggedInStatus,
+    cartDetails,
     handleLogout,
     searchInputRef,
     basketRef,

@@ -123,6 +123,8 @@ export default function ThemeFrame(props: ThemeFrameProps) {
       font.href = fontUrl;
       doc.head.appendChild(font);
     }
+
+    // https://use.typekit.net/smw5rwj.css
     if (customStyles) {
       const tw = doc.createElement('script');
       tw.setAttribute('src', 'https://cdn.tailwindcss.com');
@@ -269,7 +271,7 @@ export default function ThemeFrame(props: ThemeFrameProps) {
 
   return (
     <iframe
-      id={'b2b-iframe'}
+      id='b2b-iframe'
       allowFullScreen
       className={isSetupComplete ? className : undefined}
       title={title}

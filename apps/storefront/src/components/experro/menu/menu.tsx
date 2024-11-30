@@ -51,12 +51,12 @@ const ExpMenu = (props: ExpMenuInterface) => {
     <ul className={`${ulClasses}`} id={ulId ? ulId : ''}>
       {menuData?.map((menuItem: any, menuIndex: number) => {
         if (
-          ((menuItem?.page_slug && menuItem.page_slug) || (menuItem?.path && menuItem.path)) !==
+          ((menuItem?.page_slug && menuItem.page_slug) || (menuItem?.page_slug_esi && menuItem.page_slug_esi)) !==
             '#' ||
           (menuItem?.link_es && menuItem.link_es !== '#')
         ) {
           menuItem.redirectLink =
-            menuItem?.type === 'link' ? menuItem?.link_es : menuItem?.page_slug || menuItem?.path;
+            menuItem?.type === 'link' ? menuItem?.link_es : menuItem?.page_slug || menuItem?.page_slug_esi;
 
           if (menuItem?.redirectLink?.indexOf('//') !== -1) {
             if (

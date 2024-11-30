@@ -38,7 +38,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from './store';
-import { ExpGraphQl } from './components/experro/api';
+import { ExpGetCategoryList } from './components/experro/api';
 
 const B3GlobalTip = lazy(() => import('@/components/B3GlobalTip'));
 
@@ -117,9 +117,7 @@ export default function App() {
   });
 
   const {
-    state: {
-      cssOverride,
-    },
+    state: { cssOverride },
     dispatch: styleDispatch,
   } = useContext(CustomStyleContext);
 
@@ -285,50 +283,84 @@ export default function App() {
     }
   };
 
-  const categoryTree = ` {
-    site {
-      categoryTree {
-        name
-        path
-        entityId
-        children {
-          name
-          path
-          entityId
+  const getAllCategories = async () => {
+    try {
+      const subCat = await ExpGetCategoryList();
+      const ensureChildrenArray = (data: any[]) => {
+        return data.map((item, index) => {
+          const newItem = {
+            ...item,
+            index,
+            children: [],
+          };
+
+          if (newItem.child && Array.isArray(newItem.child)) {
+            newItem.children = newItem.child.map((child: any) => ({
+              ...child,
+              children: child.children || [],
+            }));
+          }
+
+          return newItem;
+        });
+      };
+
+      const updatedData = ensureChildrenArray(subCat.Data?.categories);
+      const sortedItems = updatedData?.sort((a: any, b: any) => {
+        if (a.name_esi.toLowerCase() === 'brands') return -1;
+        if (b.name_esi.toLowerCase() === 'brands') return 1;
+        return 0;
+      });
+
+      let accessibleCategories: any;
+
+      try {
+        const categories = localStorage.getItem('categories');
+        if (categories) {
+          accessibleCategories = JSON.parse(categories);
+        } else {
+          accessibleCategories = [];
         }
+      } catch (error) {
+        accessibleCategories = [];
+      }
+
+      if (accessibleCategories.length > 0) {
+        accessibleCategories = new Set(accessibleCategories);
+        const updateMenuData = filterCategoryOnDefaultCustomerGroup(
+          sortedItems,
+          accessibleCategories,
+        );
+        setCategories(updateMenuData);
+      } else {
+        setCategories(sortedItems);
+      }
+      setIsCategoryLoading(false);
+    } catch (error) {
+      setCategories([]);
+      setIsCategoryLoading(false);
+    }
+  };
+
+  const filterCategoryOnDefaultCustomerGroup = (categoryTree: any, entityIdSet: any) => {
+    const filteredTree = [];
+
+    for (const category of categoryTree) {
+      if (entityIdSet.has(Number(category.provider_id_esi))) {
+        const categoryCopy = { ...category };
+
+        if (categoryCopy.children && categoryCopy.children.length > 0) {
+          categoryCopy.children = filterCategoryOnDefaultCustomerGroup(
+            categoryCopy.children,
+            entityIdSet,
+          );
+        }
+
+        filteredTree.push(categoryCopy);
       }
     }
-  }`;
 
-  const getCategoryTree = async () => {
-    const data = await ExpGraphQl(categoryTree);
-
-    const ensureChildrenArray = (data: any[]) => {
-      return data.map((item, index) => {
-        const newItem = {
-          ...item,
-          index,
-        };
-
-        if (newItem.children && Array.isArray(newItem.children)) {
-          newItem.children = newItem.children.map((child: any) => ({
-            ...child,
-            children: child.children || [],
-          }));
-        }
-
-        return newItem;
-      });
-    };
-
-    const updatedData = ensureChildrenArray(data.site?.categoryTree);
-    const sortedItems = updatedData?.sort((a: any, b: any) => {
-      if (a.name.toLowerCase() === 'brands') return -1;
-      if (b.name.toLowerCase() === 'brands') return 1;
-      return 0;
-    });
-    setCategories(sortedItems);
-    setIsCategoryLoading(false);
+    return filteredTree;
   };
 
   useEffect(() => {
@@ -409,7 +441,7 @@ export default function App() {
 
     window.addEventListener('hashchange', handleHashChange);
     getGlobalSettings();
-    getCategoryTree();
+    getAllCategories();
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };

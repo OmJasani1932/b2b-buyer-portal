@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ExpGetMenuById } from '../api';
+import { ExpNavigate } from '../utils/link-parser';
 
 interface ExpMenuControllerProps {
   menuLinkObj: any;
@@ -67,7 +68,8 @@ const ExpMenuController = (props: ExpMenuControllerProps) => {
           menuItem.menu_title_es ||
           menuItem.navigation_title ||
           menuItem.title ||
-          menuItem.name;
+          menuItem.name ||
+          menuItem.name_esi;
   };
 
   const toggleMenuWithChild = (id: any) => {
@@ -180,7 +182,7 @@ const ExpMenuController = (props: ExpMenuControllerProps) => {
                   const newObj = {
                     id: 'more-childs',
                     title: 'More',
-                    name: 'More',
+                    name_esi: 'More',
                     page_slug_esi: '/',
                     content_model_name: 'Custom Links',
                     content_model_internal_name: 'custom_links',
@@ -195,19 +197,19 @@ const ExpMenuController = (props: ExpMenuControllerProps) => {
                   fittingItems.forEach((item: any) => {
                     const li = document.createElement('li');
                     li.className = `cat-li-one group text-primary hover:text-primaryHover hover:bg-[#eaeaec] xl:w-auto w-full relative ${toKebabCase(
-                      item?.name,
+                      item?.name_esi,
                     )}`;
 
                     if (item.id !== 'more-childs') {
-                      li.setAttribute('data-id', item.path);
+                      li.setAttribute('data-id', item.page_slug_esi);
                     }
 
                     const divWrapper = `
                   <div class="link-wrap xl:w-auto w-full relative navigation-mega-menu-link" data-id=${
-                    item.path
+                    item.page_slug_esi
                   }>
                     <span class="flex items-center xl:justify-start justify-between xl:text-base text-sm leading-4 xl:w-auto w-full xl:font-medium text-primary hover:text-primaryHover 2xl:px-5 xl:px-3 xl:py-5 py-[0.625rem] cursor-pointer">
-                      ${item.name}
+                      ${item.name_esi}
                       ${
                         item.children && item.children.length > 0
                           ? `
@@ -261,16 +263,16 @@ const ExpMenuController = (props: ExpMenuControllerProps) => {
     item.children.forEach((child: any) => {
       const childLi = document.createElement('li');
       childLi.className = `cat-li-${index} group text-primary hover:text-primaryHover xl:w-auto w-full relative`;
-      childLi.setAttribute('data-id', child.path);
+      childLi.setAttribute('data-id', child.page_slug_esi);
 
       const childDivWrapper = `
         <div class="link-wrap xl:w-auto w-full relative navigation-mega-menu-link pl-4" data-id=${
-          child.path
+          child.page_slug_esi
         }>
           <span class="${`flex items-center xl:justify-start justify-between xl:text-base text-sm leading-5 xl:w-auto w-full xl:font-medium text-primary hover:text-primaryHover cursor-pointer ${
             index === 'two' ? 'xl:flex-row-reverse xl:!justify-end' : ''
           }`}">
-            ${child.name}
+            ${child.name_esi}
             ${
               child.children && child.children.length > 0 && index !== 'three'
                 ? `
@@ -302,7 +304,39 @@ const ExpMenuController = (props: ExpMenuControllerProps) => {
 
       childUl.appendChild(childLi);
     });
+    attachNavigationMenuClickEvents();
     return childUl;
+  };
+
+  const attachNavigationMenuClickEvents = () => {
+    let attempts = 0;
+    const maxAttempts = 20;
+    const intervalTime = 500;
+
+    const intervalId = setInterval(() => {
+      const navigationMenuItems = document.querySelectorAll('.navigation-mega-menu-link');
+
+      if (navigationMenuItems && navigationMenuItems.length) {
+        navigationMenuItems.forEach((menuItem: any) => {
+          if (!menuItem.getAttribute('data-click-attached')) {
+            menuItem.onclick = () => {
+              const pageSlug = menuItem.getAttribute('data-id');
+              if (pageSlug !== 'undefined') {
+                ExpNavigate(pageSlug);
+              }
+            };
+
+            menuItem.setAttribute('data-click-attached', 'true');
+          }
+        });
+
+        clearInterval(intervalId);
+      }
+      attempts++;
+      if (attempts >= maxAttempts) {
+        clearInterval(intervalId);
+      }
+    }, intervalTime);
   };
 
   useEffect(() => {

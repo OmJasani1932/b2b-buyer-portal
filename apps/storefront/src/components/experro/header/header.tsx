@@ -8,6 +8,7 @@ import { HeaderController } from './header-controller';
 import { ExpImageParser, ExpLinkParser } from '../utils';
 import { IconCross } from '../assets/icons/icon-cross';
 import ExpSearchPreview from './search-preview';
+import { ExpCartPreview } from '../cart-preview';
 
 const Header = ({
   globalsettings,
@@ -22,8 +23,9 @@ const Header = ({
     openCartSlider,
     basketRef,
     cartQuantity,
-    // isOpenCartPreview,
-    // setIsOpenCartPreview,
+    isOpenCartPreview,
+    setIsOpenCartPreview,
+    cartDetails,
     addClassToOpenMobileMenu,
     showSearchPreview,
     removeClassToOpenSerch,
@@ -196,6 +198,16 @@ const Header = ({
                     </li>
                     <li
                       id="60155edc-1e2e-4cca-ac4f-f8054999f31c"
+                      className="text-primary hover:text-primaryHover nav-item-about "
+                    >
+                      <div className="link-wrap">
+                        <span className="flex items-center cursor-pointer">
+                          Logout
+                        </span>
+                      </div>
+                    </li>
+                    <li
+                      id="60155edc-1e2e-4cca-ac4f-f8054999f31c"
                       className="group/level1 text-primary hover:text-primaryHover nav-item-about "
                     >
                       <div className="link-wrap">
@@ -221,11 +233,12 @@ const Header = ({
                     </i>
                     Cart
                   </span>
-                  {/* <ExpCartPreview
+                  <ExpCartPreview
                     isCartPreview={isOpenCartPreview}
                     setIsCartPreview={setIsOpenCartPreview}
                     basketRef={basketRef}
-                  /> */}
+                    cartDetails={cartDetails}
+                  />
                 </li>
               </ul>
             </div>
