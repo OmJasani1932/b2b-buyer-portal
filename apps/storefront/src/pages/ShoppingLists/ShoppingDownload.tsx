@@ -72,10 +72,10 @@ function ShoppingDownload(props: any) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (validateForm()) {
       setIsloading(true);
+      console.log(shoppingList);
       const requestData = {
         shoppingListId: shoppingList?.id,
         customerId,
@@ -144,7 +144,7 @@ function ShoppingDownload(props: any) {
         handleLeftClick={handleClose}
         handRightClick={handleSubmit}
       >
-        <form onSubmit={handleSubmit}>
+        <form>
           {tempallAddressFields.map((field: any) => (
             <FormControl
               key={field.name}
