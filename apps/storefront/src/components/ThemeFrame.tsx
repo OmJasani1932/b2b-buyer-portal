@@ -124,13 +124,14 @@ export default function ThemeFrame(props: ThemeFrameProps) {
       doc.head.appendChild(font);
     }
 
-    // https://use.typekit.net/smw5rwj.css
     if (customStyles) {
-      const tw = doc.createElement('script');
-      tw.setAttribute('src', 'https://cdn.tailwindcss.com');
-      doc.head.appendChild(tw);
-      const tailwindConfig = document.createElement('script');
-      tailwindConfig.textContent = `tailwind.config = {
+      if (!doc.getElementById('tailwind-src')) {
+        const tw = doc.createElement('script');
+        tw.id = 'tailwind-src';
+        tw.setAttribute('src', 'https://cdn.tailwindcss.com');
+        doc.head.appendChild(tw);
+        const tailwindConfig = document.createElement('script');
+        tailwindConfig.textContent = `tailwind.config = {
           theme: {
             screens: {
               xsm: '480px',
@@ -235,12 +236,13 @@ export default function ThemeFrame(props: ThemeFrameProps) {
             },
           },
         };`;
+        tw.onload = () => {
+          doc.head.appendChild(tailwindConfig);
+        };
+      }
       const customStyleElement = doc.createElement('style');
       customStyleElement.appendChild(document.createTextNode(customStyles));
       doc.head.appendChild(customStyleElement);
-      tw.onload = () => {
-        doc.head.appendChild(tailwindConfig);
-      };
     }
 
     const emotionCacheObj = createCache({
@@ -271,7 +273,7 @@ export default function ThemeFrame(props: ThemeFrameProps) {
 
   return (
     <iframe
-      id='b2b-iframe'
+      id="b2b-iframe"
       allowFullScreen
       className={isSetupComplete ? className : undefined}
       title={title}
