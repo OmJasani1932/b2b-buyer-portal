@@ -78,7 +78,7 @@ function QuoteDetailHeader(props: QuoteDetailHeaderProps) {
         >
           <Box
             sx={{
-              color: '#1976d2',
+              color: '#004270',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',

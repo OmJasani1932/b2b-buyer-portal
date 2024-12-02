@@ -262,12 +262,10 @@ function ShoppingLists() {
           handleLeftClick={handleCancelClick}
           handRightClick={handleDeleteUserClick}
           row={deleteItem}
-          rightStyleBtn={{
-            color: '#D32F2F',
-          }}
-          isShowBordered={false}
+          isShowBordered={true}
         >
           <Box
+            className="text-gray-200 min-h-12"
             sx={{
               display: 'flex',
               justifyContent: `${isMobile ? 'center%' : 'start'}`,

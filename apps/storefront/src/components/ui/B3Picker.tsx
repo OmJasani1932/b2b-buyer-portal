@@ -58,6 +58,7 @@ export default function B3Picker({
       <Box ref={container} />
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={activeLang}>
         <DatePicker
+          className=""
           label={label}
           DialogProps={{
             container: container.current,

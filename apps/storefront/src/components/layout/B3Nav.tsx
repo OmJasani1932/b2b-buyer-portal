@@ -104,7 +104,7 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
 
   return (
     <List
-      className='text-primary [&_.Mui-selected]:text-white [&_.Mui-selected]:bg-primary py-0'
+      className="text-primary [&_.Mui-selected]:text-white [&_.Mui-selected]:bg-primary py-0"
       component="nav"
       aria-labelledby="nested-list-subheader"
     >
@@ -129,8 +129,15 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
                   },
                 }}
               >
-                <ListItemButton onClick={() => handleClick(item)} selected={activePath(item.path)}>
-                  <ListItemText primary={b3Lang(item.idLang)} />
+                <ListItemButton
+                  className="[&.Mui-selected]:hover:text-white [&.Mui-selected]:hover:bg-primary/80"
+                  onClick={() => handleClick(item)}
+                  selected={activePath(item.path)}
+                >
+                  <ListItemText
+                    className="my-[3px] [&_span]:font-medium"
+                    primary={b3Lang(item.idLang)}
+                  />
                 </ListItemButton>
               </Badge>
             </ListItem>
@@ -138,8 +145,15 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
         }
         return (
           <ListItem key={item.path} disablePadding>
-            <ListItemButton onClick={() => handleClick(item)} selected={activePath(item.path)}>
-              <ListItemText primary={b3Lang(item.idLang)} />
+            <ListItemButton
+              className="[&.Mui-selected]:hover:text-white [&.Mui-selected]:hover:bg-primary/80"
+              onClick={() => handleClick(item)}
+              selected={activePath(item.path)}
+            >
+              <ListItemText
+                className="my-[3px] [&_span]:font-medium"
+                primary={b3Lang(item.idLang)}
+              />
             </ListItemButton>
           </ListItem>
         );

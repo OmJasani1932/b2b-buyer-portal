@@ -106,7 +106,33 @@ export default function B3Layout({
           isCategoryLoading={isCategoryLoading}
         />
         {isMobile ? (
-          <B3MobileLayout title={title}>{children}</B3MobileLayout>
+          // <B3MobileLayout title={title}>{children}</B3MobileLayout>
+          <div className="bg-white">
+            <Box
+              className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto"
+              id="app-mainPage-layout"
+            >
+              <div className="flex flex-wrap pt-6">
+                <Box className="w-full">
+                  <Box>
+                    <B3Nav />
+                  </Box>
+                </Box>
+
+                <Box className="w-full pl-0">
+                  <CompanyCredit />
+                  <Box
+                    component="main"
+                    sx={{
+                      mt: !isMobile && !title ? '24px' : '0',
+                    }}
+                  >
+                    {children}
+                  </Box>
+                </Box>
+              </div>
+            </Box>
+          </div>
         ) : (
           // <Box
           //   sx={{
@@ -121,25 +147,24 @@ export default function B3Layout({
               className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto"
               id="app-mainPage-layout"
             >
-              <div className="flex pt-16">
-
-              <Box className="w-[200px]">
-                <Box>
-                  <B3Nav />
+              <div className="xl:flex pt-16">
+                <Box className="xl:w-[200px] w-full">
+                  <Box>
+                    <B3Nav />
+                  </Box>
                 </Box>
-              </Box>
 
-              <Box className="w-[calc(100%_-_200px)] pl-10">
-                <CompanyCredit />
-                <Box
-                  component="main"
-                  sx={{
-                    mt: !isMobile && !title ? '24px' : '0',
-                  }}
-                >
-                  {children}
+                <Box className="xl:w-[calc(100%_-_200px)] w-full xl:pl-10">
+                  <CompanyCredit />
+                  <Box
+                    component="main"
+                    sx={{
+                      mt: !isMobile && !title ? '24px' : '0',
+                    }}
+                  >
+                    {children}
+                  </Box>
                 </Box>
-              </Box>
               </div>
             </Box>
           </div>

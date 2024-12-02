@@ -24,8 +24,8 @@ export const TipContent = styled('div')({
 
 export const TipLogin = styled('div')(() => ({
   cursor: 'pointer',
-  color: '#1976d2',
-  borderBottom: '1px solid #1976d2',
+  color: '#004270',
+  borderBottom: '1px solid #004270',
 }));
 
 export const RegisteredContainer = styled('div')((props: CustomFieldItems) => {

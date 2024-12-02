@@ -307,7 +307,8 @@ function AccountSetting() {
     <B3Spin isSpinning={isloadding} background={backgroundColor}>
       <Box
         sx={{
-          width: `${isMobile ? '100%' : '35%'}`,
+          width: `${isMobile ? '100%' : '60%'}`,
+          margin: `${isMobile ? '0' : '0 auto 0 auto'}`,
           minHeight: `${isMobile ? '800px' : '300px'}`,
           '& input, & .MuiFormControl-root .MuiTextField-root, & .MuiSelect-select.MuiSelect-filled, & .MuiTextField-root .MuiInputBase-multiline':
             {
@@ -346,6 +347,7 @@ function AccountSetting() {
           }}
           onClick={handleAddUserClick}
           variant="contained"
+          size="large"
         >
           {b3Lang('accountSettings.button.saveUpdates')}
         </CustomButton>

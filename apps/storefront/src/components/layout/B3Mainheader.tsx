@@ -122,7 +122,7 @@ export default function B3Mainheader({ title }: { title: string }) {
                   <Typography
                     id="cart-number-icon"
                     sx={{
-                      backgroundColor: '#1976D2',
+                      backgroundColor: '#004270',
                       minWidth: '21px',
                       height: '20px',
                       color: '#FFFFFF',

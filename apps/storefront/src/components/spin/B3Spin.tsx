@@ -35,7 +35,7 @@ export default function B3Spin(props: B3SpinProps) {
 
   const theme = useTheme();
 
-  const primaryColor = theme.palette.primary.main;
+  const primaryColor = theme.palette.secondary.main;
 
   const [isMobile] = useMobile();
   const b3Lang = useB3Lang();
@@ -45,7 +45,14 @@ export default function B3Spin(props: B3SpinProps) {
       {isSpinning && (
         <SpinCenter background={background} isMobile={isMobile} transparency={transparency}>
           {!isCloseLoading && (
-            <CircularProgress role="progressbar" size={size || 40} thickness={thickness || 2} />
+            <CircularProgress
+              role="progressbar"
+              style={{
+                color: primaryColor,
+              }}
+              size={size || 40}
+              thickness={thickness || 3}
+            />
           )}
           {tip && (
             <SpinTip

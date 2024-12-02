@@ -23,7 +23,9 @@ const Footer = ({ globalSettings }: any) => {
                       height={50}
                       className="icon flex items-center justify-center lg:w-[3.125rem] lg:h-[3.125rem] w-10 h-10 bg-primary text-white rounded-full mr-4 lg:[&>svg]:w-[1.625rem] [&>svg]:w-5"
                     />
-                    <h4 className="lg:text-[1.375rem] text-lg mb-0">{ele?.usp_title_et}</h4>
+                    <h4 className="lg:text-[1.375rem] text-lg mb-0 font-semibold">
+                      {ele?.usp_title_et}
+                    </h4>
                   </a>
                 </li>
               ))}

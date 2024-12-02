@@ -52,7 +52,7 @@ const HeadlessController = lazy(() => import('@/components/HeadlessController'))
 
 const ThemeFrame = lazy(() => import('@/components/ThemeFrame'));
 
-const FONT_URL = 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap';
+const FONT_URL = 'https://use.typekit.net/smw5rwj.css';
 
 export default function App() {
   const [globalSettings, setGlobalSettings] = useState<any>({});
@@ -123,7 +123,7 @@ export default function App() {
 
   const CUSTOM_STYLES = `
   body {
-    font-family: Roboto;
+    font-family: proxima-nova, Arial;
   }`;
 
   const [customStyles, setCustomStyle] = useState<string>(CUSTOM_STYLES);

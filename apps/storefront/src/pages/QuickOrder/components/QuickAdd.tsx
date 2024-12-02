@@ -414,12 +414,7 @@ export default function QuickAdd(props: AddToListContentProps) {
               alignItems: 'center',
             }}
           >
-            <Typography
-              sx={{
-                color: '#000',
-              }}
-              variant="body1"
-            >
+            <Typography className="text-gray-200" variant="body1">
               {b3Lang('purchasedProducts.quickAdd.title')}
             </Typography>
           </Grid>
@@ -455,7 +450,6 @@ export default function QuickAdd(props: AddToListContentProps) {
         </Box>
 
         <CustomButton
-          variant="outlined"
           fullWidth
           disabled={isLoading}
           onClick={handleAddToList}

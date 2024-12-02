@@ -16,8 +16,7 @@
 }
 
 .bundle-namespace iframe {
-  font-family: 'Helvetica Neue', 'Apple Color Emoji', Helvetica, Arial,
-    sans-serif;
+  font-family: 'Helvetica Neue', 'Apple Color Emoji', Helvetica, Arial, sans-serif;
   font-size: 100%;
   font-style: normal;
   letter-spacing: normal;
@@ -323,4 +322,13 @@ input[type='number']::-webkit-outer-spin-button {
   left: 50%;
   transform: translate(-50%, -50%);
   color: black;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
 }

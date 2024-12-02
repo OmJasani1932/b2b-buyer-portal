@@ -271,11 +271,7 @@ export default function AddToQuote(props: AddToListProps) {
 
   return (
     <Card>
-      <CardContent
-        sx={{
-          p: '16px !important',
-        }}
-      >
+      <CardContent className="!p-0">
         <B3CollapseContainer title={b3Lang('quoteDraft.collapseTitle.addToQuote')}>
           <SearchProduct
             updateList={updateList}

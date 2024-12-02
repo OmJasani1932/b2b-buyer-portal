@@ -512,7 +512,7 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
         position: 'fixed',
         bottom: isMobile && isAgenting ? '52px' : 0,
         left: 0,
-        backgroundColor: '#fff',
+        backgroundColor: '#ebebeb',
         width: '100%',
         padding: isMobile ? '0 0 1rem 0' : '0 40px 1rem 40px',
         height: isMobile ? '8rem' : 'auto',
@@ -555,13 +555,7 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
             ...containerStyle,
           }}
         >
-          <Typography
-            sx={{
-              color: '#000000',
-              fontSize: '16px',
-              fontWeight: '400',
-            }}
-          >
+          <Typography>
             {b3Lang('shoppingList.footer.selectedProducts', {
               quantity: checkedArr.length,
             })}
@@ -577,8 +571,7 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
               variant="h6"
               sx={{
                 fontSize: '16px',
-                fontWeight: '700',
-                color: '#000000',
+                mb: '0px',
               }}
             >
               {b3Lang('shoppingList.footer.subtotal', {
@@ -598,18 +591,13 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
                 b2bShoppingListActionsPermission && (
                   <CustomButton
                     sx={{
-                      padding: '5px',
-                      border: `1px solid ${customColor || '#1976d2'}`,
-                      margin: isMobile ? '0 1rem 0 0' : '0 1rem',
+                      padding: '7px',
+                      margin: isMobile ? '0 1rem 0 0' : '0 0rem 0 1rem',
                       minWidth: 'auto',
                     }}
                     disabled={shoppingListInfo?.status === 40}
                   >
                     <Delete
-                      color="primary"
-                      sx={{
-                        color: customColor,
-                      }}
                       onClick={() => {
                         setDeleteOpen(true);
                       }}
@@ -622,7 +610,7 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
                     display: 'flex',
                     alignItems: 'center',
                     marginTop: isMobile ? '0.5rem' : 0,
-                    marginLeft: isMobile ? 0 : '20px',
+                    marginLeft: isMobile ? 0 : '1rem',
                     width: isMobile ? '100%' : 'auto',
                   }}
                 >

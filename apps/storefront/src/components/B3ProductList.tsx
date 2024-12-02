@@ -47,9 +47,10 @@ const Flex = styled('div')<FlexProps>(({ isHeader, isMobile }) => {
   const flexWrap = isMobile ? 'wrap' : 'initial';
 
   return {
-    color: '#212121',
+    color: '#808285',
     display: 'flex',
-    padding: '8px 0 0',
+    padding: '16px 0',
+    borderBottom: '1px solid #939597',
     gap: '8px',
     flexWrap,
     alignItems: ' flex-start',

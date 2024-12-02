@@ -27,7 +27,6 @@ function B3FilterPickers(
     endPicker,
     handleChange,
     isMonthlySpacing = false,
-    xs = {},
     customWidth,
   }: B3FilterPickerProps,
   ref: Ref<unknown> | undefined,
@@ -78,6 +77,7 @@ function B3FilterPickers(
 
   return (
     <Box
+      className="pt-4"
       sx={{
         display: 'flex',
         width: customWidth || 'auto',
@@ -87,21 +87,21 @@ function B3FilterPickers(
         <Box
           sx={{
             width: '49%',
-            mt: '16px',
             mr: '1%',
             cursor: 'pointer',
             '& > .MuiFormControl-root': {
               width: '100%',
             },
-            ...xs,
           }}
         >
-          <B3Picker
-            onChange={handleStartDatePickerChange}
-            value={startValue}
-            label={startPicker?.label}
-            variant="filled"
-          />
+          <div className="[&_.MuiInputLabel-formControl]">
+            <B3Picker
+              onChange={handleStartDatePickerChange}
+              value={startValue}
+              label={startPicker?.label}
+              variant="filled"
+            />
+          </div>
         </Box>
       )}
 
@@ -109,21 +109,21 @@ function B3FilterPickers(
         <Box
           sx={{
             width: '49%',
-            mt: '16px',
             ml: '1%',
             '& > .MuiFormControl-root': {
               width: '100%',
             },
             cursor: 'pointer',
-            ...xs,
           }}
         >
-          <B3Picker
-            onChange={handleEndDatePickerChange}
-            value={endValue}
-            label={endPicker?.label}
-            variant="filled"
-          />
+          <div className="[&_.MuiInputLabel-formControl]">
+            <B3Picker
+              onChange={handleEndDatePickerChange}
+              value={endValue}
+              label={endPicker?.label}
+              variant="filled"
+            />
+          </div>
         </Box>
       )}
     </Box>
