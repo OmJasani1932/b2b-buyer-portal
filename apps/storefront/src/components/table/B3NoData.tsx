@@ -34,7 +34,11 @@ export default function B3NoData({
 }: B3NoDataProps) {
   const b3Lang = useB3Lang();
   return (
-    <NoDataContainer backgroundColor={backgroundColor} minHeight={minHeight}>
+    <NoDataContainer
+      className="text-primary"
+      backgroundColor={backgroundColor}
+      minHeight={minHeight}
+    >
       {!isLoading && <DataUsageRounded fontSize="large" />}
       <NoDataText>{isLoading ? '' : text || b3Lang('global.table.noData')}</NoDataText>
     </NoDataContainer>

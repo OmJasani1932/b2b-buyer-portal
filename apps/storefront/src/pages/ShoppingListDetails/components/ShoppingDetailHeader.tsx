@@ -75,8 +75,8 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
         }}
       >
         <Box
+          className="text-primary hover:text-primaryHover underline"
           sx={{
-            color: '#1976d2',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -96,15 +96,13 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
           <ArrowBackIosNew
             fontSize="small"
             sx={{
-              fontSize: '12px',
+              fontSize: '14px',
               marginRight: '0.5rem',
-              color: customColor,
             }}
           />
           <Box
             sx={{
               margin: 0,
-              color: customColor,
               m: '0',
             }}
           >
@@ -139,7 +137,8 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
             }}
           >
             <Typography
-              variant="h4"
+              variant="h2"
+              className="mb-0"
               sx={{
                 marginRight: '1rem',
                 wordBreak: 'break-all',

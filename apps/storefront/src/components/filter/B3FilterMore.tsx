@@ -233,7 +233,7 @@ function B3FilterMore<T, Y>({
               size="small"
               sx={{
                 marginLeft: '5px',
-                color: '#1976D2',
+                color: '#004270',
               }}
               onClick={handleClearBtn}
             >
@@ -265,15 +265,12 @@ function B3FilterMore<T, Y>({
           />
           <B3FilterPicker ref={pickerRef} startPicker={startPicker} endPicker={endPicker} />
         </Box>
-        <CustomButton
-          sx={{
-            mt: 1,
-          }}
+        <span
+          className="mt-4 inline-block text-sm text-primary hover:text-primaryHover underline font-medium"
           onClick={handleClearFilters}
-          size="small"
         >
           {b3Lang('global.filter.clearFilters')}
-        </CustomButton>
+        </span>
       </B3Dialog>
     </Box>
   );

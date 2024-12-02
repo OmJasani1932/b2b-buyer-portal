@@ -33,7 +33,7 @@ function GlobalDialog() {
   return (
     <Box
       sx={{
-        fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+        fontFamily: 'proxima-nova, Arial',
         fontWeight: '400',
         fontSize: '1rem',
       }}

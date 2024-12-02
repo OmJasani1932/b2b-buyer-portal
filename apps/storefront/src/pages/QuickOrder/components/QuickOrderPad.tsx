@@ -338,14 +338,9 @@ export default function QuickOrderPad(props: QuickOrderPadProps) {
         marginBottom: isMobile ? '8.5rem' : '50px',
       }}
     >
-      <CardContent>
+      <CardContent className="!p-0">
         <Box>
-          <Typography
-            variant="h5"
-            sx={{
-              marginBottom: '1rem',
-            }}
-          >
+          <Typography variant="h3">
             {b3Lang('purchasedProducts.quickOrderPad.quickOrderPad')}
           </Typography>
 

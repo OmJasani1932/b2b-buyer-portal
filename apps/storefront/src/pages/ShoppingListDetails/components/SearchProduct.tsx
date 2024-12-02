@@ -167,10 +167,12 @@ export default function SearchProduct({
   return (
     <Box
       sx={{
-        margin: '24px 0',
+        mb: '24px',
       }}
     >
-      <Typography>{b3Lang('global.searchProductAddProduct.searchBySkuOrName')}</Typography>
+      <Typography className="text-gray-200">
+        {b3Lang('global.searchProductAddProduct.searchBySkuOrName')}
+      </Typography>
       <TextField
         hiddenLabel
         placeholder={b3Lang(`global.searchProduct.placeholder.${type}`)}
@@ -195,7 +197,7 @@ export default function SearchProduct({
         }}
       />
       <CustomButton
-        variant="outlined"
+        variant="contained"
         fullWidth
         disabled={isLoading}
         onClick={handleSearchButtonClicked}

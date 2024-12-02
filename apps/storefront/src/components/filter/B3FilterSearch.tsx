@@ -49,17 +49,10 @@ function B3FilterSearch({
   }, [searchValue]);
 
   return (
-    <Paper
-      component="div" className='shadow-none rounded-none block border border-gray-300 text-base leading-5 py-2.5 w-full px-5 placeholder-gray-200 bg-white focus-visible:shadow-none focus-visible:outline-none focus-visible:border-primary'>
-      <SearchIcon />
+    <div className="relative w-full">
+      <SearchIcon className="text-gray-200 w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 z-10" />
       <InputBase
-        sx={{
-          ml: 1,
-          flex: 1,
-          '& .MuiInputBase-input': {
-            pb: 0,
-          },
-        }}
+        className="w-full !px-10"
         size="small"
         value={search}
         placeholder={placeholder}
@@ -67,23 +60,13 @@ function B3FilterSearch({
         endAdornment={
           search.length > 0 && (
             <ClearIcon
-              sx={{
-                marginRight: '8px',
-                cursor: 'pointer',
-                padding: '4px',
-                fontSize: '1.8rem',
-                color: 'rgba(0, 0, 0, 0.54)',
-                ':hover': {
-                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                  borderRadius: '48px',
-                },
-              }}
+              className="absolute right-4 w-5 h-5 cursor-pointer text-gray-200 hover:text-primary"
               onClick={handleClearSearchValue}
             />
           )
         }
       />
-    </Paper>
+    </div>
   );
 }
 

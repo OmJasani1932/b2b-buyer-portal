@@ -455,17 +455,10 @@ function QuickorderTable({
   return (
     <B3Spin isSpinning={isRequestLoading}>
       <StyleQuickOrderTable>
-        <Typography
-          sx={{
-            fontSize: '24px',
-            height: '50px',
-          }}
-        >
-          {b3Lang('purchasedProducts.totalProducts', { total })}
-        </Typography>
+        <Typography variant="h3">{b3Lang('purchasedProducts.totalProducts', { total })}</Typography>
         <Box
+          className="mb-5"
           sx={{
-            marginBottom: '5px',
             display: 'flex',
             '& label': {
               zIndex: 0,

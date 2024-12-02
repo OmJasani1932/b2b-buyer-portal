@@ -44,8 +44,7 @@ export default function B3MobileLayout({
   return (
     <Box
       sx={{
-        height: '70vh',
-        p: '4vw',
+        p: '20px',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -82,7 +81,7 @@ export default function B3MobileLayout({
               sx={{
                 '& .MuiBadge-badge': {
                   color: '#FFFFFF',
-                  backgroundColor: '#1976D2',
+                  backgroundColor: '#004270',
                   fontWeight: 500,
                   fontSize: '12px',
                   minWidth: '18px',

@@ -91,13 +91,17 @@ export default function B3Dialog<T>({
       >
         {title && (
           <DialogTitle
+            variant="h4"
             sx={
               isShowBordered
                 ? {
                     borderBottom: '1px solid #D9DCE9',
                     mb: 2,
+                    color: '#004270',
                   }
-                : {}
+                : {
+                    background: '#e5e5e5',
+                  }
             }
             id="alert-dialog-title"
           >
@@ -112,6 +116,7 @@ export default function B3Dialog<T>({
           {children}
         </DialogContent>
         <DialogActions
+          className="px-5 py-4"
           sx={
             isShowBordered
               ? {
@@ -140,6 +145,7 @@ export default function B3Dialog<T>({
 
               {showRightBtn && (
                 <CustomButton
+                  variant="contained"
                   sx={{
                     ...rightStyleBtn,
                   }}

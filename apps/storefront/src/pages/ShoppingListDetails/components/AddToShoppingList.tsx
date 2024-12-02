@@ -225,9 +225,9 @@ export default function AddToShoppingList(props: AddToListProps) {
         marginBottom: '50px',
       }}
     >
-      <CardContent>
+      <CardContent className="!p-0">
         <Box>
-          <Typography variant="h5">{b3Lang('shoppingList.addToShoppingList.addToList')}</Typography>
+          <Typography variant="h3">{b3Lang('shoppingList.addToShoppingList.addToList')}</Typography>
           <SearchProduct
             updateList={updateList}
             addToList={addToList}

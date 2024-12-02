@@ -599,7 +599,7 @@ function QuickOrderFooter(props: QuickOrderFooterProps) {
             position: 'fixed',
             bottom: isMobile && isAgenting ? '52px' : 0,
             left: 0,
-            backgroundColor: '#fff',
+            backgroundColor: '#ebebeb',
             width: '100%',
             padding: isMobile ? '0 0 1rem 0' : '16px 0 16px',
             height: isMobile ? '8rem' : 'auto',
@@ -607,29 +607,16 @@ function QuickOrderFooter(props: QuickOrderFooterProps) {
             display: 'flex',
             flexWrap: 'nowrap',
             zIndex: '1000',
+            borderTop: '2px solid #004270',
           }}
           container
           spacing={2}
         >
-          <Grid item={isMobile} sx={gridBarStyles}>
-            <Box
-              sx={{
-                width: 263,
-                display: isMobile ? 'none' : 'block',
-              }}
-            />
-            <Box
-              sx={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                paddingLeft: isMobile ? 0 : '50px',
-                paddingRight: isMobile ? 0 : '80px',
-              }}
-            >
+          <div className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto w-full">
+            <Grid item={isMobile} sx={gridBarStyles}>
               <Box
                 sx={{
-                  width: isMobile ? '100%' : 'calc(66.6667% + 32px)',
+                  width: isMobile ? '100%' : '100%',
                   display: 'flex',
                   zIndex: '999',
                   justifyContent: 'space-between',
@@ -638,9 +625,9 @@ function QuickOrderFooter(props: QuickOrderFooterProps) {
               >
                 <Typography
                   sx={{
-                    color: '#000000',
-                    fontSize: '16px',
-                    fontWeight: '400',
+                    color: '#808285',
+                    fontSize: '18px',
+                    fontWeight: '500',
                   }}
                 >
                   {b3Lang('purchasedProducts.footer.selectedProducts', {
@@ -655,14 +642,7 @@ function QuickOrderFooter(props: QuickOrderFooterProps) {
                     width: isMobile ? '100%' : 'auto',
                   }}
                 >
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontSize: '16px',
-                      fontWeight: '700',
-                      color: '#000000',
-                    }}
-                  >
+                  <Typography variant="h6" className="mb-0">
                     {b3Lang('purchasedProducts.footer.subtotal', {
                       subtotal: currencyFormat(selectedSubTotal),
                     })}
@@ -717,14 +697,8 @@ function QuickOrderFooter(props: QuickOrderFooterProps) {
                   </Box>
                 </Box>
               </Box>
-              <Box
-                sx={{
-                  width: '33.3333%',
-                  display: !isMobile ? 'block' : 'none',
-                }}
-              />
-            </Box>
-          </Grid>
+            </Grid>
+          </div>
         </Grid>
       ) : null}
 

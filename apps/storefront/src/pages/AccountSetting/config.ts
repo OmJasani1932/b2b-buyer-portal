@@ -60,7 +60,7 @@ export const getAccountSettingFiles = (
       fieldType: 'text',
       xs,
       variant: 'filled',
-      size: 'small',
+      size: '',
     },
     {
       name: 'role',
@@ -88,7 +88,7 @@ export const getAccountSettingFiles = (
       ],
       xs,
       variant: 'filled',
-      size: 'small',
+      size: '',
     },
   ];
 
@@ -100,7 +100,7 @@ export const getAccountSettingFiles = (
     fieldType: 'password',
     xs,
     variant: 'filled',
-    size: 'small',
+    size: '',
     idLang: item.idLang,
   }));
 

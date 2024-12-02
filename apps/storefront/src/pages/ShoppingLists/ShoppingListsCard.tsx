@@ -18,6 +18,7 @@ import { displayFormat, getB3PermissionsList } from '@/utils';
 
 import { ShoppingListsItemsProps } from './config';
 import { ShoppingStatus } from './ShoppingStatus';
+import ShoppingDownload from './ShoppingDownload';
 
 export interface OrderItemCardProps {
   item: ShoppingListsItemsProps;
@@ -41,7 +42,7 @@ const Flex = styled('div')(() => ({
 
 const FontBold = styled(Typography)(() => ({
   fontWeight: '500',
-  paddingRight: '5px',
+  paddingRight: '8px',
 }));
 
 const FlexItem = styled(Box)(() => ({
@@ -116,44 +117,31 @@ function ShoppingListsCard(props: OrderItemCardProps) {
       key={shoppingList.id}
       sx={{
         '& .b2b-card-content': {
-          paddingBottom: '16px',
+          paddingBottom: '0',
         },
       }}
     >
-      <CardContent
-        className="b2b-card-content"
-        sx={{
-          color: '#313440',
-        }}
-      >
+      <CardContent className="b2b-card-content !p-0">
         <Typography
           variant="h5"
+          className="leading-5"
           sx={{
-            color: 'rgba(0, 0, 0, 0.87)',
             width: '100%',
             wordBreak: 'break-all',
           }}
         >
           {shoppingList.name}
         </Typography>
-        <Box
-          sx={{
-            pt: '8px',
-            pb: '20px',
-          }}
-        >
+        <Box>
           {isB2BUser &&
             (submitShoppingListPermission ||
               (approveShoppingListPermission && shoppingList.approvedFlag)) && (
-              <Box
-                sx={{
-                  pb: '25px',
-                }}
-              >
+              <Box className="mb-2">
                 <ShoppingStatus status={shoppingList.status} />
               </Box>
             )}
           <Box
+            className="mb-2 text-gray-200"
             sx={{
               width: '100%',
               wordBreak: 'break-all',
@@ -163,31 +151,31 @@ function ShoppingListsCard(props: OrderItemCardProps) {
           </Box>
 
           {isB2BUser && (
-            <FlexItem>
-              <FontBold>{b3Lang('shoppingLists.card.createdBy')}</FontBold>
+            <FlexItem className="mb-1 text-gray-200">
+              <FontBold className="text-gray-200">
+                {b3Lang('shoppingLists.card.createdBy')}
+              </FontBold>
               {shoppingList.customerInfo.firstName} {shoppingList.customerInfo.lastName}
             </FlexItem>
           )}
-          <FlexItem>
-            <FontBold>{b3Lang('shoppingLists.card.products')}</FontBold>
+          <FlexItem className="mb-1 text-gray-200">
+            <FontBold className="text-gray-200">{b3Lang('shoppingLists.card.products')}</FontBold>
             {shoppingList.products.totalCount}
           </FlexItem>
-          <FlexItem>
-            <FontBold>{b3Lang('shoppingLists.card.lastActivity')}</FontBold>
+          <FlexItem className="mb-1 text-gray-200">
+            <FontBold className="text-gray-200">
+              {b3Lang('shoppingLists.card.lastActivity')}
+            </FontBold>
             {`${displayFormat(shoppingList.updatedAt)}`}
           </FlexItem>
         </Box>
-        <Flex>
-          <CustomButton
-            sx={{
-              m: '0 0 0 -8px',
-              minWidth: 0,
-            }}
-            variant="text"
+        <Flex className="mt-4">
+          <span
+            className="text-primary font-medium underline cursor-pointer hover:text-primaryHover"
             onClick={() => goToDetail(shoppingList)}
           >
             {b3Lang('shoppingLists.card.view')}
-          </CustomButton>
+          </span>
           <Box
             sx={{
               display: `${isPermissions ? 'block' : 'none'}`,
@@ -196,7 +184,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
             {!getEditPermissions(shoppingList.status) && isCanEditShoppingList && (
               <IconButton
                 aria-label="edit"
-                size="medium"
+                size="small"
                 sx={{
                   marginRight: '8px',
                 }}
@@ -210,7 +198,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
 
             <IconButton
               aria-label="duplicate"
-              size="medium"
+              size="small"
               sx={{
                 marginRight: '8px',
               }}
@@ -223,7 +211,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
             {!getDeletePermissions(shoppingList.status) && isCanEditShoppingList && (
               <IconButton
                 aria-label="delete"
-                size="medium"
+                size="small"
                 onClick={() => {
                   onDelete(shoppingList);
                 }}
@@ -233,6 +221,12 @@ function ShoppingListsCard(props: OrderItemCardProps) {
             )}
           </Box>
         </Flex>
+
+        {shoppingList.id && (
+          <div className="mt-3">
+            <ShoppingDownload shoppingList={shoppingList} />
+          </div>
+        )}
       </CardContent>
     </Card>
   );

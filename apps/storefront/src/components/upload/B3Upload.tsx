@@ -286,7 +286,7 @@ export default function B3Upload(props: B3UploadProps) {
           <Grid display="flex" justifyContent="center" xs={12}>
             <InsertDriveFile
               sx={{
-                color: primaryColor || '#1976D2',
+                color: primaryColor || '#004270',
                 fontSize: '40px',
               }}
             />
@@ -325,7 +325,7 @@ export default function B3Upload(props: B3UploadProps) {
           </Box>
           <Box
             sx={{
-              color: '#1976D2',
+              color: '#004270',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
               marginLeft: '0.5rem',
@@ -373,7 +373,7 @@ export default function B3Upload(props: B3UploadProps) {
         handleConfirmToList();
       }}
       showRightBtn={step === 'end'}
-      isShowBordered={false}
+      isShowBordered={true}
       dialogContentSx={
         step === 'end'
           ? {
@@ -403,7 +403,7 @@ export default function B3Upload(props: B3UploadProps) {
           <FileUploadContainer
             ref={uploadRef}
             sx={{
-              border: `1px dashed ${primaryColor || '#1976D2'}`,
+              border: `1px dashed ${primaryColor || '#004270'}`,
             }}
           >
             {content}

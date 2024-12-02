@@ -18,7 +18,7 @@ const FooterQuickLinks = ({ pageData }: any) => {
             pageData.globalSettings?.footer_com[0]?.column_1_title_et && (
               // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
               <h6
-                className="footer-info-heading text-lg mb-0 lg:border-0 border-b border-gray-50 lg:py-0 py-[0.625rem] leading-5 relative"
+                className="footer-info-heading font-semibold text-lg mb-0 lg:border-0 border-b border-gray-50 lg:py-0 py-[0.625rem] leading-5 relative"
                 onClick={(event) => toggleMenu(event)}
               >
                 {pageData.globalSettings?.footer_com &&
@@ -36,7 +36,9 @@ const FooterQuickLinks = ({ pageData }: any) => {
               'footer-info-list lg:mt-[1.125rem] mt-2 lg:block hidden group-[.is-expanded]:block'
             }
             liClasses={''}
-            linkNameClasses={'hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm'}
+            linkNameClasses={
+              'hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm text-gray-200'
+            }
           />
         </div>
       </div>
@@ -47,7 +49,7 @@ const FooterQuickLinks = ({ pageData }: any) => {
             pageData.globalSettings?.footer_com[0]?.column_2_title_et && (
               // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
               <h6
-                className="footer-info-heading text-lg mb-0 lg:border-0 border-b border-gray-50 lg:py-0 py-[0.625rem] leading-5 relative"
+                className="footer-info-heading font-semibold text-lg mb-0 lg:border-0 border-b border-gray-50 lg:py-0 py-[0.625rem] leading-5 relative"
                 onClick={(event) => toggleMenu(event)}
               >
                 {pageData.globalSettings?.footer_com &&
@@ -64,12 +66,14 @@ const FooterQuickLinks = ({ pageData }: any) => {
               'footer-info-list lg:mt-[1.125rem] mt-2 lg:block hidden group-[.is-expanded]:block'
             }
             liClasses={''}
-            linkNameClasses={'hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm'}
+            linkNameClasses={
+              'hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm text-gray-200'
+            }
           />
           <ul className="footer-info-list lg:block hidden group-[.is-expanded]:block">
             <li>
               <a
-                className="hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm"
+                className="hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm text-gray-200"
                 href="/my-account/"
               >
                 My Account
@@ -77,7 +81,7 @@ const FooterQuickLinks = ({ pageData }: any) => {
             </li>
             <li>
               <a
-                className="hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm"
+                className="hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm text-gray-200"
                 href="/my-account?tab=orders"
               >
                 Recent Orders
@@ -93,7 +97,7 @@ const FooterQuickLinks = ({ pageData }: any) => {
             pageData.globalSettings?.footer_com[0]?.column_3_title_et && (
               // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
               <h6
-                className="footer-info-heading text-lg mb-0 lg:border-0 border-b border-gray-50 lg:py-0 py-[0.625rem] leading-5 relative"
+                className="footer-info-heading font-semibold text-lg mb-0 lg:border-0 border-b border-gray-50 lg:py-0 py-[0.625rem] leading-5 relative"
                 onClick={(event) => toggleMenu(event)}
               >
                 {pageData.globalSettings?.footer_com &&
@@ -110,7 +114,9 @@ const FooterQuickLinks = ({ pageData }: any) => {
               'footer-info-list lg:mt-[1.125rem] mt-2 lg:block hidden group-[.is-expanded]:block'
             }
             liClasses={''}
-            linkNameClasses={'hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm'}
+            linkNameClasses={
+              'hover:text-primary py-1 leading-5 inline-block lg:text-base text-sm text-gray-200'
+            }
           />
         </div>
       </div>

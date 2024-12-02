@@ -96,10 +96,8 @@ interface PaginationTableRefProps extends HTMLInputElement {
 
 const StyledShoppingListTableContainer = styled('div')(() => ({
   backgroundColor: '#FFFFFF',
-  padding: '1rem',
-  borderRadius: '4px',
-  boxShadow:
-    '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)',
+  borderRadius: '0px',
+  boxShadow: 'none',
 
   '& tbody': {
     '& tr': {
@@ -704,11 +702,7 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
           margin: '0 0 1rem 0',
         }}
       >
-        <Typography
-          sx={{
-            fontSize: '24px',
-          }}
-        >
+        <Typography variant="h3" className="mb-0">
           {b3Lang('shoppingList.table.totalProductCount', {
             quantity: shoppingListInfo?.products?.totalCount || 0,
           })}
@@ -723,7 +717,7 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
       </Box>
       <Box
         sx={{
-          marginBottom: '5px',
+          marginBottom: '20px',
         }}
       >
         <B3FilterSearch
