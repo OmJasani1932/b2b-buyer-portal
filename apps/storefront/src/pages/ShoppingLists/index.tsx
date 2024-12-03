@@ -235,7 +235,7 @@ function ShoppingLists() {
           getRequestList={fetchList}
           searchParams={filterSearch}
           isCustomRender
-          itemXs={isExtraLarge ? 3 : 4}
+          itemXs={isExtraLarge ? 4 : 4}
           requestLoading={setIsRequestLoading}
           renderItem={(row: ShoppingListsItemsProps) => (
             <ShoppingListsCard

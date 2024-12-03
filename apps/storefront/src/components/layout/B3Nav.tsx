@@ -135,7 +135,7 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
                   selected={activePath(item.path)}
                 >
                   <ListItemText
-                    className="my-[3px] [&_span]:font-medium"
+                    className="my-[3px] [&_span]:font-medium text-white"
                     primary={b3Lang(item.idLang)}
                   />
                 </ListItemButton>
@@ -146,7 +146,7 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
         return (
           <ListItem key={item.path} disablePadding>
             <ListItemButton
-              className="[&.Mui-selected]:hover:text-white [&.Mui-selected]:hover:bg-primary/80"
+              className="[&.Mui-selected_span]:text-white [&]:hover:text-white [&.Mui-selected]:hover:bg-primary/80"
               onClick={() => handleClick(item)}
               selected={activePath(item.path)}
             >

@@ -131,9 +131,11 @@ function ShoppingDownload(props: any) {
 
   return (
     <>
-      <Button variant="contained" onClick={() => setOpen(true)}>
-        Add Shipping Address
-      </Button>
+      <div className="text-center">
+        <Button variant="contained" onClick={() => setOpen(true)}>
+          Add Shipping Address
+        </Button>
+      </div>
 
       <B3Dialog
         isOpen={open}

@@ -76,7 +76,7 @@ const Header = ({
                     {!showSearchPreview && (
                       <i
                         onClick={addClassToOpenSerch}
-                        className="icon w-[1.0625rem] h-[1.0625rem] flex search-open-icon text-gray-100"
+                        className="icon w-[1.0625rem] h-[1.0625rem] flex search-open-icon text-gray-100 [&_svg]:w-full [&_svg]:h-full"
                       >
                         <IconSearch />
                         <span className="tooltip hidden">Search</span>
@@ -201,9 +201,7 @@ const Header = ({
                       className="text-primary hover:text-primaryHover nav-item-about "
                     >
                       <div className="link-wrap">
-                        <span className="flex items-center cursor-pointer">
-                          Logout
-                        </span>
+                        <span className="flex items-center cursor-pointer">Logout</span>
                       </div>
                     </li>
                     <li

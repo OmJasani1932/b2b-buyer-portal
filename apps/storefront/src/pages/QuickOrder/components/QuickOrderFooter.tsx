@@ -601,8 +601,8 @@ function QuickOrderFooter(props: QuickOrderFooterProps) {
             left: 0,
             backgroundColor: '#ebebeb',
             width: '100%',
-            padding: isMobile ? '0 0 1rem 0' : '16px 0 16px',
-            height: isMobile ? '8rem' : 'auto',
+            padding: isMobile ? '16px 0 16px' : '16px 0 16px',
+            height: isMobile ? 'auto' : 'auto',
             marginLeft: 0,
             display: 'flex',
             flexWrap: 'nowrap',
@@ -624,9 +624,9 @@ function QuickOrderFooter(props: QuickOrderFooterProps) {
                 }}
               >
                 <Typography
+                  className="md:text-lg text-base"
                   sx={{
                     color: '#808285',
-                    fontSize: '18px',
                     fontWeight: '500',
                   }}
                 >
@@ -661,7 +661,7 @@ function QuickOrderFooter(props: QuickOrderFooterProps) {
                       ref={ref}
                       onClick={handleOpenBtnList}
                       sx={{
-                        marginRight: isMobile ? '1rem' : 0,
+                        marginRight: isMobile ? '0' : 0,
                         width: isMobile ? '100%' : 'auto',
                       }}
                       endIcon={<ArrowDropDown />}

@@ -376,26 +376,28 @@ function QuotesList() {
           handleChange={handleChange}
           handleFilterChange={handleFirterChange}
         />
-        <B3PaginationTable
-          columnItems={columnAllItems}
-          rowsPerPageOptions={[10, 20, 30]}
-          getRequestList={fetchList}
-          searchParams={filterData}
-          isCustomRender={false}
-          requestLoading={setIsRequestLoading}
-          tableKey="quoteNumber"
-          sortDirection={order}
-          orderBy={orderBy}
-          sortByFn={handleSetOrderBy}
-          labelRowsPerPage={`${
-            isMobile ? b3Lang('quotes.cardsPerPage') : b3Lang('quotes.quotesPerPage')
-          }`}
-          renderItem={(row: ListItem) => <QuoteItemCard item={row} goToDetail={goToDetail} />}
-          onClickRow={(row: ListItem) => {
-            goToDetail(row, +row.status);
-          }}
-          hover
-        />
+        <div className="[&_.MuiTablePagination-input]:py-2">
+          <B3PaginationTable
+            columnItems={columnAllItems}
+            rowsPerPageOptions={[10, 20, 30]}
+            getRequestList={fetchList}
+            searchParams={filterData}
+            isCustomRender={false}
+            requestLoading={setIsRequestLoading}
+            tableKey="quoteNumber"
+            sortDirection={order}
+            orderBy={orderBy}
+            sortByFn={handleSetOrderBy}
+            labelRowsPerPage={`${
+              isMobile ? b3Lang('quotes.cardsPerPage') : b3Lang('quotes.quotesPerPage')
+            }`}
+            renderItem={(row: ListItem) => <QuoteItemCard item={row} goToDetail={goToDetail} />}
+            onClickRow={(row: ListItem) => {
+              goToDetail(row, +row.status);
+            }}
+            hover
+          />
+        </div>
       </Box>
     </B3Spin>
   );
