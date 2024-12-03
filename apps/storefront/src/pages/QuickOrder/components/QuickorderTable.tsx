@@ -457,7 +457,7 @@ function QuickorderTable({
       <StyleQuickOrderTable>
         <Typography variant="h3">{b3Lang('purchasedProducts.totalProducts', { total })}</Typography>
         <Box
-          className="mb-5"
+          className="mb-5 [&_.MuiInputLabel-formControl]:hidden [&_.filter-field]:pt-0"
           sx={{
             display: 'flex',
             '& label': {

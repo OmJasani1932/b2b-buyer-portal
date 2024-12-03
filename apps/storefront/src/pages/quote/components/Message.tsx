@@ -330,7 +330,7 @@ function Message({ msgs, id, isB2BUser, email, status }: MsgsProps) {
     <Card>
       <CardContent
         sx={{
-          p: '16px !important',
+          p: '0px !important',
         }}
       >
         <B3CollapseContainer handleOnChange={handleOnChange} title={title}>
@@ -339,18 +339,7 @@ function Message({ msgs, id, isB2BUser, email, status }: MsgsProps) {
               padding: '16px 0',
             }}
           >
-            <Box
-              sx={{
-                position: 'relative',
-                color: 'rgba(0, 0, 0, 0.6)',
-                opacity: 0.6,
-                textAlign: 'left',
-                width: '100%',
-                fontSize: '14px',
-              }}
-            >
-              {b3Lang('quoteDetail.message.merchantAnswers')}
-            </Box>
+            <p>{b3Lang('quoteDetail.message.merchantAnswers')}</p>
             <Box
               ref={messagesEndRef}
               sx={{

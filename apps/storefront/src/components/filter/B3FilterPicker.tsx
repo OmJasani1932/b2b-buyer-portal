@@ -77,7 +77,7 @@ function B3FilterPickers(
 
   return (
     <Box
-      className="pt-4"
+      className="pt-4 filter-field"
       sx={{
         display: 'flex',
         width: customWidth || 'auto',

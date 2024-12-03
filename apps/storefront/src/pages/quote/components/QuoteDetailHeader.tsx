@@ -125,6 +125,7 @@ function QuoteDetailHeader(props: QuoteDetailHeaderProps) {
           }}
         >
           <Box
+            className="mb-6"
             sx={{
               display: 'flex',
               alignItems: `${isMobile ? 'start' : 'center'}`,
@@ -132,10 +133,10 @@ function QuoteDetailHeader(props: QuoteDetailHeaderProps) {
             }}
           >
             <Typography
+              variant="h2"
               sx={{
-                marginRight: '10px',
-                fontSize: '34px',
-                color: b3HexToRgb(customColor, 0.87),
+                marginRight: '20px',
+                marginBottom: '0px',
               }}
             >
               {b3Lang('quoteDetail.header.quoteNumber', {

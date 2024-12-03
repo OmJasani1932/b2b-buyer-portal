@@ -40,7 +40,11 @@ export default function B3CollapseContainer(props: CollapseContainerProps) {
           alignItems: 'center',
         }}
       >
-        {header || <Typography variant="h5">{title}</Typography>}
+        {header || (
+          <Typography className="mb-0" variant="h5">
+            {title}
+          </Typography>
+        )}
         {open ? <ExpandLess /> : <ExpandMore />}
       </Box>
       <Collapse in={open} timeout="auto" unmountOnExit>

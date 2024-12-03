@@ -106,7 +106,7 @@ const Footer = ({ globalSettings }: any) => {
           <div className="flex xl:flex-nowrap flex-wrap">
             <FooterCopyrightText pageData={pageData} />
             <div
-              className="xl:w-8/12 w-full flex xl:justify-end justify-center xl:mt-0 mt-3"
+              className="xl:w-8/12 w-full flex xl:justify-end justify-center xl:mt-0 mt-3 text-gray-200"
               dangerouslySetInnerHTML={{
                 __html:
                   pageData?.globalSettings?.footer_com &&

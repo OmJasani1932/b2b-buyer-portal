@@ -1,7 +1,7 @@
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useB3Lang } from '@b3/lang';
-import { Box, useMediaQuery } from '@mui/material';
+import { Box, Collapse, Typography, useMediaQuery } from '@mui/material';
 
 import useMobile from '@/hooks/useMobile';
 import { DynamicallyVariableedContext } from '@/shared/dynamicallyVariable';
@@ -15,6 +15,7 @@ import B3MobileLayout from './B3MobileLayout';
 import B3Nav from './B3Nav';
 import Header from '../experro/header';
 import Footer from '../experro/footer';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 const SPECIAL_PATH_TEXTS = {
   '/purchased-products': 'global.purchasedProducts.title',
@@ -38,6 +39,12 @@ export default function B3Layout({
   const location = useLocation();
 
   const [title, setTitle] = useState<string>('');
+
+  const [open, setOpen] = useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
 
   const b3Lang = useB3Lang();
 
@@ -105,72 +112,55 @@ export default function B3Layout({
           categories={categories}
           isCategoryLoading={isCategoryLoading}
         />
-        {isMobile ? (
-          // <B3MobileLayout title={title}>{children}</B3MobileLayout>
-          <div className="bg-white">
-            <Box
-              className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto"
-              id="app-mainPage-layout"
-            >
-              <div className="flex flex-wrap pt-6">
-                <Box className="w-full">
-                  <Box>
-                    <B3Nav />
-                  </Box>
-                </Box>
 
-                <Box className="w-full pl-0">
-                  <CompanyCredit />
-                  <Box
-                    component="main"
-                    sx={{
-                      mt: !isMobile && !title ? '24px' : '0',
-                    }}
+        {/* <Box
+          sx={{
+            p: '40px 30px',
+            minHeight: '100vh',
+            display: 'flex',
+            backgroundColor: '#d2d2d3',
+          }}
+        ></Box> */}
+        <div className="bg-white">
+          <Box
+            className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto"
+            id="app-mainPage-layout"
+          >
+            <div className="xl:flex pt-10">
+              <Box className="xl:w-[200px] w-full">
+                <div className="xl:border-0 border border-gray-40">
+                  <Typography
+                    onClick={handleClick}
+                    className="mb-0 px-5 py-3 xl:hidden block relative"
+                    variant="h4"
                   >
-                    {children}
-                  </Box>
-                </Box>
-              </div>
-            </Box>
-          </div>
-        ) : (
-          // <Box
-          //   sx={{
-          //     p: '40px 30px',
-          //     minHeight: '100vh',
-          //     display: 'flex',
-          //     backgroundColor: '#d2d2d3',
-          //   }}
-          // >
-          <div className="bg-white">
-            <Box
-              className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto"
-              id="app-mainPage-layout"
-            >
-              <div className="xl:flex pt-16">
-                <Box className="xl:w-[200px] w-full">
-                  <Box>
-                    <B3Nav />
-                  </Box>
-                </Box>
+                    Account Details
+                    <span className="absolute right-5 top-1/2 flex -mt-3">
+                      {open ? <ExpandLess /> : <ExpandMore />}
+                    </span>
+                  </Typography>
+                  <Collapse in={open} timeout="auto" unmountOnExit>
+                    <div className="xl:px-0 px-5 xl:py-0 py-3 xl:border-0 border-t border-gray-40">
+                      <B3Nav />
+                    </div>
+                  </Collapse>
+                </div>
+              </Box>
 
-                <Box className="xl:w-[calc(100%_-_200px)] w-full xl:pl-10">
-                  <CompanyCredit />
-                  <Box
-                    component="main"
-                    sx={{
-                      mt: !isMobile && !title ? '24px' : '0',
-                    }}
-                  >
-                    {children}
-                  </Box>
+              <Box className="xl:w-[calc(100%_-_200px)] w-full xl:pl-10 xl:mt-0 mt-8">
+                <CompanyCredit />
+                <Box
+                  component="main"
+                  sx={{
+                    mt: !isMobile && !title ? '24px' : '0',
+                  }}
+                >
+                  {children}
                 </Box>
-              </div>
-            </Box>
-          </div>
-
-          // </Box>
-        )}
+              </Box>
+            </div>
+          </Box>
+        </div>
 
         <B3Dialog
           isOpen={globalMessageDialog.open}

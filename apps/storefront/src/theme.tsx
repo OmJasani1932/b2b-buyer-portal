@@ -4,7 +4,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { CustomStyleContext } from './shared/customStyleButton';
 import { BROWSER_LANG } from './constants';
-import { Margin } from '@mui/icons-material';
+import { Margin, Padding } from '@mui/icons-material';
+import { colors } from '@mui/material';
 
 type LangMapType = {
   [index: string]: string;
@@ -68,6 +69,9 @@ function B3ThemeProvider({ children }: Props) {
             fontWeight: 600,
             color: '#004270',
             marginBottom: '15px',
+          },
+          body1: {
+            color: '#808285',
           },
         },
         components: {
@@ -384,6 +388,9 @@ function B3ThemeProvider({ children }: Props) {
                 border: '1px solid rgba(0,0,0,0.12)',
                 padding: '20px', // Padding inside the card
                 transition: 'transform 0.3s ease', // Animation on hover
+                '.MuiCardContent-root': {
+                  padding: '0px !important',
+                },
               },
             },
           },
@@ -441,6 +448,22 @@ function B3ThemeProvider({ children }: Props) {
                 backgroundColor: 'rgba(0, 0, 0, 0.7)', // Semi-transparent black backdrop
                 backdropFilter: 'blur(4px)', // Add a blur effect
                 transition: 'all 0.3s ease-in-out', // Smooth transition for backdrop appearance
+              },
+            },
+          },
+          MuiTableCell: {
+            styleOverrides: {
+              root: {
+                backgroundColor: '#ffffff',
+                color: '#808285',
+                padding: '12px 10px',
+                fontSize: '16px',
+                '.Mui-active': {
+                  color: '#004270',
+                },
+                '.MuiTableCell-head': {
+                  color: '#f20000',
+                },
               },
             },
           },

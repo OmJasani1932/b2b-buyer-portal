@@ -275,7 +275,7 @@ function Address() {
           getRequestList={getAddressList}
           searchParams={filterData}
           isCustomRender
-          itemXs={isExtraLarge ? 3 : 4}
+          itemXs={isExtraLarge ? 4 : 4}
           requestLoading={setIsRequestLoading}
           tableKey="id"
           renderItem={(row: AddressItemType) => (

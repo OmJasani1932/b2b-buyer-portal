@@ -1,5 +1,5 @@
 import { useB3Lang } from '@b3/lang';
-import { Box, Typography } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 
 import CustomButton from '@/components/button/CustomButton';
 import { useMobile } from '@/hooks';
@@ -76,7 +76,7 @@ function QuoteInfoItem({ flag, title, info, status }: QuoteInfoItemProps) {
     >
       <Typography
         sx={{
-          fontWeight: 400,
+          fontWeight: 500,
           fontSize: '24px',
           height: '32px',
         }}
@@ -94,6 +94,7 @@ function QuoteInfoItem({ flag, title, info, status }: QuoteInfoItemProps) {
             if (list === 'quoteTitle') {
               return status === 'Draft' ? (
                 <Typography
+                  className="text-gray-200"
                   sx={{
                     wordBreak: 'break-all',
                   }}
@@ -109,14 +110,14 @@ function QuoteInfoItem({ flag, title, info, status }: QuoteInfoItemProps) {
 
             if (typeof list === 'string') {
               return (
-                <Typography key={list} variant="body1">
+                <Typography className="text-gray-200" key={list} variant="body1">
                   {(info && info[list]) || ''}
                 </Typography>
               );
             }
 
             return (
-              <Typography key={`${list}`} variant="body1">
+              <Typography className="text-gray-200" key={`${list}`} variant="body1">
                 {list.map((item: string, index: number) => {
                   if (index === list.length - 1) {
                     return info[item] || '';
@@ -145,14 +146,7 @@ function QuoteInfo({
   const [isMobile] = useMobile();
 
   return (
-    <Container
-      flexDirection="column"
-      xs={{
-        boxShadow:
-          '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)',
-        borderRadius: '4px',
-      }}
-    >
+    <Card>
       <Box
         sx={{
           width: '100%',
@@ -194,7 +188,7 @@ function QuoteInfo({
           {b3Lang('global.quoteInfo.editInfo')}
         </CustomButton>
       )}
-    </Container>
+    </Card>
   );
 }
 

@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import isEmpty from 'lodash-es/isEmpty';
 
-import CustomButton from '@/components/button/CustomButton';
 import { rolePermissionSelector, useAppSelector } from '@/store';
 import { displayFormat, getB3PermissionsList } from '@/utils';
 
@@ -141,7 +140,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
               </Box>
             )}
           <Box
-            className="mb-2 text-gray-200"
+            className="mb-2 text-gray-200 text-base"
             sx={{
               width: '100%',
               wordBreak: 'break-all',
@@ -223,7 +222,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
         </Flex>
 
         {shoppingList.id && (
-          <div className="mt-3">
+          <div className="mt-4">
             <ShoppingDownload shoppingList={shoppingList} />
           </div>
         )}
