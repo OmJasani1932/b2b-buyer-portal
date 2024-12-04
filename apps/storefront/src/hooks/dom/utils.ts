@@ -21,6 +21,7 @@ import {
 
 import { conversionProductsList } from '../../utils/b3Product/shared/config';
 
+
 interface DiscountsProps {
   discountedAmount: number;
   id: string;
@@ -200,30 +201,30 @@ const addProductsToDraftQuote = async (
   if (isSuccess) {
     addQuoteDraftProducts(productsList);
   }
+  if (window.location.hash?.includes('#/')) {
+    if (isSuccess) {
+      // Save the shopping cart id, used to clear the shopping cart after submitting the quote
+      if (cartId) B3LStorage.set('cartToQuoteId', cartId);
+      globalSnackbar.success('', {
+        jsx: () =>
+          B3AddToQuoteTip({
+            gotoQuoteDraft: () => gotoQuoteDraft(setOpenPage),
+            msg: 'Product was added to your quote.',
+          }),
+        isClose: true,
+      });
+      return;
+    }
 
-  if (isSuccess) {
-    // Save the shopping cart id, used to clear the shopping cart after submitting the quote
-    if (cartId) B3LStorage.set('cartToQuoteId', cartId);
-
-    globalSnackbar.success('', {
+    globalSnackbar.error('', {
       jsx: () =>
         B3AddToQuoteTip({
           gotoQuoteDraft: () => gotoQuoteDraft(setOpenPage),
-          msg: 'Product was added to your quote.',
+          msg: 'The quantity of each product in Quote is 1-1000000.',
         }),
       isClose: true,
     });
-    return;
   }
-
-  globalSnackbar.error('', {
-    jsx: () =>
-      B3AddToQuoteTip({
-        gotoQuoteDraft: () => gotoQuoteDraft(setOpenPage),
-        msg: 'The quantity of each product in Quote is 1-1000000.',
-      }),
-    isClose: true,
-  });
 };
 
 const addProductsFromCartToQuote = (setOpenPage: SetOpenPage) => {

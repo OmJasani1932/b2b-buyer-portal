@@ -1033,7 +1033,6 @@ const addQuoteDraftProducts = (products: CustomFieldItems[]) => {
       }
     });
   }
-
   store.dispatch(setDraftQuoteList(draftQuote));
 };
 

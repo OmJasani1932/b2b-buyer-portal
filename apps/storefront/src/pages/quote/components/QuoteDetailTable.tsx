@@ -314,7 +314,6 @@ function QuoteDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>) {
           offeredPrice,
           productsSearch: { variants = [], taxClassId },
         } = row;
-
         const taxRate = getTaxRate(taxClassId, variants);
         const taxPrice = enteredInclusiveTax
           ? (+basePrice * taxRate) / (1 + taxRate)

@@ -394,23 +394,11 @@ const HeaderController = () => {
     );
   };
 
-  const handleLogout = async (_redirect: boolean) => {
-    // try {
-    //   const logoutResponse = await AuthService.logout();
-    //   if (logoutResponse?.Status !== 'failure') {
-    //     AuthService.setUserDetails({});
-    //     checkUserLoggedInStatus();
-    //     document.dispatchEvent(new Event('CART_REFRESH'));
-    //     logoutFromB2bNinja();
-    //     if (redirect) {
-    //       navigate('/');
-    //     } else {
-    //       window.location.reload();
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
+  const handleLogout = () => {
+    window.dispatchEvent(new Event('LOGOUT_FROM_B2B'));
+    localStorage.removeItem('persist:company');
+    document.dispatchEvent(new Event('CART_REFRESH'));
+    window.location.href = `${window.location.origin}/login/`;
   };
 
   useEffect(() => {
@@ -422,9 +410,6 @@ const HeaderController = () => {
   useEffect(() => {
     initiateEventListeners();
     // checkUserLoggedInStatus();
-    window.addEventListener('LOGOUT_FROM_B2B', () => {
-      handleLogout(false);
-    });
 
     getCart();
     const handlePushstate = () => {

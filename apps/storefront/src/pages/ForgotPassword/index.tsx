@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useB3Lang } from '@b3/lang';
 import { Box, ImageListItem, Typography } from '@mui/material';
 

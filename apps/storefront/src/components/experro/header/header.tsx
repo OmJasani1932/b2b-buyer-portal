@@ -39,6 +39,7 @@ const Header = ({
     searchInputRef,
     handleSearchChange,
     openSearchPreview,
+    handleLogout,
   } = HeaderController();
 
   return (
@@ -201,7 +202,9 @@ const Header = ({
                       className="text-primary hover:text-primaryHover nav-item-about "
                     >
                       <div className="link-wrap">
-                        <span className="flex items-center cursor-pointer">Logout</span>
+                        <span onClick={handleLogout} className="flex items-center cursor-pointer">
+                          Logout
+                        </span>
                       </div>
                     </li>
                     <li

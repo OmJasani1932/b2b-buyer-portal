@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useB3Lang } from '@b3/lang';
 import { Box } from '@mui/material';
-import Cookies from 'js-cookie';
 import trim from 'lodash-es/trim';
 
 import { B3CustomForm } from '@/components';

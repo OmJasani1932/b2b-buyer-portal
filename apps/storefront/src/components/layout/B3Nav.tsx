@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useB3Lang } from '@b3/lang';
-import { Badge, List, ListItem, ListItemButton, ListItemText, useTheme } from '@mui/material';
+import { Badge, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 
 import { useMobile } from '@/hooks';
 import { DynamicallyVariableedContext } from '@/shared/dynamicallyVariable';
@@ -10,7 +10,6 @@ import { getAllowedRoutes } from '@/shared/routes';
 import { useAppSelector } from '@/store';
 import { B3SStorage } from '@/utils';
 
-import { b3HexToRgb, getContrastColor } from '../outSideComponents/utils/b3CustomStyles';
 
 interface B3NavProps {
   closeSidebar?: (x: boolean) => void;
@@ -26,13 +25,11 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
   const role = useAppSelector(({ company }) => company.customer.role);
 
   const { state: globalState } = useContext(GlobalContext);
-  const { quoteDetailHasNewMessages, registerEnabled } = globalState;
+  const { quoteDetailHasNewMessages } = globalState;
 
-  const theme = useTheme();
-  const primaryColor = theme.palette.primary.main;
 
   const jumpRegister = () => {
-    navigate('/register');
+    window.location.href = `${window.location.origin}/login/`
     dispatch({
       type: 'common',
       payload: {
@@ -59,7 +56,7 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
                 ? 'Please create an account, or login to create a shopping list.'
                 : 'To receive full access to buyer portal, please register. It will take 2 minutes.',
             cancelText: 'Cancel',
-            saveText: registerEnabled ? 'Register' : '',
+            saveText: 'Sign-up',
             saveFn: jumpRegister,
           },
         },

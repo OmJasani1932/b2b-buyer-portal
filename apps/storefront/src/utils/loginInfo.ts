@@ -334,7 +334,7 @@ export const getCurrentCustomerInfo: (b2bToken?: string) => Promise<
       store.dispatch(setCompanyInfo(companyPayload));
       store.dispatch(setCustomerInfo(customerInfo));
       store.dispatch(setQuoteUserId(quoteUserId));
-      B3SStorage.set('isB2BUser', isB2BUser);
+      B3LStorage.set('isB2BUser', isB2BUser);
       B3LStorage.set('cartToQuoteId', '');
 
       return {

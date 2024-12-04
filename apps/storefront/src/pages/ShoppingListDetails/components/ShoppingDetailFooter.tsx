@@ -109,7 +109,6 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
     setValidateFailureProducts,
     setValidateSuccessProducts,
     isB2BUser,
-    customColor,
     isCanEditShoppingList,
     role,
   } = props;
@@ -281,7 +280,6 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
           }
         }
       }
-
       setValidateFailureProducts(validateFailureArr);
       setValidateSuccessProducts(validateSuccessArr);
     } finally {

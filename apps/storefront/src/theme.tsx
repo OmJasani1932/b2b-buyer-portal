@@ -1,11 +1,8 @@
-import { ReactNode, useContext } from 'react';
+import { ReactNode } from 'react';
 import * as materialMultiLanguages from '@mui/material/locale';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import { CustomStyleContext } from './shared/customStyleButton';
 import { BROWSER_LANG } from './constants';
-import { Margin, Padding } from '@mui/icons-material';
-import { colors } from '@mui/material';
 
 type LangMapType = {
   [index: string]: string;

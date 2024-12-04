@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import {
   Button,
-  DialogContent,
-  DialogTitle,
   MenuItem,
   Select,
   FormControl,
@@ -33,7 +31,7 @@ function ShoppingDownload(props: any) {
   ];
 
   const customerId = useAppSelector(({ company }) => company.customer.id);
-  const [isLoading, setIsloading] = useState<boolean>(false);
+  const [ ,setIsloading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState<any>({});

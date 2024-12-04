@@ -1,7 +1,7 @@
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useB3Lang } from '@b3/lang';
-import { Box, Collapse, Typography, useMediaQuery } from '@mui/material';
+import { Box, Collapse, Typography } from '@mui/material';
 
 import useMobile from '@/hooks/useMobile';
 import { DynamicallyVariableedContext } from '@/shared/dynamicallyVariable';
@@ -11,7 +11,6 @@ import { useAppSelector } from '@/store';
 import B3Dialog from '../B3Dialog';
 import CompanyCredit from '../CompanyCredit';
 
-import B3MobileLayout from './B3MobileLayout';
 import B3Nav from './B3Nav';
 import Header from '../experro/header';
 import Footer from '../experro/footer';

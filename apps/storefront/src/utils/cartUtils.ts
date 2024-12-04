@@ -120,6 +120,13 @@ export const callCart = async (lineItems: LineItems[] | CustomFieldItems[]) => {
   const res = cartInfo?.data?.site?.cart
     ? await updateCart(cartInfo, lineItems)
     : await createNewShoppingCart(lineItems);
+  let b2bIframe: any = document.getElementById('b2b-iframe');
+  let iframeDocument: any = null;
+  console.log(res);
+  if (b2bIframe) {
+    iframeDocument = b2bIframe.contentDocument;
+  }
+  iframeDocument.dispatchEvent(new Event('CART_REFRESH'));
 
   return res;
 };

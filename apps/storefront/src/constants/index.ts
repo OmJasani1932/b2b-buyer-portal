@@ -68,5 +68,5 @@ export const TRANSLATION_SHOPPING_LIST_BTN_VARAIBLE = 'global.customStyles.shopp
 
 export const BROWSER_LANG = navigator.language.substring(0, 2);
 
-export const CART_URL = '/cart.php';
+export const CART_URL = '/cart/';
 export const CHECKOUT_URL = '/checkout';

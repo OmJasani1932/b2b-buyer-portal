@@ -45,7 +45,6 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
     isB2BUser,
     setOpenPage,
     openAPPParams,
-    customColor,
   } = props;
 
   const {

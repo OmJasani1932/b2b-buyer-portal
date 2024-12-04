@@ -5,8 +5,6 @@ import CustomButton from '@/components/button/CustomButton';
 import { useMobile } from '@/hooks';
 import { BillingAddress, ContactInfo, ShippingAddress } from '@/types/quotes';
 
-import Container from '../style';
-
 interface QuoteInfoItemType {
   [key: string]: string;
 }

@@ -66,6 +66,7 @@ function ExpLinkParser({
 function ExpNavigate(target: string) {
   const Link = target?.startsWith('/') ? target.replace(/^\//, '') : target;
   window.location.href = `${window.location.origin}/${Link}`;
+  console.log('called here in this section')
 }
 
 export { ExpLinkParser, ExpNavigate };

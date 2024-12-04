@@ -107,7 +107,7 @@ export const initState = {
     enabled: true,
   },
   floatingAction: {
-    color: '#3385d6',
+    color: '#fffff',
     text: 'Finish quote',
     buttonText: 'Finish quote',
     location: 'bottomRight',

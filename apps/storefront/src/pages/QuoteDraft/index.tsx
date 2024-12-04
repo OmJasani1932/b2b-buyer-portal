@@ -522,13 +522,11 @@ function QuoteDraft({ setOpenPage }: PageProps) {
             currencyCode: currency.currency_code,
           },
         };
-
         const fn = +role === 99 ? createBCQuote : createQuote;
 
         if (!dispatchOnQuoteCreateEvent(data)) {
           throw new Error();
         }
-
         const {
           quoteCreate: {
             quote: { id, createdAt },
