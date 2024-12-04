@@ -1,3 +1,4 @@
+import { ExpLinkParser } from '../utils';
 import ExpMenuController from './menu-controller';
 import React from 'react';
 
@@ -51,12 +52,14 @@ const ExpMenu = (props: ExpMenuInterface) => {
     <ul className={`${ulClasses}`} id={ulId ? ulId : ''}>
       {menuData?.map((menuItem: any, menuIndex: number) => {
         if (
-          ((menuItem?.page_slug && menuItem.page_slug) || (menuItem?.page_slug_esi && menuItem.page_slug_esi)) !==
-            '#' ||
+          ((menuItem?.page_slug && menuItem.page_slug) ||
+            (menuItem?.page_slug_esi && menuItem.page_slug_esi)) !== '#' ||
           (menuItem?.link_es && menuItem.link_es !== '#')
         ) {
           menuItem.redirectLink =
-            menuItem?.type === 'link' ? menuItem?.link_es : menuItem?.page_slug || menuItem?.page_slug_esi;
+            menuItem?.type === 'link'
+              ? menuItem?.link_es
+              : menuItem?.page_slug || menuItem?.page_slug_esi;
 
           if (menuItem?.redirectLink?.indexOf('//') !== -1) {
             if (
@@ -108,17 +111,16 @@ const ExpMenu = (props: ExpMenuInterface) => {
                       onMouseOut(menuItem?.id, index);
                     }}
                   >
-                    <a
-                      href={menuItem?.redirectLink}
+                    <ExpLinkParser
+                      to={menuItem?.redirectLink}
                       className={linkNameClasses}
-                      id={menuItem?.id}
                       target={menuItem?.link_target === 'New Tab' ? '_blank' : ''}
                     >
                       {getMenuNameToShow(menuItem)}
                       {!!menuItem?.children?.length && (
                         <span className="xl:block hidden">{iconForNavChild}</span>
                       )}
-                    </a>
+                    </ExpLinkParser>
                     {!!menuItem?.children?.length && (
                       <div className="xl:hidden flex items-center justify-center w-9 h-9 absolute xl:top-[0.125rem] top-1/2 -xl:translate-y-0 -translate-y-1/2 right-0">
                         {iconForNavChild}
@@ -135,15 +137,14 @@ const ExpMenu = (props: ExpMenuInterface) => {
                       onMouseOut(menuItem?.id, index);
                     }}
                   >
-                    <a
-                      href={menuItem?.redirectLink}
+                    <ExpLinkParser
+                      to={menuItem?.redirectLink}
                       className={linkNameClasses}
                       target={menuItem?.link_target === 'New Tab' ? '_blank' : ''}
-                      rel="noreferrer"
                     >
                       {getMenuNameToShow(menuItem)}
                       <span className="xl:block hidden">{iconForNavChild}</span>
-                    </a>
+                    </ExpLinkParser>
                     <div className="xl:hidden flex items-center justify-center w-9 h-9 absolute top-[0.125rem] right-0">
                       {iconForNavChild}
                     </div>
@@ -215,14 +216,10 @@ const ExpMenu = (props: ExpMenuInterface) => {
                     } ${menuItem?.class_name ? menuItem?.class_name : ''}`}
                   >
                     <div className="link-wrap xl:w-auto w-full relative">
-                      <a
-                        href={'logout'}
-                        className={`!justify-start ${linkNameClasses}`}
-                        rel="noreferrer"
-                      >
+                      <ExpLinkParser to={'logout'} className={`!justify-start ${linkNameClasses}`}>
                         <i className="icon w-[15px] h-[15px] flex mr-2"></i>
                         Account
-                      </a>
+                      </ExpLinkParser>
                     </div>
                   </li>
                 )}

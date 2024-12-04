@@ -310,31 +310,35 @@ const ExpMenuController = (props: ExpMenuControllerProps) => {
 
   const attachNavigationMenuClickEvents = () => {
     let attempts = 0;
-    const maxAttempts = 20;
-    const intervalTime = 500;
+    const maxAttempts = 30;
+    const intervalTime = 1000;
 
     const intervalId = setInterval(() => {
-      const navigationMenuItems = document.querySelectorAll('.navigation-mega-menu-link');
+      let b2bIframe: any = document.getElementById('b2b-iframe');
+      if (b2bIframe) {
+        b2bIframe = b2bIframe?.contentDocument;
+        const navigationMenuItems = b2bIframe.querySelectorAll('.navigation-mega-menu-link');
 
-      if (navigationMenuItems && navigationMenuItems.length) {
-        navigationMenuItems.forEach((menuItem: any) => {
-          if (!menuItem.getAttribute('data-click-attached')) {
-            menuItem.onclick = () => {
-              const pageSlug = menuItem.getAttribute('data-id');
-              if (pageSlug !== 'undefined') {
-                ExpNavigate(pageSlug);
-              }
-            };
+        if (navigationMenuItems && navigationMenuItems.length) {
+          navigationMenuItems.forEach((menuItem: any) => {
+            if (!menuItem.getAttribute('data-click-attached')) {
+              menuItem.onclick = () => {
+                const pageSlug = menuItem.getAttribute('data-id');
+                if (pageSlug !== 'undefined') {
+                  ExpNavigate(pageSlug);
+                }
+              };
 
-            menuItem.setAttribute('data-click-attached', 'true');
-          }
-        });
+              menuItem.setAttribute('data-click-attached', 'true');
+            }
+          });
 
-        clearInterval(intervalId);
-      }
-      attempts++;
-      if (attempts >= maxAttempts) {
-        clearInterval(intervalId);
+          clearInterval(intervalId);
+        }
+        attempts++;
+        if (attempts >= maxAttempts) {
+          clearInterval(intervalId);
+        }
       }
     }, intervalTime);
   };
