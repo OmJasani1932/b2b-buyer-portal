@@ -27,7 +27,6 @@ interface RefCurrntProps extends HTMLInputElement {
 }
 
 function ShoppingLists() {
-
   const [isb2bCustome, setb2bCustome] = useState<boolean>(false);
 
   const [isRequestLoading, setIsRequestLoading] = useState<boolean>(false);
@@ -233,28 +232,27 @@ function ShoppingLists() {
       }
 
       const data = await response.json();
-      const groupName = localStorage.getItem('user-group')?.toLowerCase();
+      const userGroup = localStorage.getItem('user-group');
+      const groupName = userGroup ? JSON.parse(userGroup)?.toLowerCase() : null;
 
       if (!groupName) {
-        console.error('Error: User group not found in localStorage.');
-        return null;
+        setb2bCustome(false);
+        return;
       }
 
       const quoteType = data?.Data?.find(
         (item: any) => item?.storeName?.toLowerCase() === groupName,
       )?.quoteType;
 
-      if (quoteType === 'custom') {
-        setb2bCustome(true);
-      }
+      setb2bCustome(quoteType === 'custom');
     } catch (error) {
       setb2bCustome(false);
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchCustomStoreConfig();
-  },[])
+  }, []);
 
   return (
     <B3Spin isSpinning={isRequestLoading}>
