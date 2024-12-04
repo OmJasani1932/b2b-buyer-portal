@@ -54,6 +54,8 @@ const ThemeFrame = lazy(() => import('@/components/ThemeFrame'));
 
 const FONT_URL = 'https://use.typekit.net/smw5rwj.css';
 
+declare let window: any;
+
 export default function App() {
   const [globalSettings, setGlobalSettings] = useState<any>({});
   const [categories, setCategories] = useState<any>([]);
@@ -173,11 +175,51 @@ export default function App() {
     });
   };
 
+  const getStoreConfiguration = async () => {
+    const userDetails = window.__PING_DETAILS__;
+    if (userDetails?.userInfo?.id) {
+      const customerGroupDetails = userDetails?.userInfo?.customerGroupDetails;
+      const searchTerm = 'Dollar General';
+      const normalize = (str: any) => str.toLowerCase().replace(/\s+/g, '');
+      if (normalize(customerGroupDetails?.name).includes(normalize(searchTerm))) {
+        //HIDE
+      } else {
+        const data = await fetch(
+          'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              clientid: 'product-3a6fc5d8-1c9c-4844-af6e-d45204f95f8b',
+            },
+          },
+        );
+        const response = await data.json();
+        console.log(response);
+        if (response?.Data?.length) {
+          const quoteType = response?.Data?.find(
+            (item: any) =>
+              item?.storeName?.toLowerCase() === customerGroupDetails?.name?.toLowerCase(),
+          )?.quoteType;
+
+          if (quoteType == 'none' || quoteType == 'custom') {
+            //HIDE
+          } else if (quoteType == 'b2b') {
+            //SHOW
+          } else {
+            //SHOW
+          }
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     handleHideRegisterPage(registerEnabled);
   }, [registerEnabled]);
 
   useEffect(() => {
+    getStoreConfiguration();
     removeBCMenus();
   }, []);
 

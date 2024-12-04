@@ -113,7 +113,7 @@ function QuoteTableCard(props: QuoteTableCardProps) {
               } = window;
 
               if (productUrl) {
-                window.location.href = `${origin}${productUrl}`;
+                window.location.href = `${origin}/xp5agt0qcq${productUrl}`;
               }
             }}
             sx={{

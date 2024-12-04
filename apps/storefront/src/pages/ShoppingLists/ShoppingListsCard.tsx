@@ -54,6 +54,7 @@ const FlexItem = styled(Box)(() => ({
 function ShoppingListsCard(props: OrderItemCardProps) {
   const { item: shoppingList, onEdit, onDelete, onCopy, isPermissions, isB2BUser,isb2bCustome } = props;
   const b3Lang = useB3Lang();
+  console.log(isb2bCustome);
 
   const [isCanEditShoppingList, setIsCanEditShoppingList] = useState<boolean>(true);
   const permissions = useAppSelector(({ company }) => company.permissions);
@@ -224,7 +225,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
 
         {shoppingList.id && isb2bCustome && (
           <div className="mt-4">
-            <ShoppingDownload shoppingList={shoppingList} />
+            <ShoppingDownload />
           </div>
         )}
       </CardContent>

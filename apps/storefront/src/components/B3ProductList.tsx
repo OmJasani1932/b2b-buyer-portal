@@ -338,7 +338,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
                       } = window;
 
                       if (product?.productUrl)
-                        window.location.href = `${origin}${product?.productUrl}`;
+                        window.location.href = `${origin}/xp5agt0qcq${product?.productUrl}`;
                     }
                   }}
                   sx={{

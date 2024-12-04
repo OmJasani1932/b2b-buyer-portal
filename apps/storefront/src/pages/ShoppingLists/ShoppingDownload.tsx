@@ -13,10 +13,8 @@ import {
 
 import B3Dialog from '@/components/B3Dialog';
 import { getB2BCountries } from '@/shared/service/b2b';
-import { useAppSelector } from '@/store';
 
-function ShoppingDownload(props: any) {
-  const { shoppingList } = props;
+function ShoppingDownload() {
   const tempallAddressFields = [
     { name: 'firstName', label: 'First Name', required: true, fieldType: 'text' },
     { name: 'lastName', label: 'Last Name', required: true, fieldType: 'text' },
@@ -31,7 +29,6 @@ function ShoppingDownload(props: any) {
     { name: 'quoteNote', label: 'Quote Note', required: false, fieldType: 'text' },
   ];
 
-  const customerId = useAppSelector(({ company }) => company.customer.id);
   const [isLoading, setIsloading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<any>({});

@@ -122,11 +122,25 @@ export const callCart = async (lineItems: LineItems[] | CustomFieldItems[]) => {
     : await createNewShoppingCart(lineItems);
   let b2bIframe: any = document.getElementById('b2b-iframe');
   let iframeDocument: any = null;
-  console.log(res);
+
+  if (!cartInfo?.data?.site?.cart) {
+    const headers = new Headers();
+    headers.append('content-type', 'application/json');
+    const requestOptions: any = {
+      method: 'GET',
+      headers: headers,
+      redirect: 'follow',
+    };
+    await fetch(
+      `/exp-sf-cms/api/bc/carts/set/${res?.data?.cart?.createCart?.cart?.entityId}`,
+      requestOptions,
+    );
+  }
   if (b2bIframe) {
     iframeDocument = b2bIframe.contentDocument;
   }
   iframeDocument.dispatchEvent(new Event('CART_REFRESH'));
+  window.dispatchEvent(new Event('CART_REFRESH'));
 
   return res;
 };

@@ -12,8 +12,11 @@ import { GlobalContext } from '@/shared/global';
 import { superAdminCompanies } from '@/shared/service/b2b';
 import B3Request from '@/shared/service/request/b3Fetch';
 import {
+  deleteProductFromDraftQuoteList,
   formattedQuoteDraftListSelector,
   isB2BUserSelector,
+  setDraftProduct,
+  setDraftQuoteList,
   useAppDispatch,
   useAppSelector,
 } from '@/store';
@@ -71,6 +74,7 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
   const role = useAppSelector(({ company }) => company.customer.role);
   const productList = useAppSelector(formattedQuoteDraftListSelector);
   const B2BToken = useAppSelector(({ company }) => company.tokens.B2BToken);
+  const quoteProducts = useAppSelector(({ quoteInfo }) => quoteInfo?.draftQuoteList);
 
   const {
     state: { addQuoteBtn, shoppingListBtn, addToAllQuoteBtn },
@@ -145,6 +149,12 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
             ...addToAllQuoteBtnRef.current,
             enabled: cartQuoteEnabledRef.current,
           }),
+          deleteProductFromQuoteFromId: (id: any) =>
+            storeDispatch(deleteProductFromDraftQuoteList(id)),
+          getDrafQuoteProducts: () => ({ quoteProducts }),
+          setQuoteProducts: (quoteList: any) => storeDispatch(setDraftQuoteList(quoteList)),
+          setDraftProduct: (product: any, id: any) =>
+            storeDispatch(setDraftProduct({ product: { node: product }, id: id })),
         },
         user: {
           getProfile: () => ({ ...customerRef.current, role }),

@@ -126,7 +126,7 @@ function ShoppingDetailCard(props: ShoppingDetailCardProps) {
                 location: { origin },
               } = window;
 
-              window.location.href = `${origin}${productUrl}`;
+              window.location.href = `${origin}/xp5agt0qcq${productUrl}`;
             }}
             sx={{
               cursor: 'pointer',

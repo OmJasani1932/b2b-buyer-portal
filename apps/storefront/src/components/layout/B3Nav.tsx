@@ -72,10 +72,15 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
   };
   const menuItems = () => {
     const newRoutes = getAllowedRoutes(globalState).filter((route) => route.isMenuItem);
-
-    return newRoutes;
+    const showQuote = sessionStorage.getItem('showQuote') === 'true';
+    if(showQuote){
+      return newRoutes;
+    }else{
+      return newRoutes?.filter((elem: any) => elem.path !== '/quotes');
+    }
   };
   const newRoutes = menuItems();
+
   const activePath = (path: string) => {
     if (location.pathname === path) {
       B3SStorage.set('prevPath', path);
@@ -98,7 +103,6 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
 
     return false;
   };
-
   return (
     <List
       className="text-primary [&_.Mui-selected]:text-white [&_.Mui-selected]:bg-primary py-0"

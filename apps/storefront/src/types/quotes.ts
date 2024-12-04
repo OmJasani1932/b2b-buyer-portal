@@ -21,7 +21,7 @@ export interface BillingAddress {
   phoneNumber: string;
   state: string;
   zipCode: string;
-}
+} 
 
 export interface ShippingAddress {
   address: string;

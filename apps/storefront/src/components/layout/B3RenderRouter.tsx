@@ -32,11 +32,12 @@ interface B3RenderRouterProps {
 export default function B3RenderRouter(props: B3RenderRouterProps) {
   const { setOpenPage, openUrl, isOpen, globalSettings, categories, isCategoryLoading } = props;
   const { state: globaledState } = useContext(GlobalContext);
-  const newRoutes = () => getAllowedRoutes(globaledState);
+  const showQuote = sessionStorage.getItem('showQuote') === 'true';
+  const newRoutes = () => getAllowedRoutes(globaledState)
+  const routes = showQuote ? newRoutes() : newRoutes()?.filter((elem: any) => elem.path !== '/quotes');
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     if (openUrl && openUrl === '/dashboard?closeMasqurade=1') {
       navigate('/dashboard', {
@@ -83,7 +84,7 @@ export default function B3RenderRouter(props: B3RenderRouterProps) {
             </B3Layout>
           }
         >
-          {newRoutes().map((route: RouteItem) => {
+          {routes.map((route: RouteItem) => {
             const { path, component: Component } = route;
             return (
               <Route key={path} path={path} element={<Component setOpenPage={setOpenPage} />} />

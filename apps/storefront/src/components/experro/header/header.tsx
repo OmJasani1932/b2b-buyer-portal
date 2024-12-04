@@ -42,6 +42,8 @@ const Header = ({
     handleLogout,
   } = HeaderController();
 
+  const showQuote = sessionStorage.getItem('showQuote') === 'true';
+
   return (
     <>
       <header
@@ -207,7 +209,7 @@ const Header = ({
                         </span>
                       </div>
                     </li>
-                    <li
+                    {showQuote && <li
                       id="60155edc-1e2e-4cca-ac4f-f8054999f31c"
                       className="group/level1 text-primary hover:text-primaryHover nav-item-about "
                     >
@@ -216,7 +218,7 @@ const Header = ({
                           My Quote
                         </ExpLinkParser>
                       </div>
-                    </li>
+                    </li>}
                   </ul>
                 </li>
                 <li className="nav-item 3xl:px-5 2xl:px-4 xl:px-3 px-3 relative">

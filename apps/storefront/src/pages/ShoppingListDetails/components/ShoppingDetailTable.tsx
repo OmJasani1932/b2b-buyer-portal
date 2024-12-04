@@ -460,7 +460,7 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
                     location: { origin },
                   } = window;
 
-                  window.location.href = `${origin}${row.productUrl}`;
+                  window.location.href = `${origin}/xp5agt0qcq${row.productUrl}`;
                 }}
                 sx={{
                   cursor: 'pointer',

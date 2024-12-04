@@ -45,6 +45,10 @@ declare interface Window {
         };
         getButtonInfo: () => import('@/shared/customStyleButton/context/config').BtnProperties;
         getButtonInfoAddAllFromCartToQuote: () => import('@/shared/customStyleButton/context/config').BtnProperties;
+        deleteProductFromQuoteFromId: any;
+        getDrafQuoteProducts: any;
+        setQuoteProducts: any;
+        setDraftProduct: any;
       };
       user: {
         getProfile: () => Record<string, string | number>;
