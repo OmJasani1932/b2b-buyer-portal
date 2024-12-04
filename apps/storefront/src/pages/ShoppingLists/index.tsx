@@ -27,6 +27,9 @@ interface RefCurrntProps extends HTMLInputElement {
 }
 
 function ShoppingLists() {
+
+  const [isb2bCustome, setb2bCustome] = useState<boolean>(false);
+
   const [isRequestLoading, setIsRequestLoading] = useState<boolean>(false);
 
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
@@ -211,6 +214,48 @@ function ShoppingLists() {
     }
   };
 
+  const fetchCustomStoreConfig = async () => {
+    try {
+      const response = await fetch(
+        'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            clientid: 'product-3a6fc5d8-1c9c-4844-af6e-d45204f95f8b',
+          },
+        },
+      );
+
+      if (!response.ok) {
+        console.error(`Error: Failed to fetch data. Status: ${response.status}`);
+        return null;
+      }
+
+      const data = await response.json();
+      const groupName = localStorage.getItem('user-group')?.toLowerCase();
+
+      if (!groupName) {
+        console.error('Error: User group not found in localStorage.');
+        return null;
+      }
+
+      const quoteType = data?.Data?.find(
+        (item: any) => item?.storeName?.toLowerCase() === groupName,
+      )?.quoteType;
+
+      if (quoteType === 'custom') {
+        setb2bCustome(true);
+      }
+    } catch (error) {
+      setb2bCustome(false);
+    }
+  };
+
+  useEffect(()=>{
+    fetchCustomStoreConfig();
+  },[])
+
   return (
     <B3Spin isSpinning={isRequestLoading}>
       <Box
@@ -246,6 +291,7 @@ function ShoppingLists() {
               onDelete={handleDelete}
               onCopy={handleCopy}
               isB2BUser={isB2BUser}
+              isb2bCustome={isb2bCustome}
             />
           )}
         />

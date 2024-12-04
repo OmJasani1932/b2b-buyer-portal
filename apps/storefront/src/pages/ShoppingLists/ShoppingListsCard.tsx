@@ -26,6 +26,7 @@ export interface OrderItemCardProps {
   onCopy: (data: ShoppingListsItemsProps) => void;
   isPermissions: boolean;
   isB2BUser: boolean;
+  isb2bCustome?: boolean;
 }
 
 interface PermissionLevelInfoProps {
@@ -51,7 +52,7 @@ const FlexItem = styled(Box)(() => ({
 }));
 
 function ShoppingListsCard(props: OrderItemCardProps) {
-  const { item: shoppingList, onEdit, onDelete, onCopy, isPermissions, isB2BUser } = props;
+  const { item: shoppingList, onEdit, onDelete, onCopy, isPermissions, isB2BUser,isb2bCustome } = props;
   const b3Lang = useB3Lang();
 
   const [isCanEditShoppingList, setIsCanEditShoppingList] = useState<boolean>(true);
@@ -221,7 +222,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
           </Box>
         </Flex>
 
-        {shoppingList.id && (
+        {shoppingList.id && isb2bCustome && (
           <div className="mt-4">
             <ShoppingDownload shoppingList={shoppingList} />
           </div>

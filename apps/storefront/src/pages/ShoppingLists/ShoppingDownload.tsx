@@ -3,35 +3,36 @@
 import { useEffect, useState } from 'react';
 import {
   Button,
+  FilledInput,
+  FormControl,
+  FormHelperText,
+  InputLabel,
   MenuItem,
   Select,
-  FormControl,
-  InputLabel,
-  FormHelperText,
-  FilledInput,
 } from '@mui/material';
 
+import B3Dialog from '@/components/B3Dialog';
 import { getB2BCountries } from '@/shared/service/b2b';
 import { useAppSelector } from '@/store';
-import B3Dialog from '@/components/B3Dialog';
 
 function ShoppingDownload(props: any) {
   const { shoppingList } = props;
   const tempallAddressFields = [
     { name: 'firstName', label: 'First Name', required: true, fieldType: 'text' },
     { name: 'lastName', label: 'Last Name', required: true, fieldType: 'text' },
-    { name: 'company', label: 'Company Name', required: false, fieldType: 'text' },
-    { name: 'phone', label: 'Phone Number', required: false, fieldType: 'text' },
     { name: 'address1', label: 'Address Line 1', required: true, fieldType: 'text' },
     { name: 'address2', label: 'Address Line 2', required: false, fieldType: 'text' },
     { name: 'city', label: 'Suburb/City', required: true, fieldType: 'text' },
     { name: 'country', label: 'Country', required: true, fieldType: 'dropdown' },
     { name: 'state', label: 'State/Province', required: false, fieldType: 'dropdown' },
-    { name: 'postalCode', label: 'Zip/Postcode', required: true, fieldType: 'text' },
+    { name: 'postalCode', label: 'ZipCode', required: true, fieldType: 'text' },
+    { name: 'poNumber', label: 'PO Number', required: false, fieldType: 'text' },
+    { name: 'orderName', label: 'Order Name', required: false, fieldType: 'text' },
+    { name: 'quoteNote', label: 'Quote Note', required: false, fieldType: 'text' },
   ];
 
   const customerId = useAppSelector(({ company }) => company.customer.id);
-  const [ ,setIsloading] = useState<boolean>(false);
+  const [isLoading, setIsloading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState<any>({});
@@ -73,13 +74,13 @@ function ShoppingDownload(props: any) {
   const handleSubmit = async () => {
     if (validateForm()) {
       setIsloading(true);
-      console.log(shoppingList);
       const requestData = {
-        shoppingListId: shoppingList?.id,
-        customerId,
-        poNumber: '',
-        notes: '',
-        orderName: '',
+        // shoppingListId: Number(shoppingList?.id),
+        shoppingListId: 290963,
+        customerId: 10125,
+        poNumber: formData.poNumber,
+        notes: formData.quoteNote,
+        orderName: formData.orderName,
         address: {
           shipTo: {
             firstName: formData.firstName,
@@ -100,21 +101,31 @@ function ShoppingDownload(props: any) {
           'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/shopping-list-quote',
           {
             method: 'POST',
-            headers: { clientid: 'order-56aaf9ef-770e-46b1-aeae-d72f62d9b279' },
+            headers: {
+              clientid: 'order-56aaf9ef-770e-46b1-aeae-d72f62d9b279',
+              'Content-Type': 'application/json',
+            },
             body: JSON.stringify(requestData),
           },
         );
 
-        const data = await response.json();
         if (response.ok) {
-          console.log('API Response:', data);
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'shopping-list-quote.pdf';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          window.URL.revokeObjectURL(url);
+
           handleClose();
         } else {
-          console.error('Error:', data);
+          setIsloading(false);
         }
       } catch (error) {
         handleClose();
-        console.error('Error submitting form:', error);
       }
     }
   };
@@ -138,11 +149,12 @@ function ShoppingDownload(props: any) {
       <B3Dialog
         isOpen={open}
         fullWidth
-        title={'Add Shipping Address'}
+        title="Add Shipping Address"
         maxWidth="sm"
         rightSizeBtn="submit"
         handleLeftClick={handleClose}
         handRightClick={handleSubmit}
+        loading={isLoading}
       >
         <form>
           {tempallAddressFields.map((field: any) => (
