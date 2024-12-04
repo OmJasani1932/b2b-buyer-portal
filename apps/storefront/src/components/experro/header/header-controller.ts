@@ -398,6 +398,7 @@ const HeaderController = () => {
     window.dispatchEvent(new Event('LOGOUT_FROM_B2B'));
     localStorage.removeItem('persist:company');
     localStorage.removeItem('categories');
+    localStorage.removeItem('user-group');
     document.dispatchEvent(new Event('CART_REFRESH'));
     window.location.href = `${window.location.origin}/login/`;
   };

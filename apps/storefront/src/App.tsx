@@ -307,10 +307,12 @@ export default function App() {
 
       const updatedData = ensureChildrenArray(subCat.Data?.categories);
       const sortedItems = updatedData?.sort((a: any, b: any) => {
-        if (a.name_esi.toLowerCase() === 'brands') return -1;
-        if (b.name_esi.toLowerCase() === 'brands') return 1;
-        return 0;
+        if (a?.name_esi?.toLowerCase() === 'brands') return -1;
+        if (b?.name_esi?.toLowerCase() === 'brands') return 1;
+
+        return a?.name_esi.toLowerCase().localeCompare(b?.name_esi.toLowerCase());
       });
+
 
       let accessibleCategories: any;
 
