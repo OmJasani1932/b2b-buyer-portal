@@ -39,6 +39,7 @@ const ExpMenu = (props: ExpMenuInterface) => {
     onMouseOut,
     handleMenuMoreOptions,
     isMenuOptionsHandled,
+    toKebabCase
   } = ExpMenuController({
     menuLinkObj,
     childMenuItem,
@@ -93,7 +94,7 @@ const ExpMenu = (props: ExpMenuInterface) => {
                   menuItem?.children?.length
                     ? ` text-primary hover:text-primaryHover [&.is-expanded>.link-wrap>div>.icon]:text-primary [&.is-expanded>.link-wrap>div>.icon]:rotate-180 [&.is-expanded>.link-wrap>div>.icon]:transition-all`
                     : ''
-                } nav-item-${
+                } ${toKebabCase(menuItem?.name_esi)} nav-item-${
                   menuItem.content_model_internal_name === 'custom_links'
                     ? filterNavStringForClass(menuItem.name_esi)
                     : filterNavStringForClass(menuItem.menu_title_es) ||
@@ -208,7 +209,7 @@ const ExpMenu = (props: ExpMenuInterface) => {
                       menuItem?.children?.length
                         ? ` text-primary hover:text-primaryHover xl:hidden`
                         : 'xl:hidden'
-                    } nav-item-${
+                    } ${toKebabCase(menuItem?.name_esi)} nav-item-${
                       menuItem.content_model_internal_name === 'custom_links'
                         ? filterNavStringForClass(menuItem.name_esi)
                         : filterNavStringForClass(menuItem.menu_title_es) ||

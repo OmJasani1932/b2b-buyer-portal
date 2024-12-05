@@ -382,6 +382,7 @@ const ExpMenuController = (props: ExpMenuControllerProps) => {
     toggleMenuWithChild,
     handleMenuMoreOptions,
     isMenuOptionsHandled,
+    toKebabCase,
   };
 };
 export default ExpMenuController;
