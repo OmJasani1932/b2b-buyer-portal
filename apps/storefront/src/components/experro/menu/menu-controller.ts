@@ -192,9 +192,24 @@ const ExpMenuController = (props: ExpMenuControllerProps) => {
                   if (extraItems.length > 0) {
                     fittingItems.push(newObj);
                   }
-
+                  extraItems?.filter((item: any) => {
+                    if (
+                      item.page_slug_esi === '/wood-doors/' ||
+                      item.page_slug_esi ===
+                        `/xp5agt0qcq/wood-doors/`
+                    ) {
+                      item.page_slug_esi = '/commercial-wood-doors/';
+                    }
+                  });
                   ulTag.innerHTML = '';
                   fittingItems.forEach((item: any) => {
+                    if (
+                      item.page_slug_esi === '/wood-doors/' ||
+                      item.page_slug_esi ===
+                      `/xp5agt0qcq/wood-doors/`
+                    ) {
+                      item.page_slug_esi = '/commercial-wood-doors/';
+                    }
                     const li = document.createElement('li');
                     li.className = `cat-li-one group text-primary hover:text-primaryHover hover:bg-[#eaeaec] xl:w-auto w-full relative ${toKebabCase(
                       item?.name_esi,

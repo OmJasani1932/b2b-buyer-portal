@@ -39,7 +39,7 @@ const ExpMenu = (props: ExpMenuInterface) => {
     onMouseOut,
     handleMenuMoreOptions,
     isMenuOptionsHandled,
-    toKebabCase
+    toKebabCase,
   } = ExpMenuController({
     menuLinkObj,
     childMenuItem,
@@ -113,7 +113,12 @@ const ExpMenu = (props: ExpMenuInterface) => {
                     }}
                   >
                     <ExpLinkParser
-                      to={menuItem?.redirectLink}
+                      to={
+                        menuItem?.redirectLink === `/xp5agt0qcq/wood-doors/` ||
+                        menuItem?.redirectLink === '/wood-doors/'
+                          ? '/commercial-wood-doors/'
+                          : menuItem?.redirectLink
+                      }
                       className={linkNameClasses}
                       target={menuItem?.link_target === 'New Tab' ? '_blank' : ''}
                     >
@@ -139,7 +144,12 @@ const ExpMenu = (props: ExpMenuInterface) => {
                     }}
                   >
                     <ExpLinkParser
-                      to={menuItem?.redirectLink}
+                      to={
+                        menuItem?.redirectLink === `/xp5agt0qcq/wood-doors/` ||
+                        menuItem?.redirectLink === '/wood-doors/'
+                          ? '/commercial-wood-doors/'
+                          : menuItem?.redirectLink
+                      }
                       className={linkNameClasses}
                       target={menuItem?.link_target === 'New Tab' ? '_blank' : ''}
                     >
@@ -188,8 +198,8 @@ const ExpMenu = (props: ExpMenuInterface) => {
                       }
                       linkNameClasses={
                         menuItem?.class_name === 'mega-menu'
-                          ? 'flex items-center xl:justify-start justify-between xl:text-base text-sm leading-5 xl:w-auto w-full xl:font-medium text-primary hover:text-primaryHover 2xl:px-5 xl:px-3 xl:py-5 py-1.5'
-                          : 'flex items-center xl:text-base text-sm leading-5 xl:py-0 py-1.5'
+                          ? 'flex items-center xl:justify-start justify-between xl:text-base text-sm leading-5 xl:w-auto w-full xl:font-medium text-primary hover:text-primaryHover 2xl:px-5 xl:px-3 xl:py-5 py-1.5 cursor-pointer'
+                          : 'flex items-center xl:text-base text-sm leading-5 xl:py-0 py-1.5 cursor-pointer'
                       }
                       keyValueForMenu={keyValueForMenu}
                       iconForNavChild={iconForNavChild}

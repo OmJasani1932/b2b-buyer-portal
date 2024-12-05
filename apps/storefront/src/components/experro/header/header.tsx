@@ -50,7 +50,7 @@ const Header = ({
         className="header-section bg-white relative xl:z-20 z-50 group-[.sticky-header]/body:fixed group-[.sticky-header]/body:top-0 group-[.sticky-header]/body:left-0 group-[.sticky-header]/body:bg-white group-[.sticky-header]/body:z-50 group-[.sticky-header]/body:w-full group-[.sticky-header]/body:animate-top-to-bottom group-[.sticky-header]/body:shadow-[0_5px_15px_rgba(0,0,0,.1)]"
         id={'header'}
       >
-        <div className="header-container max-w-[120rem] 3xl:px-[4.6875rem] 2xl:px-10 md:px-5 px-4 xl:py-0 py-4">
+        <div className="header-container max-w-[120rem] 3xl:px-[4.6875rem] 2xl:px-10 md:px-5 px-4 xl:py-0 py-4 mx-auto">
           <div className="flex justify-end">
             <div className="mobile-menu-block xl:w-auto w-[20%] xl:hidden flex items-center">
               <ul className="flex items-center">
@@ -116,7 +116,7 @@ const Header = ({
                     'group nav-item 3xl:mx-5 2xl:mx-3 xl:mx-2 flex items-center flex-wrap xl:border-0 border-b border-gray-50 xl:flex-nowrap primary-navigation'
                   }
                   linkNameClasses={
-                    "flex items-center xl:justify-start justify-between text-sm 2xl:text-base font-medium text-primary xl:py-[2.0625rem] py-[0.625rem] leading-5 transition-all duration-200 ease-linear relative xl:before:content-[''] before:absolute xl:before:w-full xl:before:h-1 xl:before:left-0 xl:before:bottom-0 xl:before:bg-primary xl:before:invisible xl:before:transition-all xl:before:duration-300 before:ease-linear xl:group-[:hover]:before:visible"
+                    "flex items-center xl:justify-start justify-between text-sm 2xl:text-base font-medium text-primary xl:py-[2.0625rem] py-[0.625rem] leading-5 transition-all duration-200 ease-linear relative xl:before:content-[''] before:absolute xl:before:w-full xl:before:h-1 xl:before:left-0 xl:before:bottom-0 xl:before:bg-primary xl:before:invisible xl:before:transition-all xl:before:duration-300 before:ease-linear xl:group-[:hover]:before:visible cursor-pointer"
                   }
                   keyValueForMenu={'primary_navigation_menu_id_et'}
                   iconForNavChild={
@@ -254,7 +254,7 @@ const Header = ({
             <div className="container">
               <div className="pencil-banner-inner flex justify-center">
                 <p
-                  className="mb-0 font-semibold text-center text-white sm:text-[1.375rem] text-base sm:leading-7 leading-5 inline-block underline"
+                  className="mb-0 font-semibold text-center text-white sm:text-[1.375rem] text-base sm:leading-7 leading-5 inline-block underline [&_a]:text-white [&_a:hover]:text-white"
                   dangerouslySetInnerHTML={{
                     __html: globalsettings.header_com[0].pencil_banner_text_et,
                   }}

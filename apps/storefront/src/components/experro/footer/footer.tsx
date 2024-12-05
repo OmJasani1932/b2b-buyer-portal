@@ -33,7 +33,7 @@ const Footer = ({ globalSettings }: any) => {
           </div>
         )}
       </div>
-      <div className="footer-section max-w-[120rem] 3xl:px-[4.6875rem] 2xl:px-10 md:px-5 px-4 lg:py-14 py-8">
+      <div className="footer-section max-w-[120rem] 3xl:px-[4.6875rem] 2xl:px-10 md:px-5 px-4 lg:py-14 py-8 mx-auto">
         <div className="footer-navigation-section">
           <div className="footer-nav-block flex lg:gap-5 xl:flex-nowrap flex-wrap lg:[&>.footer-logo-col]:mb-0 [&>.footer-logo-col]:mb-5">
             <div className="footer-col footer-logo-col xl:basis-[29.7%] lg:basis-[36%] basis-[100%]">
