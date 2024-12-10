@@ -218,6 +218,7 @@ function B3FilterMore<T, Y>({
                     '& .MuiBadge-badge.MuiBadge-standard.MuiBadge-anchorOriginTopRight': {
                       bgcolor: primaryColor,
                       borderRadius: '50%',
+                      color: '#ffffff'
                     },
                   }}
                 >
@@ -228,11 +229,11 @@ function B3FilterMore<T, Y>({
           </Box>
           {isFiltering && !isMobile && (
             <Button
+            className='p-0 border-0 hover:bg-white hover:text-primaryHover underline text-sm whitespace-nowrap'
               aria-label="clear-edit"
               size="small"
               sx={{
-                marginLeft: '5px',
-                color: '#004270',
+                marginLeft: '16px',
               }}
               onClick={handleClearBtn}
             >

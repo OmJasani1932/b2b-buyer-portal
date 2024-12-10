@@ -59,102 +59,107 @@ export function AddressItemCard(props: OrderItemCardProps) {
   const b3Lang = useB3Lang();
 
   return (
-    <Card key={addressInfo.id}>
+    <Card className="h-full" key={addressInfo.id}>
       <CardContent
+        className="h-full"
         sx={{
-          color: '#313440',
           wordBreak: 'break-word',
         }}
       >
-        {addressInfo.label && (
-          <Typography
-            variant="h5"
-            sx={{
-              marginBottom:
-                addressInfo.isDefaultShipping === 1 || addressInfo.isDefaultBilling === 1
-                  ? theme.spacing(1)
-                  : theme.spacing(3),
-              color: 'rgba(0, 0, 0, 0.87)',
-            }}
-          >
-            {addressInfo.label}
-          </Typography>
-        )}
-
-        <TagBox
-          marginBottom={
-            addressInfo.isDefaultShipping === 1 || addressInfo.isDefaultBilling === 1
-              ? theme.spacing(3)
-              : 0
-          }
-        >
-          {addressInfo.isDefaultShipping === 1 && (
-            <B3Tag color="#C4DD6C" textColor="rgba(0, 0, 0, 0.87)">
-              {b3Lang('addresses.addressItemCard.defaultShipping')}
-            </B3Tag>
-          )}
-          {addressInfo.isDefaultBilling === 1 && (
-            <B3Tag color="#C4DD6C" textColor="rgba(0, 0, 0, 0.87)">
-              {b3Lang('addresses.addressItemCard.defaultBilling')}
-            </B3Tag>
-          )}
-        </TagBox>
-
-        <Typography variant="body1">{`${addressInfo.firstName} ${addressInfo.lastName}`}</Typography>
-        <Typography variant="body1">{addressInfo.company || ''}</Typography>
-        <Typography variant="body1">{addressInfo.addressLine1}</Typography>
-        <Typography variant="body1">
-          {addressInfo.addressLine2 === 'undefined' ? '' : addressInfo.addressLine2}
-        </Typography>
-        <Typography variant="body1">{`${addressInfo.city}, ${addressInfo.state} ${addressInfo.zipCode}, ${addressInfo.country}`}</Typography>
-        <Typography variant="body1">{addressInfo.phoneNumber}</Typography>
-
-        {hasPermission && (
-          <Flex>
-            {!isBCPermission && (
-              <CustomButton
-                variant="text"
+        <div className="flex justify-between flex-col h-full">
+          <div className="title-block">
+            {addressInfo.label && (
+              <Typography
+                variant="h5"
                 sx={{
-                  ml: '-8px',
-                }}
-                onClick={() => {
-                  onSetDefault(addressInfo);
+                  marginBottom:
+                    addressInfo.isDefaultShipping === 1 || addressInfo.isDefaultBilling === 1
+                      ? theme.spacing(1)
+                      : theme.spacing(3),
+                  color: 'rgba(0, 0, 0, 0.87)',
                 }}
               >
-                {b3Lang('addresses.addressItemCard.setAsDefault')}
-              </CustomButton>
+                {addressInfo.label}
+              </Typography>
             )}
-            <Box
-              sx={{
-                flex: 1,
-                display: 'flex',
-                justifyContent: 'flex-end',
-              }}
+
+            <TagBox
+              marginBottom={
+                addressInfo.isDefaultShipping === 1 || addressInfo.isDefaultBilling === 1
+                  ? theme.spacing(3)
+                  : 0
+              }
             >
-              <IconButton
-                aria-label="edit"
-                size="small"
-                sx={{
-                  marginRight: '8px',
-                }}
-                onClick={() => {
-                  onEdit(addressInfo);
-                }}
-              >
-                <EditIcon fontSize="inherit" />
-              </IconButton>
-              <IconButton
-                aria-label="delete"
-                size="small"
-                onClick={() => {
-                  onDelete(addressInfo);
-                }}
-              >
-                <DeleteIcon fontSize="inherit" />
-              </IconButton>
-            </Box>
-          </Flex>
-        )}
+              {addressInfo.isDefaultShipping === 1 && (
+                <B3Tag color="#C4DD6C" textColor="rgba(0, 0, 0, 0.87)">
+                  {b3Lang('addresses.addressItemCard.defaultShipping')}
+                </B3Tag>
+              )}
+              {addressInfo.isDefaultBilling === 1 && (
+                <B3Tag color="#C4DD6C" textColor="rgba(0, 0, 0, 0.87)">
+                  {b3Lang('addresses.addressItemCard.defaultBilling')}
+                </B3Tag>
+              )}
+            </TagBox>
+
+            <Typography variant="body1">{`${addressInfo.firstName} ${addressInfo.lastName}`}</Typography>
+            <Typography variant="body1">{addressInfo.company || ''}</Typography>
+            <Typography variant="body1">{addressInfo.addressLine1}</Typography>
+            <Typography variant="body1">
+              {addressInfo.addressLine2 === 'undefined' ? '' : addressInfo.addressLine2}
+            </Typography>
+            <Typography variant="body1">{`${addressInfo.city}, ${addressInfo.state} ${addressInfo.zipCode}, ${addressInfo.country}`}</Typography>
+            <Typography variant="body1">{addressInfo.phoneNumber}</Typography>
+          </div>
+          <div>
+            {hasPermission && (
+              <Flex>
+                {!isBCPermission && (
+                  <CustomButton
+                    variant="text"
+                    sx={{
+                      ml: '-8px',
+                    }}
+                    onClick={() => {
+                      onSetDefault(addressInfo);
+                    }}
+                  >
+                    {b3Lang('addresses.addressItemCard.setAsDefault')}
+                  </CustomButton>
+                )}
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <IconButton
+                    aria-label="edit"
+                    size="small"
+                    sx={{
+                      marginRight: '8px',
+                    }}
+                    onClick={() => {
+                      onEdit(addressInfo);
+                    }}
+                  >
+                    <EditIcon fontSize="inherit" />
+                  </IconButton>
+                  <IconButton
+                    aria-label="delete"
+                    size="small"
+                    onClick={() => {
+                      onDelete(addressInfo);
+                    }}
+                  >
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                </Box>
+              </Flex>
+            )}
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

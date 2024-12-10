@@ -48,7 +48,6 @@ export function AddressItemCard(props: OrderItemCardProps) {
     <Card key={addressInfo.id}>
       <CardContent
         sx={{
-          color: '#313440',
           wordBreak: 'break-word',
         }}
       >

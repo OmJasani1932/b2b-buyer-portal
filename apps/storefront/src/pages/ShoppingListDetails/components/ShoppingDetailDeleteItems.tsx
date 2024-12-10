@@ -23,9 +23,6 @@ function ShoppingDetailDeleteItems(props: ShoppingDetailDeleteItemsProps) {
       rightSizeBtn={b3Lang('shoppingList.deleteItems.delete')}
       handleLeftClick={handleCancelClick}
       handRightClick={handleDeleteProductClick}
-      rightStyleBtn={{
-        color: '#D32F2F',
-      }}
     >
       <Box
         sx={{

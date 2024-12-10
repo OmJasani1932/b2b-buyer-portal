@@ -131,7 +131,7 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
                 }}
               >
                 <ListItemButton
-                  className="[&.Mui-selected]:hover:text-white [&.Mui-selected]:hover:bg-primary/80"
+                  className="[&.Mui-selected_span]:text-white [&]:hover:text-white [&.Mui-selected]:hover:text-white [&.Mui-selected]:hover:bg-primary/80"
                   onClick={() => handleClick(item)}
                   selected={activePath(item.path)}
                 >

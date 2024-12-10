@@ -73,9 +73,6 @@ export default function DeleteAddressDialog(props: DeleteAddressDialogProps) {
         setIsOpen(false);
       }}
       handRightClick={handleDelete}
-      rightStyleBtn={{
-        color: '#D32F2F',
-      }}
       isShowBordered={false}
     >
       <Box

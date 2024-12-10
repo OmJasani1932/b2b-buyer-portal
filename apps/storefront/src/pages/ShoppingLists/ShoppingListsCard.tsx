@@ -54,7 +54,6 @@ const FlexItem = styled(Box)(() => ({
 function ShoppingListsCard(props: OrderItemCardProps) {
   const { item: shoppingList, onEdit, onDelete, onCopy, isPermissions, isB2BUser,isb2bCustome } = props;
   const b3Lang = useB3Lang();
-  console.log(isb2bCustome);
 
   const [isCanEditShoppingList, setIsCanEditShoppingList] = useState<boolean>(true);
   const permissions = useAppSelector(({ company }) => company.permissions);
@@ -115,6 +114,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
 
   return (
     <Card
+    className='h-full'
       key={shoppingList.id}
       sx={{
         '& .b2b-card-content': {
@@ -122,112 +122,116 @@ function ShoppingListsCard(props: OrderItemCardProps) {
         },
       }}
     >
-      <CardContent className="b2b-card-content !p-0">
-        <Typography
-          variant="h5"
-          className="leading-5"
-          sx={{
-            width: '100%',
-            wordBreak: 'break-all',
-          }}
-        >
-          {shoppingList.name}
-        </Typography>
-        <Box>
-          {isB2BUser &&
-            (submitShoppingListPermission ||
-              (approveShoppingListPermission && shoppingList.approvedFlag)) && (
-              <Box className="mb-2">
-                <ShoppingStatus status={shoppingList.status} />
-              </Box>
-            )}
-          <Box
-            className="mb-2 text-gray-200 text-base"
+      <CardContent className="b2b-card-content !p-0 flex h-full flex-col justify-between">
+        <div className="title-block">
+          <Typography
+            variant="h5"
+            className="leading-5"
             sx={{
               width: '100%',
               wordBreak: 'break-all',
             }}
           >
-            {shoppingList.description}
-          </Box>
-
-          {isB2BUser && (
+            {shoppingList.name}
+          </Typography>
+          <Box>
+            {isB2BUser &&
+              (submitShoppingListPermission ||
+                (approveShoppingListPermission && shoppingList.approvedFlag)) && (
+                <Box className="mb-2">
+                  <ShoppingStatus status={shoppingList.status} />
+                </Box>
+              )}
+            <Box
+              className="mb-2 text-gray-200 text-base"
+              sx={{
+                width: '100%',
+                wordBreak: 'break-all',
+              }}
+            >
+              {shoppingList.description}
+            </Box>
+ 
+            {isB2BUser && (
+              <FlexItem className="mb-1 text-gray-200">
+                <FontBold className="text-gray-200">
+                  {b3Lang('shoppingLists.card.createdBy')}
+                </FontBold>
+                {shoppingList.customerInfo.firstName} {shoppingList.customerInfo.lastName}
+              </FlexItem>
+            )}
+            <FlexItem className="mb-1 text-gray-200">
+              <FontBold className="text-gray-200">{b3Lang('shoppingLists.card.products')}</FontBold>
+              {shoppingList.products.totalCount}
+            </FlexItem>
             <FlexItem className="mb-1 text-gray-200">
               <FontBold className="text-gray-200">
-                {b3Lang('shoppingLists.card.createdBy')}
+                {b3Lang('shoppingLists.card.lastActivity')}
               </FontBold>
-              {shoppingList.customerInfo.firstName} {shoppingList.customerInfo.lastName}
+              {`${displayFormat(shoppingList.updatedAt)}`}
             </FlexItem>
-          )}
-          <FlexItem className="mb-1 text-gray-200">
-            <FontBold className="text-gray-200">{b3Lang('shoppingLists.card.products')}</FontBold>
-            {shoppingList.products.totalCount}
-          </FlexItem>
-          <FlexItem className="mb-1 text-gray-200">
-            <FontBold className="text-gray-200">
-              {b3Lang('shoppingLists.card.lastActivity')}
-            </FontBold>
-            {`${displayFormat(shoppingList.updatedAt)}`}
-          </FlexItem>
-        </Box>
-        <Flex className="mt-4">
-          <span
-            className="text-primary font-medium underline cursor-pointer hover:text-primaryHover"
-            onClick={() => goToDetail(shoppingList)}
-          >
-            {b3Lang('shoppingLists.card.view')}
-          </span>
-          <Box
-            sx={{
-              display: `${isPermissions ? 'block' : 'none'}`,
-            }}
-          >
-            {!getEditPermissions(shoppingList.status) && isCanEditShoppingList && (
+          </Box>
+        </div>
+        <div className="button-block mt-4">
+          <Flex>
+            <span
+              className="text-primary font-medium underline cursor-pointer hover:text-primaryHover"
+              onClick={() => goToDetail(shoppingList)}
+            >
+              {b3Lang('shoppingLists.card.view')}
+            </span>
+            <Box
+              sx={{
+                display: `${isPermissions ? 'block' : 'none'}`,
+              }}
+            >
+              {!getEditPermissions(shoppingList.status) && isCanEditShoppingList && (
+                <IconButton
+                  aria-label="edit"
+                  size="small"
+                  sx={{
+                    marginRight: '8px',
+                  }}
+                  onClick={() => {
+                    onEdit(shoppingList);
+                  }}
+                >
+                  <EditIcon fontSize="inherit" />
+                </IconButton>
+              )}
+ 
               <IconButton
-                aria-label="edit"
+                aria-label="duplicate"
                 size="small"
                 sx={{
                   marginRight: '8px',
                 }}
                 onClick={() => {
-                  onEdit(shoppingList);
+                  onCopy(shoppingList);
                 }}
               >
-                <EditIcon fontSize="inherit" />
+                <ContentCopyIcon fontSize="inherit" />
               </IconButton>
-            )}
-
-            <IconButton
-              aria-label="duplicate"
-              size="small"
-              sx={{
-                marginRight: '8px',
-              }}
-              onClick={() => {
-                onCopy(shoppingList);
-              }}
-            >
-              <ContentCopyIcon fontSize="inherit" />
-            </IconButton>
-            {!getDeletePermissions(shoppingList.status) && isCanEditShoppingList && (
-              <IconButton
-                aria-label="delete"
-                size="small"
-                onClick={() => {
-                  onDelete(shoppingList);
-                }}
-              >
-                <DeleteIcon fontSize="inherit" />
-              </IconButton>
-            )}
-          </Box>
-        </Flex>
-
-        {shoppingList.id && isb2bCustome && (
-          <div className="mt-4">
-            <ShoppingDownload />
-          </div>
-        )}
+              {!getDeletePermissions(shoppingList.status) && isCanEditShoppingList && (
+                <IconButton
+                  aria-label="delete"
+                  size="small"
+                  onClick={() => {
+                    onDelete(shoppingList);
+                  }}
+                >
+                  <DeleteIcon fontSize="inherit" />
+                </IconButton>
+              )}
+            </Box>
+          </Flex>
+ 
+          {shoppingList.id && isb2bCustome && (
+            <div className="mt-4">
+              <ShoppingDownload />
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
