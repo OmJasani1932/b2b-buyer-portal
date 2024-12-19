@@ -189,7 +189,7 @@ const HeaderController = () => {
 
       if (accessibleCategories) {
         searchObj.body.filter = {
-          fq: `provider_categories_id_esai:${accessibleCategories}`,
+          fq: accessibleCategories,
         };
       }
 
