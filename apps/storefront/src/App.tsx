@@ -502,6 +502,11 @@ export default function App() {
     setCustomStyle(newStyle);
   }, [cssOverride?.css, CUSTOM_STYLES]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.remove('transparent-header');
+    }
+  }, [isOpen]);
   return (
     <>
       <HashRouter>

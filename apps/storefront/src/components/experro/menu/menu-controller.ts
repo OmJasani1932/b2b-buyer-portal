@@ -73,7 +73,9 @@ const ExpMenuController = (props: ExpMenuControllerProps) => {
   };
 
   const toggleMenuWithChild = (id: any) => {
-    const liTag: any = document.getElementById(id);
+    const b2bIframe: any = document.getElementById('b2b-iframe');
+
+    const liTag: any = b2bIframe.contentDocument.getElementById(id);
     if (window.innerWidth < 1280) {
       if (liTag?.classList.contains('is-expanded')) {
         const innerUl = liTag.querySelector('ul');

@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ExpGetCart, ExpSearch, ExpSearchAutoSuggest, ExpSearchCount } from '../api';
 import { ExpNavigate } from '../utils/link-parser';
 import { getFilteredAccessibleCategoryQuery } from '../utils/customer-group';
+import useEmblaCarousel from 'embla-carousel-react';
+import { EmblaOptionsType } from 'embla-carousel';
 
 declare let window: any;
 
@@ -21,6 +23,22 @@ const HeaderController = () => {
   const [cartQuantity, setCartQuantity] = useState<number>(0);
   const [isOpenCartPreview, setIsOpenCartPreview] = useState<boolean>(false);
   const [cartDetails, setCartDetails] = useState<any>({});
+  const [windowWidth, setWindowWidth] = useState<any>(window.innerWidth);
+
+  const settingsForSlids: EmblaOptionsType = {
+    active: true,
+    loop: true,
+    slidesToScroll: 1,
+  };
+  const [emblaRef, emblaApi] = useEmblaCarousel(settingsForSlids);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
 
   let b2bIframe: any = document.getElementById('b2b-iframe');
   let iframeWindow: any = null;
@@ -403,6 +421,29 @@ const HeaderController = () => {
     window.location.href = `${window.location.origin}/login/`;
   };
 
+  const handleResizeMenu = () => {
+    if (window.innerWidth >= 1280) {
+      document.body.classList.remove('mobile-menu-open');
+      document.body.classList.remove('group');
+      document.body.classList.remove('fixed');
+      document.body.classList.remove('overflow-hidden');
+      document.body.classList.remove('w-full');
+    }
+    setWindowWidth(window.innerWidth);
+    const navigation: any = iframeDocument.querySelector('.navigation-block-inner');
+    const li: any = navigation.getElementsByTagName('li');
+    Array.from(li)?.length &&
+      Array.from(li)?.forEach((item: any, i: any) => {
+        if (item?.classList?.contains('is-expanded')) {
+          const ul = li[i].querySelector('ul');
+          if (ul) {
+            ul.removeAttribute('style');
+          }
+          item.classList.remove('is-expanded');
+        }
+      });
+  };
+
   useEffect(() => {
     setIsLoading(false);
     setShowPreview(false);
@@ -421,8 +462,10 @@ const HeaderController = () => {
       }
     };
     window.addEventListener('pushstate', handlePushstate);
+    window.addEventListener('resize', handleResizeMenu);
     return () => {
       window.removeEventListener('pushstate', handlePushstate);
+      window.removeEventListener('resize', handleResizeMenu);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -453,6 +496,10 @@ const HeaderController = () => {
     basketRef,
     openSearchPreview,
     handleLanguageChange,
+    emblaRef,
+    scrollNext,
+    scrollPrev,
+    windowWidth,
   };
 };
 

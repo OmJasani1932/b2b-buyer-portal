@@ -19,15 +19,30 @@ function ExpLinkParser({
   onClick?: any;
 }) {
   const Link = to?.startsWith('/') ? to.replace(/^\//, '') : to;
+  const removeMobileMenuClass = () => {
+    const b2bIframe: any = document.getElementById('b2b-iframe');
 
+    const element: any = b2bIframe.contentDocument.getElementById('hamburger-menu');
+    if (b2bIframe.contentDocument.body.classList.contains('mobile-menu-open')) {
+      b2bIframe.contentDocument.body.classList.remove('mobile-menu-open');
+      b2bIframe.contentDocument.body.classList.remove('group');
+      b2bIframe.contentDocument.body.classList.remove('fixed');
+      b2bIframe.contentDocument.body.classList.remove('overflow-hidden');
+      b2bIframe.contentDocument.body.classList.remove('w-full');
+      element?.classList.remove('is-open');
+    }
+  };
   return (
     <>
       {to?.includes('http') || to?.startsWith('tel:') || to?.startsWith('mailto:') ? (
         <span
           onClick={() => {
-            if (onClick) {
+            // if (onClick) {
+            if (onclick) {
               onClick();
             }
+            removeMobileMenuClass();
+            // }
             if (target === '_blank') {
               window.open(to, '_blank');
             } else {
@@ -43,9 +58,12 @@ function ExpLinkParser({
       ) : (
         <span
           onClick={() => {
-            if (onClick) {
+            // if (onClick) {
+            if (onclick) {
               onClick();
             }
+            removeMobileMenuClass();
+            // }
             if (target === '_blank') {
               window.open(Link, '_blank');
             } else {

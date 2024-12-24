@@ -1,3 +1,4 @@
+// import { IconUser } from '../assets/icons/icon-user';
 import { ExpLinkParser } from '../utils';
 import ExpMenuController from './menu-controller';
 import React from 'react';
@@ -14,6 +15,7 @@ interface ExpMenuInterface {
   ulId?: any;
   categories?: any;
   isCategoryLoading?: any;
+  handleLogout?: any;
 }
 const ExpMenu = (props: ExpMenuInterface) => {
   const {
@@ -28,6 +30,7 @@ const ExpMenu = (props: ExpMenuInterface) => {
     ulId,
     categories,
     isCategoryLoading,
+    handleLogout,
   } = props;
 
   const {
@@ -213,26 +216,113 @@ const ExpMenu = (props: ExpMenuInterface) => {
               {menuData?.length - 1 === menuIndex &&
                 index === 0 &&
                 window.matchMedia('(max-width: 1024px)').matches && (
-                  <li
-                    key={menuItem?.id}
-                    className={`${liClasses}${
-                      menuItem?.children?.length
-                        ? ` text-primary hover:text-primaryHover xl:hidden`
-                        : 'xl:hidden'
-                    } ${toKebabCase(menuItem?.name_esi)} nav-item-${
-                      menuItem.content_model_internal_name === 'custom_links'
-                        ? filterNavStringForClass(menuItem.name_esi)
-                        : filterNavStringForClass(menuItem.menu_title_es) ||
-                          filterNavStringForClass(menuItem.title)
-                    } ${menuItem?.class_name ? menuItem?.class_name : ''}`}
-                  >
-                    <div className="link-wrap xl:w-auto w-full relative">
-                      <ExpLinkParser to={'logout'} className={`!justify-start ${linkNameClasses}`}>
-                        <i className="icon w-[15px] h-[15px] flex mr-2"></i>
-                        Account
-                      </ExpLinkParser>
-                    </div>
-                  </li>
+                  <>
+                    <li
+                      key={menuItem?.id}
+                      className={`${liClasses}${
+                        menuItem.children.length
+                          ? ` text-primary hover:text-primaryHover xl:hidden`
+                          : 'xl:hidden'
+                      } nav-item-${
+                        menuItem.content_model_internal_name === 'custom_links'
+                          ? filterNavStringForClass(menuItem.name_esi)
+                          : filterNavStringForClass(menuItem.menu_title_es) ||
+                            filterNavStringForClass(menuItem.title)
+                      }  ${menuItem?.class_name ? menuItem?.class_name : ''}`}
+                    >
+                      <div className="link-wrap xl:w-auto w-full relative">
+                        <ExpLinkParser
+                          to="/#/shoppingLists"
+                          className={`!justify-start ${linkNameClasses}`}
+                          // rel="noreferrer"
+                        >
+                          {/* <i className="icon w-[15px] h-[15px] flex mr-2">
+                          <IconPerson />
+                        </i> */}
+                          Shopping List
+                        </ExpLinkParser>
+                      </div>
+                    </li>
+
+                    <li
+                      key={menuItem?.id}
+                      className={`${liClasses}${
+                        menuItem.children.length
+                          ? ` text-primary hover:text-primaryHover xl:hidden`
+                          : 'xl:hidden'
+                      } nav-item-${
+                        menuItem.content_model_internal_name === 'custom_links'
+                          ? filterNavStringForClass(menuItem.name_esi)
+                          : filterNavStringForClass(menuItem.menu_title_es) ||
+                            filterNavStringForClass(menuItem.title)
+                      }  ${menuItem?.class_name ? menuItem?.class_name : ''}`}
+                    >
+                      <div className="link-wrap xl:w-auto w-full relative">
+                        <ExpLinkParser
+                          to="/#/quotes"
+                          className={`!justify-start ${linkNameClasses}`}
+                          // rel="noreferrer"
+                        >
+                          {/* <i className="icon w-[15px] h-[15px] flex mr-2">
+                          <IconPerson />
+                        </i> */}
+                          My Quote
+                        </ExpLinkParser>
+                      </div>
+                    </li>
+
+                    <li
+                      key={menuItem?.id}
+                      className={`${liClasses}${
+                        menuItem?.children?.length
+                          ? ` text-primary hover:text-primaryHover xl:hidden`
+                          : 'xl:hidden'
+                      } ${toKebabCase(menuItem?.name_esi)} nav-item-${
+                        menuItem.content_model_internal_name === 'custom_links'
+                          ? filterNavStringForClass(menuItem.name_esi)
+                          : filterNavStringForClass(menuItem.menu_title_es) ||
+                            filterNavStringForClass(menuItem.title)
+                      } ${menuItem?.class_name ? menuItem?.class_name : ''}`}
+                    >
+                      <div className="link-wrap xl:w-auto w-full relative">
+                        <ExpLinkParser
+                          to={'/#/orders'}
+                          className={`!justify-start ${linkNameClasses}`}
+                        >
+                          {/* <i className="icon w-[15px] h-[15px] flex mr-2 [&_svg]:w-full [&_svg]:h-full">
+                          <IconUser />
+                        </i> */}
+                          Account
+                        </ExpLinkParser>
+                      </div>
+                    </li>
+                    <li
+                      key={menuItem?.id}
+                      className={`${liClasses}${
+                        menuItem.children.length
+                          ? ` text-primary hover:text-primaryHover xl:hidden`
+                          : 'xl:hidden'
+                      } nav-item-${
+                        menuItem.content_model_internal_name === 'custom_links'
+                          ? filterNavStringForClass(menuItem.name_esi)
+                          : filterNavStringForClass(menuItem.menu_title_es) ||
+                            filterNavStringForClass(menuItem.title)
+                      }  ${menuItem?.class_name ? menuItem?.class_name : ''}`}
+                    >
+                      <div className="link-wrap xl:w-auto w-full relative">
+                        <span
+                          onClick={handleLogout}
+                          className={`!justify-start ${linkNameClasses}`}
+                          rel="noreferrer"
+                        >
+                          {/* <i className="icon w-[15px] h-[15px] flex mr-2">
+                          <IconPerson />
+                        </i> */}
+                          Logout
+                        </span>
+                      </div>
+                    </li>
+                  </>
                 )}
             </>
           </React.Fragment>
