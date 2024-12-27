@@ -76,7 +76,7 @@ const SocialIcons = ({ pageData }: SocialIconsProps) => {
                       ?.social_links_heading_et}
                 </h6>
               )}
-            <ul className="flex gap-7 xl:justify-end justify-center xl:mt-0 mt-10">
+            <ul className="flex gap-7 justify-start xl:mt-0 mt-6">
               {socialList.map((item, index) => {
                 return (
                   <Fragment key={index}>
@@ -96,7 +96,7 @@ const SocialIcons = ({ pageData }: SocialIconsProps) => {
                               ]
                             }`}
                             target="_blank"
-                            className="icon text-primary hover:text-gray-200">
+                            className="icon text-white hover:text-primaryHover">
                             <i className="icon flex w-[1.5rem] h-[1.5rem] [&_svg]:w-full [&_svg]:h-full">
                               <item.icons />
                             </i>

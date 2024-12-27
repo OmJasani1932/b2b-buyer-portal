@@ -5,6 +5,7 @@ function ExpLinkParser({
   children,
   to,
   target = '_self',
+  dangerouslySetInnerHTML,
   className,
   title,
   ariaLabel,
@@ -13,6 +14,7 @@ function ExpLinkParser({
   children?: any;
   to?: any;
   target?: string;
+  dangerouslySetInnerHTML?: { __html: string };
   className?: string;
   title?: string;
   ariaLabel?: string;
@@ -35,47 +37,103 @@ function ExpLinkParser({
   return (
     <>
       {to?.includes('http') || to?.startsWith('tel:') || to?.startsWith('mailto:') ? (
-        <span
-          onClick={() => {
-            // if (onClick) {
-            if (onclick) {
-              onClick();
-            }
-            removeMobileMenuClass();
-            // }
-            if (target === '_blank') {
-              window.open(to, '_blank');
-            } else {
-              window.location.href = to;
-            }
-          }}
-          className={className}
-          title={title}
-          aria-label={ariaLabel}
-        >
-          {children}
-        </span>
+        <>
+          {!dangerouslySetInnerHTML ? (
+            <span
+              onClick={() => {
+                // if (onClick) {
+                if (onclick) {
+                  onClick();
+                }
+                removeMobileMenuClass();
+                // }
+                if (target === '_blank') {
+                  window.open(to, '_blank');
+                } else {
+                  window.location.href = to;
+                }
+              }}
+              className={className}
+              title={title}
+              aria-label={ariaLabel}
+            >
+              {children}
+            </span>
+          ) : (
+            <span
+              onClick={() => {
+                // if (onClick) {
+                if (onclick) {
+                  onClick();
+                }
+                removeMobileMenuClass();
+                // }
+                if (target === '_blank') {
+                  window.open(to, '_blank');
+                } else {
+                  window.location.href = to;
+                }
+              }}
+              className={className}
+              title={title}
+              aria-label={ariaLabel}
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                // eslint-disable-next-line no-underscore-dangle
+                __html: dangerouslySetInnerHTML?.__html,
+              }}
+            />
+          )}
+        </>
       ) : (
-        <span
-          onClick={() => {
-            // if (onClick) {
-            if (onclick) {
-              onClick();
-            }
-            removeMobileMenuClass();
-            // }
-            if (target === '_blank') {
-              window.open(Link, '_blank');
-            } else {
-              window.location.href = `${window.location.origin}/${Link}`;
-            }
-          }}
-          className={className}
-          title={title}
-          aria-label={ariaLabel}
-        >
-          {children}
-        </span>
+        <>
+          {!dangerouslySetInnerHTML ? (
+            <span
+              onClick={() => {
+                // if (onClick) {
+                if (onclick) {
+                  onClick();
+                }
+                removeMobileMenuClass();
+                // }
+                if (target === '_blank') {
+                  window.open(Link, '_blank');
+                } else {
+                  window.location.href = `${window.location.origin}/${Link}`;
+                }
+              }}
+              className={className}
+              title={title}
+              aria-label={ariaLabel}
+            >
+              {children}
+            </span>
+          ) : (
+            <span
+              onClick={() => {
+                // if (onClick) {
+                if (onclick) {
+                  onClick();
+                }
+                removeMobileMenuClass();
+                // }
+                if (target === '_blank') {
+                  window.open(Link, '_blank');
+                } else {
+                  window.location.href = `${window.location.origin}/${Link}`;
+                }
+              }}
+              className={className}
+              title={title}
+              aria-label={ariaLabel}
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                // eslint-disable-next-line no-underscore-dangle
+                __html: dangerouslySetInnerHTML?.__html,
+              }}
+            />
+          )}
+        </>
       )}
     </>
   );

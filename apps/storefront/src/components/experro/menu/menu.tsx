@@ -184,11 +184,11 @@ const ExpMenu = (props: ExpMenuInterface) => {
                       childMenuItem={menuItem.children}
                       ulClasses={
                         menuItem?.class_name === 'mega-menu'
-                          ? `group-[.is-expanded]:block xl:invisible xl:group-hover:visible xl:bg-white xl:absolute xl:top-full w-full xl:left-0 2xl:px-[4.6875rem] 2xl:pl-[4.6875rem] pl-2 xl:before:shadow-[0_7px_14px_0_rgba(0,0,0,.1)] xl:before:absolute xl:before:content-[''] xl:before:h-[0.625rem] xl:before:w-full xl:before:left-0 xl:before:top-[-0.6875rem] xl:flex flex-wrap justify-center hidden border-gray-50 xl:border-b-2 xl:[&_.brands_ul]:columns-5 [&_.brands_ul_.cat-ul-three]:!hidden [&_.brands_ul_.cat-li-two_.link-wrap_span_span]:!hidden xl:[&_.brands_ul]:py-7 xl:[&_.brands_ul]:px-12 2xl:[&_.brands_ul]:w-[1266px] xl:[&_.brands_ul]:w-[1156px] xl:[&_.brands_.cat-li-two]:pl-0 xl:[&_.commercial-washroom-accessories_ul]:columns-2 xl:[&_.commercial-washroom-accessories_ul]:w-[600px] xl:[&_.door-hardware_ul]:columns-2 xl:[&_.door-hardware_ul]:w-[600px] xl:[&_.right-menu_ul.cat-ul-two]:left-auto xl:[&_.right-menu_ul.cat-ul-two]:right-0`
+                          ? `group-[.is-expanded]/level:block xl:invisible xl:group-hover/level:visible xl:bg-white xl:absolute xl:top-full w-full xl:left-0 2xl:px-[4.6875rem] 2xl:pl-[4.6875rem] pl-2 xl:before:shadow-[0_7px_14px_0_rgba(0,0,0,.1)] xl:before:absolute xl:before:content-[''] xl:before:h-[0.625rem] xl:before:w-full xl:before:left-0 xl:before:top-[-0.6875rem] xl:flex flex-wrap justify-center hidden border-gray-50 xl:border-b-2 xl:[&_.brands_ul]:columns-5 [&_.brands_ul_.cat-ul-three]:!hidden [&_.brands_ul_.cat-li-two_.link-wrap_span_span]:!hidden xl:[&_.brands_ul]:py-7 xl:[&_.brands_ul]:px-12 2xl:[&_.brands_ul]:w-[1266px] xl:[&_.brands_ul]:w-[1156px] xl:[&_.brands_.cat-li-two]:pl-0 xl:[&_.commercial-washroom-accessories_ul]:columns-2 xl:[&_.commercial-washroom-accessories_ul]:w-[600px] xl:[&_.door-hardware_ul]:columns-2 xl:[&_.door-hardware_ul]:w-[600px] xl:[&_.right-menu_ul.cat-ul-two]:left-auto xl:[&_.right-menu_ul.cat-ul-two]:right-0`
                           : `${
                               index > 0
                                 ? `cl-${index} xl:hidden xl:group-hover/level${index}:block group/level${index}-[.is-expanded]:block z-10 pl-2`
-                                : 'xl:hidden xl:group-hover:block'
+                                : 'xl:hidden xl:group-hover/level:block'
                             } group-[&>.is-expanded]:block bg-white xl:absolute xl:top-full xl:w-[17.5rem] w-full xl:shadow-[0_6px_17px_-4px_rgba(0,0,0,0.24)] xl:p-[0.938rem] xl:pl-[0.938rem] pl-2  pt-0 xl:space-y-3 xl:block hidden`
                       }
                       ulId={menuItem?.id}

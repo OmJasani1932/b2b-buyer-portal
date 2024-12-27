@@ -336,7 +336,7 @@ const Header = ({
         </div>
       </header>
       {globalsettings.header_com[0].pencil_banner_text_et && (
-        <div className="pencil-banner bg-yellow py-[0.375rem]">
+        <div className="pencil-banner bg-yellow py-[0.375rem] hidden">
           <div className="pencil-banner-wrap sm:p-[0.625rem] p-1.5 border border-white">
             <div className="container">
               <div className="pencil-banner-inner flex justify-center">

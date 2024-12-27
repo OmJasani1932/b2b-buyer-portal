@@ -7,8 +7,8 @@ const Footer = ({ globalSettings }: any) => {
   const pageData = { globalSettings };
 
   return (
-    <footer className="md:pt-16 pt-10 bg-white">
-      <div className="service-block bg-gray-50 lg:py-5 py-4">
+    <footer className="md:pt-16 pt-10 bg-white group-[.transparent-header]/body:mt-0">
+      <div className="service-block bg-gray-50 lg:py-5 py-4 hidden">
         {!!pageData?.globalSettings?.footer_usp_links_com?.length && (
           <div className="container">
             <ul className="flex justify-center lg:[&>*:nth-child(2)]:px-11 md:[&>*:nth-child(2)]:px-5 md:[&>*:nth-child(2)]:border-x-[0.1875rem] md:[&>*:nth-child(2)]:border-y-0 [&>*:nth-child(2)]:border-y-[0.125rem] [&>*:nth-child(2)]:border-gray-400 [&>*:nth-child(2)]:border-solid lg:space-x-11 md:space-x-5 md:flex-row flex-col">
@@ -33,80 +33,79 @@ const Footer = ({ globalSettings }: any) => {
           </div>
         )}
       </div>
-      <div className="footer-section max-w-[120rem] 3xl:px-[4.6875rem] 2xl:px-10 md:px-5 px-4 lg:py-14 py-8 mx-auto">
+      <div className="footer-section max-w-[120rem] 3xl:px-[4.6875rem] 2xl:px-10 md:px-5 px-4 py-4 mx-auto lg:py-14 py-12 bg-primary">
         <div className="footer-navigation-section">
           <div className="footer-nav-block flex lg:gap-5 xl:flex-nowrap flex-wrap lg:[&>.footer-logo-col]:mb-0 [&>.footer-logo-col]:mb-5">
-            <div className="footer-col footer-logo-col xl:basis-[29.7%] lg:basis-[36%] basis-[100%]">
-              <div className="footer-logo mb-7">
+            <div className="footer-col footer-logo-col xl:basis-1/4 lg:basis-[36%] basis-[100%]">
+            <div className="footer-logo mb-7">
                 <ExpLinkParser to="" title="Footer Logo" aria-label="Footer Logo">
                   <img
-                    className="max-h-[60px]"
+                    className="max-h-[80px]"
                     src={
                       ExpImageParser(
                         pageData?.globalSettings.site_com?.length &&
-                          pageData?.globalSettings.site_com[0]?.logo_emd
-                          ? pageData?.globalSettings.site_com[0]?.logo_emd[0]
+                          pageData?.globalSettings.site_com[0]?.footer_logo_emd
+                          ? pageData?.globalSettings.site_com[0]?.footer_logo_emd[0]
                           : '',
                       )?.absolutePath
                     }
                     alt="C&B Logo"
                     title="C&B Logo"
-                    width={188}
-                    height={60}
+                    width={255}
+                    height={80}
                   />
                 </ExpLinkParser>
               </div>
-              <div className="f-app-icon">
-                <strong className="mb-3 block text-primary">Download Our App</strong>
-                <ul className="flex space-x-3">
-                  {pageData?.globalSettings?.footer_com[0].app_store_link_et && (
-                    <li>
-                      <ExpLinkParser
-                        to={pageData?.globalSettings?.footer_com[0].app_store_link_et}
-                        title="Footer Logo"
-                        aria-label="Footer Logo"
-                      >
-                        <img
-                          src={pageData?.globalSettings?.footer_com[0]?.app_store_image_url_et}
-                          alt={`App Store`}
-                          title={`App Store`}
-                          width={150}
-                          height={47}
-                          className="max-h-[60px]"
-                        />
-                      </ExpLinkParser>
-                    </li>
-                  )}
-                  {pageData?.globalSettings?.footer_com[0].google_play_link_et && (
-                    <li>
-                      <ExpLinkParser
-                        to={pageData?.globalSettings?.footer_com[0].google_play_link_et}
-                        title="Footer Logo"
-                        aria-label="Footer Logo"
-                      >
-                        <img
-                          src={pageData?.globalSettings?.footer_com[0]?.google_play_image_url_et}
-                          alt="Google Play"
-                          title="Google Play"
-                          width={150}
-                          height={47}
-                          className="max-h-[60px]"
-                        />
-                      </ExpLinkParser>
-                    </li>
-                  )}
-                </ul>
-              </div>
+              {pageData.globalSettings?.site_com &&
+                pageData.globalSettings?.site_com[0]?.address_et && (
+                  <div className="address-block mb-3">
+                    <h6 className="footer-info-heading text-base mb-2 lg:py-0 py-[0.625rem] leading-5 relative text-white">
+                      Corporate Headquarters:
+                    </h6>
+                    <div
+                      className="text-white font-normal text-sm"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          pageData?.globalSettings?.site_com &&
+                          pageData?.globalSettings?.site_com[0]?.address_et,
+                      }}
+                    />
+                  </div>
+                )}
+
+              {pageData.globalSettings?.site_com &&
+                pageData.globalSettings?.site_com[0]?.phone_et && (
+                  <div className="address-block mb-3">
+                    <ExpLinkParser
+                      className="text-white font-normal text-sm underline"
+                      to={`tel: ${pageData?.globalSettings?.site_com[0]?.phone_et}`}
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          pageData?.globalSettings?.site_com &&
+                          pageData?.globalSettings?.site_com[0]?.phone_et,
+                      }}
+                    />
+                  </div>
+                )}
+              <p className='mb-3'>
+                <ExpLinkParser
+                  className="text-white font-normal text-sm hover:text-white/80 mb-3"
+                  to="/contact-us/"
+                >
+                  Contact US
+                </ExpLinkParser>
+              </p>
+
+              <SocialIcons pageData={pageData} />
             </div>
             <FooterQuickLinks pageData={pageData} />
-            <SocialIcons pageData={pageData} />
           </div>
         </div>
-        <div className="footer-bottom border-gray-50 border-t pt-5 mt-5">
+        <div className="footer-bottom mt-12">
           <div className="flex xl:flex-nowrap flex-wrap">
             <FooterCopyrightText pageData={pageData} />
             <div
-              className="xl:w-8/12 w-full flex xl:justify-end justify-center xl:mt-0 mt-3 text-gray-200"
+              className="xl:w-8/12 w-full flex xl:justify-end justify-center xl:mt-0 mt-3 text-white [&_a:hover]:text-white/80"
               dangerouslySetInnerHTML={{
                 __html:
                   pageData?.globalSettings?.footer_com &&
