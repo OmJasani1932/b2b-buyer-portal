@@ -224,7 +224,7 @@ const Header = ({
                   <input
                     ref={searchInputRef}
                     type="text"
-                    className="block border border-gray-300 px-5 py-[0.6875rem] leading-4 text-sm w-full placeholder-gray-200 bg-white focus-visible:shadow-none focus-visible:outline-none focus-visible:border-primary !pl-8"
+                    className="block border border-gray-300 px-5 py-[0.6875rem] leading-4 text-sm w-full placeholder-gray-200 bg-white focus-visible:shadow-none focus-visible:outline-none focus-visible:border-primary !pl-8 rounded-[4px]"
                     placeholder="Search the store"
                     onChange={handleSearchChange}
                     value={searchText}
@@ -250,7 +250,7 @@ const Header = ({
               <ul className="3xl:-mx-5 2xl:-mx-4 xl:-mx-3 -mx-3 flex justify-end">
                 <li className="nav-item 3xl:px-5 2xl:px-4 xl:px-3 px-3">
                   <ExpLinkParser
-                    className="flex items-center text-[0px] xl:text-sm 2xl:text-base font-medium text-primary xl:py-[2.0625rem] py-5 leading-5"
+                    className="flex items-center text-[0px] xl:text-sm 2xl:text-base font-medium text-primary py-5 leading-5"
                     to="contact-us"
                   >
                     <i className="flex icon 3xl:w-[1.375rem] 3xl:h-[1.375rem] 2xl:w-[1.375rem] 2xl:h-[1.375rem] xl:w-[1.25rem] xl:h-[1.25rem] h-[1.25rem] w-[1.25rem] mr-0 xl:mr-2 xl:text-gray-500 text-gray-100 [&_svg]:w-full [&_svg]:h-full">
@@ -261,7 +261,7 @@ const Header = ({
                 </li>
                 <li className="group nav-item 3xl:px-5 2xl:px-4 xl:px-3 xl:block hidden">
                   <ExpLinkParser
-                    className="flex items-center xl:text-sm 2xl:text-base font-medium text-primary py-[2.0625rem] leading-5 transition-all duration-200 ease-linear relative before:content-[''] before:absolute before:w-full before:h-1 before:left-0 before:bottom-0 before:bg-primary before:invisible before:transition-all before:duration-300 before:ease-linear group-[:hover]:before:visible"
+                    className="flex items-center xl:text-sm 2xl:text-base font-medium text-primary py-5 leading-5 transition-all duration-200 ease-linear relative before:content-[''] before:absolute before:w-full before:h-1 before:left-0 before:bottom-0 before:bg-primary before:invisible before:transition-all before:duration-300 before:ease-linear group-[:hover]:before:visible"
                     to="/#/orders"
                   >
                     <i className="flex icon 3xl:w-[1.375rem] 3xl:h-[1.375rem] 2xl:w-[1.375rem] 2xl:h-[1.375rem] xl:w-[1.25rem] xl:h-[1.25rem] h-[1.25rem] w-[1.25rem] mr-2 xl:text-gray-500 text-gray-100 [&_svg]:w-full [&_svg]:h-full">
@@ -311,7 +311,7 @@ const Header = ({
                 <li className="nav-item 3xl:px-5 2xl:px-4 xl:px-3 px-3 relative">
                   <span
                     onClick={openCartSlider}
-                    className="cart-link flex items-center text-[0px] xl:text-sm 2xl:text-base font-medium text-primary xl:py-[2.0625rem] py-5 leading-5 cursor-pointer"
+                    className="cart-link flex items-center text-[0px] xl:text-sm 2xl:text-base font-medium text-primary py-5 leading-5 cursor-pointer"
                     ref={basketRef}
                   >
                     <i className="flex icon 3xl:w-[1.375rem] 3xl:h-[1.375rem] 2xl:w-[1.375rem] 2xl:h-[1.375rem] xl:w-[1.25rem] xl:h-[1.25rem] h-[1.25rem] w-[1.25rem] mr-0 xl:mr-3  xl:text-gray-500 text-gray-100 has-tooltip relative not-italic [&_svg]:w-full [&_svg]:h-full">

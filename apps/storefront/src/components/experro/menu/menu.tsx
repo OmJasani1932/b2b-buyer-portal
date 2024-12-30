@@ -168,7 +168,7 @@ const ExpMenu = (props: ExpMenuInterface) => {
                     className="link-wrap xl:w-auto w-full relative"
                     onClick={() => toggleMenuWithChild(menuItem?.id)}
                   >
-                    <p className="flex items-center xl:justify-start justify-between text-sm 2xl:text-base font-medium text-primary xl:py-[2.0625rem] py-[0.625rem] leading-5 transition-all duration-200 ease-linear relative xl:before:content-[''] before:absolute xl:before:w-full xl:before:h-1 xl:before:left-0 xl:before:bottom-0 xl:before:bg-primary xl:before:invisible xl:before:transition-all xl:before:duration-300 before:ease-linear xl:group-[:hover]:before:visible mb-0 cursor-pointer">
+                    <p className="flex items-center xl:justify-start justify-between text-sm 2xl:text-base font-medium text-primary py-[0.625rem] leading-5 transition-all duration-200 ease-linear relative xl:before:content-[''] before:absolute xl:before:w-full xl:before:h-1 xl:before:left-0 xl:before:bottom-0 xl:before:bg-primary xl:before:invisible xl:before:transition-all xl:before:duration-300 before:ease-linear xl:group-[:hover]:before:visible mb-0 cursor-pointer">
                       {getMenuNameToShow(menuItem)}{' '}
                       <span className="xl:block hidden">{iconForNavChild}</span>
                     </p>

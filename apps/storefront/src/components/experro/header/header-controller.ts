@@ -52,7 +52,7 @@ const HeaderController = () => {
   let prevScrollpos = iframeWindow.scrollY;
   const header = iframeDocument.getElementById('header');
   const headerHeight = header?.offsetHeight;
-  const scrlOffsetDown = 230;
+  const scrlOffsetDown = 180;
   const scrlOffsetUp = 100;
 
   iframeWindow.onscroll = function () {
@@ -68,6 +68,7 @@ const HeaderController = () => {
       // eslint-disable-next-line no-lonely-if
       if (currentScrollPos > scrlOffsetDown) {
         iframeDocument.body.style.paddingTop = `${headerHeight}px`;
+        iframeDocument.body.classList.add('group/body');
         iframeDocument.body.classList.add('sticky-header');
       } else if (currentScrollPos <= scrlOffsetDown) {
         iframeDocument.body.classList.remove('sticky-header');
