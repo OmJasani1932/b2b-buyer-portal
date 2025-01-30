@@ -61,7 +61,8 @@ interface ThemeFramePortalProps {
   bodyRef?: RefObject<HTMLBodyElement>;
 }
 
-const DefaultIframeContent = '<!DOCTYPE html><html><head></head><body></body></html>';
+const DefaultIframeContent =
+  '<!DOCTYPE html><html><head><style> i svg {display: inline-block;max-height: 100%;max-width: 100%;vertical-align: middle;} </style></head><body></body></html>';
 
 function ThemeFramePortal(props: ThemeFramePortalProps) {
   const dispatch = useAppDispatch();
@@ -141,6 +142,7 @@ export default function ThemeFrame(props: ThemeFrameProps) {
               xl: '1280px',
               '2xl': '1440px',
               '3xl': '1630px',
+              '4xl': '1840px',
             },
             container: {
               center: true,
@@ -162,6 +164,7 @@ export default function ThemeFrame(props: ThemeFrameProps) {
                 orangeLight: '#e0a800',
                 red: '#ff0000',
                 magento: '#5F1248',
+                quartzGray: '#484454',
                 gray: {
                   10: '#cccccc',
                   20: '#eaebec',
@@ -205,6 +208,8 @@ export default function ThemeFrame(props: ThemeFrameProps) {
                 pdficon: "url('@images/pdf.png')",
                 rightIcon: 'url(@icons/icon-check.svg)',
                 arrowDownFill: 'url(@icons/arrow-down-fill.svg)',
+                reviewrightarrow: "url('https://k097otgk-us-en.myexperro.com/mm-images/review-right-arrow-bj6emwlw.svg')",
+                building:"url('https://k097otgk-us-en.myexperro.com/mm-images/building-cta-1-j915bu48.png')",
               },
               keyframes: {
                 skBouncedelay: {
@@ -239,7 +244,9 @@ export default function ThemeFrame(props: ThemeFrameProps) {
           },
         };`;
         tw.onload = () => {
-          doc.head.appendChild(tailwindConfig);
+          setTimeout(() => {
+            doc.head.appendChild(tailwindConfig);
+          }, 500);
         };
       }
       const customStyleElement = doc.createElement('style');

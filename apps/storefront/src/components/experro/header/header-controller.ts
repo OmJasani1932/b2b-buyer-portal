@@ -24,7 +24,7 @@ const HeaderController = () => {
   const [isOpenCartPreview, setIsOpenCartPreview] = useState<boolean>(false);
   const [cartDetails, setCartDetails] = useState<any>({});
   const [windowWidth, setWindowWidth] = useState<any>(window.innerWidth);
-
+  const [clickedMenuItem, setClickedMenuItem] = useState<number | null>(null);
   const settingsForSlids: EmblaOptionsType = {
     active: true,
     loop: true,
@@ -501,6 +501,8 @@ const HeaderController = () => {
     scrollNext,
     scrollPrev,
     windowWidth,
+    clickedMenuItem,
+    setClickedMenuItem,
   };
 };
 

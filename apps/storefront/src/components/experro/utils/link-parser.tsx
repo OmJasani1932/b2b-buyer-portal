@@ -53,7 +53,7 @@ function ExpLinkParser({
                   window.location.href = to;
                 }
               }}
-              className={className}
+              className={`${className} cursor-pointer`}
               title={title}
               aria-label={ariaLabel}
             >
@@ -74,7 +74,7 @@ function ExpLinkParser({
                   window.location.href = to;
                 }
               }}
-              className={className}
+              className={`${className} cursor-pointer`}
               title={title}
               aria-label={ariaLabel}
               // eslint-disable-next-line react/no-danger
@@ -102,7 +102,7 @@ function ExpLinkParser({
                   window.location.href = `${window.location.origin}/${Link}`;
                 }
               }}
-              className={className}
+              className={`${className} cursor-pointer`}
               title={title}
               aria-label={ariaLabel}
             >
@@ -123,7 +123,7 @@ function ExpLinkParser({
                   window.location.href = `${window.location.origin}/${Link}`;
                 }
               }}
-              className={className}
+              className={`${className} cursor-pointer`}
               title={title}
               aria-label={ariaLabel}
               // eslint-disable-next-line react/no-danger
