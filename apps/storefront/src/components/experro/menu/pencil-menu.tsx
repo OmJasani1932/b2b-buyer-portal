@@ -1,3 +1,4 @@
+import { HeroIconArrowRight } from '../assets/icons/arrow-right-two';
 import { ExpImageParser, ExpLinkParser } from '../utils';
 import ExpMenuController from './menu-controller';
 import React from 'react';
@@ -84,8 +85,8 @@ const ExpPencilMenu = (props: ExpPencilMenuInterface) => {
                     // id={menuItem?.id}
                     target={menuItem?.link_target === 'New Tab' ? '_blank' : ''}
                   >
-                    {menuItem?.menu_icon_emd && (
-                      <span className="mr-1.5 xl:block hidden">
+                    {menuItem?.menu_icon_emd ? (
+                      <strong className="mr-1.5 xl:flex items-center justify-center w-6 h-6">
                         <img
                           src={
                             ExpImageParser(
@@ -99,9 +100,46 @@ const ExpPencilMenu = (props: ExpPencilMenuInterface) => {
                           height={16}
                           // lazyLoad={false}
                         />
-                      </span>
+                      </strong>
+                    ) : (
+                      <strong className="mr-1.5 xl:flex items-center justify-center relative w-6 h-6 menu-icon-block">
+                        {/* <i
+                          className="icon w-6 h-6 "
+                          dangerouslySetInnerHTML={{
+                            __html: menuItem?.menu_svg_code_et,
+                          }}
+                        ></i> */}
+                        {menuItem?.menu_svg_hover_icon_et ? (
+                          <>
+                            <i
+                              className="icon w-6 h-6 main-icon absolute left-0 right-0 top-0 bottom-0 transition-all duration-500 flex items-center justify-center"
+                              dangerouslySetInnerHTML={{
+                                __html: menuItem?.menu_svg_code_et,
+                              }}
+                            ></i>
+                            <i
+                              className="icon w-6 h-6 hover-icon absolute left-0 right-0 top-0 bottom-0 transition-all duration-500 opacity-0 invisible flex items-center justify-center"
+                              dangerouslySetInnerHTML={{
+                                __html: menuItem?.menu_svg_hover_icon_et,
+                              }}
+                            ></i>
+                          </>
+                        ) : (
+                          <i
+                            className="icon w-6 h-6 flex items-center justify-center"
+                            dangerouslySetInnerHTML={{
+                              __html: menuItem?.menu_svg_code_et,
+                            }}
+                          ></i>
+                        )}
+                      </strong>
                     )}
-                    <span>{getMenuNameToShow(menuItem)}</span>
+                    <strong className="menu-name">{getMenuNameToShow(menuItem)}</strong>
+                    <strong className="xl:hidden block">
+                      <i className="icon flex md:w-2 w-2 absolute right-8 top-1/2 -translate-y-1/2">
+                        <HeroIconArrowRight />
+                      </i>
+                    </strong>
                   </ExpLinkParser>
                 ) : !menuItem.isNull ? (
                   <ExpLinkParser

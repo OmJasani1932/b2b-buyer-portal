@@ -68,12 +68,10 @@ const SocialIcons = ({ pageData }: SocialIconsProps) => {
           pageData?.globalSettings?.social_links_com?.[0]?.youtube_link_et) && (
           <div className="footer-col xl:basis-[25.3%] basis-[100%]">
             {pageData?.globalSettings?.footer_com &&
-              pageData?.globalSettings?.footer_com?.[0]
-                ?.social_links_heading_et && (
-                <h6>
+              pageData?.globalSettings?.footer_com?.[0]?.social_links_heading_et && (
+                <h6 className="text-white mb-3.5">
                   {pageData?.globalSettings?.footer_com &&
-                    pageData?.globalSettings?.footer_com?.[0]
-                      ?.social_links_heading_et}
+                    pageData?.globalSettings?.footer_com?.[0]?.social_links_heading_et}
                 </h6>
               )}
             <ul className="flex gap-7 justify-start xl:mt-0 mt-6">
@@ -81,23 +79,19 @@ const SocialIcons = ({ pageData }: SocialIconsProps) => {
                 return (
                   <Fragment key={index}>
                     {pageData.globalSettings?.social_links_com?.length &&
-                      pageData.globalSettings?.social_links_com[0][
-                        item.socialLink
-                      ] && (
+                      pageData.globalSettings?.social_links_com[0][item.socialLink] && (
                         <li className="flex">
                           <ExpLinkParser
                             title={`${item.socialMedia}`}
                             aria-label={`${item.socialMedia}`}
                             to={`${
-                              pageData.globalSettings?.social_links_com
-                                ?.length &&
-                              pageData.globalSettings?.social_links_com[0][
-                                item.socialLink
-                              ]
+                              pageData.globalSettings?.social_links_com?.length &&
+                              pageData.globalSettings?.social_links_com[0][item.socialLink]
                             }`}
                             target="_blank"
-                            className="icon text-white hover:text-primaryHover">
-                            <i className="icon flex w-[1.5rem] h-[1.5rem] [&_svg]:w-full [&_svg]:h-full">
+                            className="icon text-white hover:text-primaryHover"
+                          >
+                            <i className="icon w-8 h-8 flex items-center justify-center [&_svg]:w-full [&_svg]:h-full">
                               <item.icons />
                             </i>
                           </ExpLinkParser>

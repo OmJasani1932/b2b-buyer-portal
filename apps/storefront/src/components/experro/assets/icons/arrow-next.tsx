@@ -1,14 +1,14 @@
-export const HeroIconArrowRight = () => (
+export const IconArrowNext = () => (
   <svg
-    width="6"
-    height="12"
-    viewBox="0 0 6 12"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg">
     <path
-      d="M1.33977 11L5.00006 6L1.33977 1"
+      d="M8.20996 19L15.79 12L8.20996 5.00003"
       stroke="currentColor"
-      strokeWidth="1.66667"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
