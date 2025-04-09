@@ -90,7 +90,7 @@ export default function B3Mainheader({ title }: { title: string }) {
                   fontSize: '16px',
                 }}
                 onClick={() => {
-                  window.location.href = `${window.location.origin}/login`;
+                  window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
                 }}
               >
                 {b3Lang('global.B3MainHeader.signIn')}

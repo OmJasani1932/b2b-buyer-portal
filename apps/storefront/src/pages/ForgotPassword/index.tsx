@@ -66,7 +66,7 @@ export function ForgotPassword({
       if (isEnabledOnStorefront && captchaKey) {
         try {
           await requestResetPassword(captchaKey, emailAddressReset);
-          window.location.href = `${window.location.origin}/login`;
+          window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
           setLoading(false);
         } catch (e) {
           b2bLogger.error(e);
@@ -76,7 +76,7 @@ export function ForgotPassword({
       if (!isEnabledOnStorefront) {
         await sendEmail(emailAddress);
         setLoading(false);
-        window.location.href = `${window.location.origin}/login`;
+        window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
       }
     } catch (e) {
       b2bLogger.error(e);

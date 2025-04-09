@@ -33,7 +33,7 @@ export default function B3AccountInfo({ closeSidebar }: B3AccountInfoProps) {
 
   const handleItemClick = async (item: ListProps) => {
     if (item.key === 'logout') {
-      window.location.href = `${window.location.origin}/login`;
+      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
     } else if (item.type === 'path' && item.key) {
       navigate(item.key);
     }

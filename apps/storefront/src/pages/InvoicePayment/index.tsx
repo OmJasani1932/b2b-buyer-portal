@@ -76,7 +76,7 @@ function Payment() {
   }, [platform, params.id]);
 
   const handleConfirm = () => {
-    window.location.href = `${window.location.origin}/login`;
+    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
   };
 
   return (

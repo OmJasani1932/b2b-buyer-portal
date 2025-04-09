@@ -394,15 +394,6 @@ const HeaderController = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText]);
 
-  // const checkUserLoggedInStatus = (userDetails: any = false) => {
-  //   const userObj = userDetails ? userDetails : AuthService.getUserDetails();
-  //   if (userObj?.userInfo?.id) {
-  //     setUserLoggedInStatus(true);
-  //   } else {
-  //     setUserLoggedInStatus(false);
-  //   }
-  // };
-
   const handleLanguageChange = (language: string) => {
     document.dispatchEvent(
       new CustomEvent('LANGUAGE_CHANGE', {
@@ -415,11 +406,11 @@ const HeaderController = () => {
 
   const handleLogout = () => {
     window.dispatchEvent(new Event('LOGOUT_FROM_B2B'));
-    localStorage.removeItem('persist:company');
+    window.b2b.utils.user.logout();
     localStorage.removeItem('categories');
     localStorage.removeItem('user-group');
     document.dispatchEvent(new Event('CART_REFRESH'));
-    window.location.href = `${window.location.origin}/login/`;
+    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true/`;
   };
 
   const handleResizeMenu = () => {

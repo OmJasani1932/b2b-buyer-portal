@@ -57,7 +57,7 @@ export default function B3Layout({
 
   useEffect(() => {
     if ((!emailAddress || !customerId) && !getIsTokenGotoPage(location.pathname)) {
-      window.location.href = `${window.location.origin}/login`;
+      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
     }
     // disabling cause navigate dispatcher is not necessary here
     // eslint-disable-next-line react-hooks/exhaustive-deps

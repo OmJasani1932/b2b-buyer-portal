@@ -27,6 +27,9 @@ import { LineItems } from '@/utils/b3Product/b3Product';
 import createShoppingList from '@/utils/b3ShoppingList/b3ShoppingList';
 import { getCurrentCustomerInfo } from '@/utils/loginInfo';
 import { endMasquerade, startMasquerade } from '@/utils/masquerade';
+import b2bLogger from '@/utils/b3Logger';
+import { logoutSession } from '@/utils/b3logout';
+import { B2BEvent } from '@b3/hooks';
 
 export interface FormattedQuoteItem
   extends Omit<QuoteItem['node'], 'optionList' | 'calculatedValue' | 'productsSearch'> {
@@ -75,6 +78,7 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
   const productList = useAppSelector(formattedQuoteDraftListSelector);
   const B2BToken = useAppSelector(({ company }) => company.tokens.B2BToken);
   const quoteProducts = useAppSelector(({ quoteInfo }) => quoteInfo?.draftQuoteList);
+  const isAgenting = useAppSelector(({ b2bFeatures }) => b2bFeatures.masqueradeCompany.isAgenting);
 
   const {
     state: { addQuoteBtn, shoppingListBtn, addToAllQuoteBtn },
@@ -195,6 +199,19 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
           loginWithB2BStorefrontToken: async (b2bStorefrontJWTToken: string) => {
             storeDispatch(setB2BToken(b2bStorefrontJWTToken));
             await getCurrentCustomerInfo(b2bStorefrontJWTToken);
+          },
+          logout: async () => {
+            try {
+              if (isAgenting) {
+                await endMasquerade();
+              }
+            } catch (e) {
+              b2bLogger.error(e);
+            } finally {
+              window.localStorage.clear();
+              logoutSession();
+              window.b2b.callbacks.dispatchEvent(B2BEvent.OnLogout);
+            }
           },
         },
         shoppingList: {

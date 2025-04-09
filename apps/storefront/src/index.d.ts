@@ -61,6 +61,7 @@ declare interface Window {
         endMasquerade: () => void;
         graphqlBCProxy: typeof import('@/shared/service/request/b3Fetch').default.graphqlBCProxy;
         loginWithB2BStorefrontToken: (b2bStorefrontJWTToken: string) => Promise<void>;
+        logout: () => Promise<void>;
       };
       shoppingList: {
         itemFromCurrentPage: import('@/components').ProductMappedAttributes;

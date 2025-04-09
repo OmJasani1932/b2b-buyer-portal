@@ -434,7 +434,7 @@ const gotoAllowedAppPage = async (
 
     if (!customer && isB2bTokenPage()) {
       logoutSession();
-      window.location.href = `${window.location.origin}/login`;
+      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
       return;
     }
   } catch (err: unknown) {

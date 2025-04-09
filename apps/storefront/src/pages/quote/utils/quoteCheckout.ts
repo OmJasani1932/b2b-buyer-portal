@@ -39,7 +39,7 @@ export const handleQuoteCheckout = async ({
 
     if (hidePriceFromGuests && +role === 100 && navigate) {
       store.dispatch(setQuoteDetailToCheckoutUrl(location.pathname + location.search));
-      window.location.href = `${window.location.origin}/login`;
+      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
       return;
     }
 

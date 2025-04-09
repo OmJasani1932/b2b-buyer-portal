@@ -29,7 +29,7 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
 
 
   const jumpRegister = () => {
-    window.location.href = `${window.location.origin}/login/`
+    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true/`
     dispatch({
       type: 'common',
       payload: {
