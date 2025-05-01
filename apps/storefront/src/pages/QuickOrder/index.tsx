@@ -1,23 +1,23 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { Box, Grid } from '@mui/material';
 
 import { useMobile } from '@/hooks';
 import { isB2BUserSelector, rolePermissionSelector, useAppSelector } from '@/store';
 
-import QuickOrderFooter from './components/QuickOrderFooter';
+// import QuickOrderFooter from './components/QuickOrderFooter';
 import QuickOrderPad from './components/QuickOrderPad';
-import QuickorderTable from './components/QuickorderTable';
-import { CheckedProduct } from './utils';
+// import QuickorderTable from './components/QuickorderTable';
+// import { CheckedProduct } from './utils';
 
 function Quickorder() {
   const isB2BUser = useAppSelector(isB2BUserSelector);
 
-  const isAgenting = useAppSelector(({ b2bFeatures }) => b2bFeatures.masqueradeCompany.isAgenting);
+  // const isAgenting = useAppSelector(({ b2bFeatures }) => b2bFeatures.masqueradeCompany.isAgenting);
 
   const [isMobile] = useMobile();
 
-  const [isRequestLoading, setIsRequestLoading] = useState<boolean>(false);
-  const [checkedArr, setCheckedArr] = useState<CheckedProduct[]>([]);
+  // const [isRequestLoading, setIsRequestLoading] = useState<boolean>(false);
+  // const [checkedArr, setCheckedArr] = useState<CheckedProduct[]>([]);
   const { purchasabilityPermission } = useAppSelector(rolePermissionSelector);
 
   const isShowQuickOrderPad = isB2BUser ? purchasabilityPermission : true;
@@ -42,7 +42,7 @@ function Quickorder() {
           container
           spacing={2}
         >
-          <Grid
+          {/* <Grid
             xs={isMobile ? 12 : 8}
             sx={{
               pt: '0',
@@ -54,10 +54,10 @@ function Quickorder() {
               setIsRequestLoading={setIsRequestLoading}
               isRequestLoading={isRequestLoading}
             />
-          </Grid>
+          </Grid> */}
           <Grid
             item
-            xs={isMobile ? 12 : 4}
+            xs={isMobile ? 12 : 12}
             sx={{
               pt: !isMobile ? '0px !important' : '16px',
               pl: isMobile ? '0px !important' : '16px',
@@ -76,12 +76,12 @@ function Quickorder() {
           zIndex: '999',
         }}
       >
-        <QuickOrderFooter
+        {/* <QuickOrderFooter
           checkedArr={checkedArr}
           isAgenting={isAgenting}
           setIsRequestLoading={setIsRequestLoading}
           isB2BUser={isB2BUser}
-        />
+        /> */}
       </Box>
     </Box>
   );

@@ -17,7 +17,7 @@ import Footer from '../experro/footer';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 const SPECIAL_PATH_TEXTS = {
-  '/purchased-products': 'global.purchasedProducts.title',
+  '/quick-order-pad': 'global.purchasedProducts.title',
   '/orders': 'global.orders.title',
   '/company-orders': 'global.companyOrders.title',
 } as const;

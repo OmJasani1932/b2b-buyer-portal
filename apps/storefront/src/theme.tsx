@@ -151,11 +151,23 @@ function B3ThemeProvider({ children }: Props) {
                   backgroundColor: '#ffffff', // Tailwind primaryHover
                   color: '#004270',
                 },
+                '&.Mui-disabled': {
+                  backgroundColor: '#f0f0f0', // Custom disabled background
+                  color: '#9e9e9e', // Custom disabled text color
+                  border: '1px solid #ccc', // Optional border
+                  cursor: 'not-allowed',
+                  opacity: 1, // Optional: override default opacity
+                },
               },
               sizeMedium: {
                 // Add your custom styles here
                 fontSize: '16px',
                 padding: '9px 16px',
+              },
+              sizeSmall: {
+                // Add your custom styles here
+                fontSize: '14px',
+                padding: '8px 16px',
               },
               containedPrimary: {
                 color: '#ffffff', // Text color for primary button
@@ -315,6 +327,22 @@ function B3ThemeProvider({ children }: Props) {
               },
             },
           },
+          MuiInputAdornment: {
+            styleOverrides: {
+              root: {
+                color: '#808285', // Example text color
+                fontSize: '14px',
+                marginRight: '8px', // spacing between adornment and input
+                height: '20px',
+              },
+              positionStart: {
+                marginRight: '0px',
+              },
+              positionEnd: {
+                marginLeft: '8px',
+              },
+            },
+          },
           MuiSelect: {
             styleOverrides: {
               root: {
@@ -460,6 +488,30 @@ function B3ThemeProvider({ children }: Props) {
                 },
                 '.MuiTableCell-head': {
                   color: '#f20000',
+                },
+              },
+            },
+          },
+          MuiTab: {
+            styleOverrides: {
+              root: {
+                textTransform: 'none',
+                fontWeight: 500,
+                fontSize: '16px',
+                color: '#555',
+                '&.Mui-selected': {
+                  color: 'white',
+                  fontWeight: 600,
+                  background: '#004270',
+                },
+                '&:hover': {
+                  color: '#1565c0',
+                  opacity: 1,
+                },
+                indicator: {
+                  backgroundColor: '#1976d2',
+                  height: '3px',
+                  borderRadius: '2px',
                 },
               },
             },

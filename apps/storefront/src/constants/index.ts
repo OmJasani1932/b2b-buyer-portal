@@ -36,7 +36,7 @@ export enum HeadlessRoutes {
   ORDERS = '/orders',
   COMPANY_ORDERS = '/company-orders',
   QUOTES = '/quotes',
-  PURCHASED_PRODUCTS = '/purchased-products',
+  PURCHASED_PRODUCTS = '/quick-order-pad',
   ADDRESSES = '/addresses',
   USER_MANAGEMENT = '/user-management',
   ACCOUNT_SETTINGS = '/accountSettings',

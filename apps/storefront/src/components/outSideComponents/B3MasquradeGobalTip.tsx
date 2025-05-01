@@ -33,7 +33,7 @@ interface B3MasquradeGobalTipProps {
   setOpenPage: SetOpenPage;
 }
 
-const bottomHeightPage = ['shoppingList/', 'purchased-products'];
+const bottomHeightPage = ['shoppingList/', 'quick-order-pad'];
 
 export default function B3MasquradeGobalTip(props: B3MasquradeGobalTipProps) {
   const { isOpen, setOpenPage } = props;

@@ -1,0 +1,492 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
+import { useB3Lang } from '@b3/lang';
+import styled from '@emotion/styled';
+import { Box, Button, Typography } from '@mui/material';
+import isEqual from 'lodash-es/isEqual';
+
+import { B3CustomForm } from '@/components';
+import { PRODUCT_DEFAULT_IMAGE } from '@/constants';
+import { searchB2BProducts, searchBcProducts } from '@/shared/service/b2b';
+import { useAppSelector } from '@/store';
+import { currencyFormat, snackbar } from '@/utils';
+import b2bLogger from '@/utils/b3Logger';
+import {
+  calculateProductListPrice,
+  getBCPrice,
+  getProductInfoDisplayPrice,
+  getVariantInfoDisplayPrice,
+} from '@/utils/b3Product/b3Product';
+
+import { AllOptionProps, ShoppingListProductItem, SimpleObject, Variant } from '../../../types';
+import {
+  Base64,
+  getOptionRequestData,
+  getProductOptionsFields,
+} from '../../../utils/b3Product/shared/config';
+
+const ProductImage = styled('img')(() => ({
+  width: '100px',
+  height: '100px',
+  borderRadius: '4px',
+  flexShrink: 0,
+}));
+
+interface ChooseOptionsProductProps extends ShoppingListProductItem {
+  newSelectOptionList: {
+    optionId: string;
+    optionValue: any;
+  }[];
+  productId: number;
+  quantity: number;
+  variantId: number;
+  additionalProducts: CustomFieldItems;
+  setSearchFields?: any;
+  index?: any;
+  searchFields?: any;
+}
+
+function QuickPadChooseOptions(props: any) {
+  const {
+    product,
+    setIsLoading,
+    isB2BUser,
+    type,
+    setSearchFields,
+    index,
+    searchFields,
+    // ...restProps
+  } = props;
+
+  const b3Lang = useB3Lang();
+  const showInclusiveTaxPrice = useAppSelector(({ global }) => global.showInclusiveTaxPrice);
+  const isEnableProduct = useAppSelector(
+    ({ global }) => global.blockPendingQuoteNonPurchasableOOS.isEnableProduct,
+  );
+  const salesRepCompanyId = useAppSelector(({ b2bFeatures }) => b2bFeatures.masqueradeCompany.id);
+  const customerGroupId = useAppSelector((state) => state.company.customer.customerGroupId);
+  const companyInfoId = useAppSelector((state) => state.company.companyInfo.id);
+  const [quantity, setQuantity] = useState<number | string>(1);
+  const [formFields, setFormFields] = useState<CustomFieldItems[]>([]);
+  const [variantInfo, setVariantInfo] = useState<Partial<Variant> | null>(null);
+  const [variantSku, setVariantSku] = useState('');
+  const [currentImage, setCurrentImage] = useState<string>(product?.imageUrl || '');
+  const [isShowPrice, setShowPrice] = useState<boolean>(true);
+  const [additionalProducts, setAdditionalProducts] = useState<CustomFieldItems>({});
+  const [productPriceChangeOptions, setProductPriceChangeOptions] = useState<
+    Partial<AllOptionProps>[]
+  >([]);
+  const [newPrice, setNewPrice] = useState<number>(0);
+  const [chooseOptionsProduct, setChooseOptionsProduct] = useState<ChooseOptionsProductProps[]>([]);
+  // const [isRequestLoading, setIsRequestLoading] = useState<boolean>(false);
+  // const [selectedProductSkus, setSelectedProductSku] = useState<any>([]);
+
+  useEffect(() => {
+    if (type === 'quote' && product) {
+      if (variantSku) {
+        const newProduct = product as CustomFieldItems;
+        newProduct.quantity = quantity;
+        const isPrice = !!getVariantInfoDisplayPrice(newProduct.base_price, newProduct, {
+          sku: variantSku,
+        });
+        setShowPrice(isPrice);
+      } else {
+        const newProduct = product as CustomFieldItems;
+        newProduct.quantity = quantity;
+        const isPrice = !!getProductInfoDisplayPrice(newProduct.base_price, newProduct);
+        if (!isPrice) {
+          setShowPrice(false);
+        }
+      }
+    } else if ((type === 'shoppingList' || type === 'quickOrder') && product) {
+      setShowPrice(!product?.isPriceHidden);
+    }
+  }, [variantSku, quantity, product, type]);
+
+  const setChooseOptionsForm = async (product: ShoppingListProductItem) => {
+    try {
+      setIsLoading(true);
+
+      const modifiers =
+        product?.modifiers?.filter(
+          (modifier) =>
+            modifier.type === 'product_list_with_images' || modifier.type === 'product_list',
+        ) || [];
+      const productImages: SimpleObject = {};
+      const additionalProductsParams: CustomFieldItems = {};
+      if (modifiers.length > 0) {
+        const productIds = modifiers.reduce((arr: number[], modifier) => {
+          const { option_values: optionValues } = modifier;
+          optionValues.forEach((option) => {
+            if (option?.value_data?.product_id) {
+              arr.push(option.value_data.product_id);
+            }
+          });
+          return arr;
+        }, []);
+
+        if (productIds.length > 0) {
+          const getProducts = isB2BUser ? searchB2BProducts : searchBcProducts;
+
+          const companyId = companyInfoId || salesRepCompanyId;
+          const { productsSearch }: CustomFieldItems = await getProducts({
+            productIds,
+            companyId,
+            customerGroupId,
+          });
+
+          productsSearch.forEach((product: CustomFieldItems) => {
+            productImages[product.id] = product.imageUrl;
+            additionalProductsParams[product.id] = product;
+          });
+        }
+      }
+
+      setAdditionalProducts(additionalProductsParams);
+
+      setQuantity(product.quantity);
+      if (product.variants?.length === 1 && product.variants[0]) {
+        setVariantInfo(product.variants[0]);
+      }
+
+      const productOptionsFields = getProductOptionsFields(product, productImages);
+      setFormFields([...productOptionsFields]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getProductPriceOptions = (product: ShoppingListProductItem) => {
+    const newProductPriceChangeOptionLists: Partial<AllOptionProps>[] = [];
+    product.allOptions?.forEach((item) => {
+      if (
+        item.type === 'product_list_with_images' ||
+        item.type === 'product_list' ||
+        item.type === 'checkbox' ||
+        item.type === 'rectangles' ||
+        item.type === 'swatch' ||
+        item.type === 'radio_buttons' ||
+        item.type === 'dropdown'
+      ) {
+        newProductPriceChangeOptionLists.push(item);
+      }
+    });
+
+    setProductPriceChangeOptions(newProductPriceChangeOptionLists);
+  };
+
+  useEffect(() => {
+    if (product) {
+      setChooseOptionsForm(product);
+      setChooseOptionsProduct([]);
+      setNewPrice(0);
+      if (product?.allOptions?.length) {
+        getProductPriceOptions(product);
+      }
+    } else {
+      setQuantity(1);
+      setFormFields([]);
+    }
+    // disabling as we don't need dispatchers here
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
+
+  const getProductPrice = (product: ShoppingListProductItem) => {
+    const { variants = [] } = product;
+
+    let priceNumber = 0;
+    if (variantSku) {
+      const variantCalculatePrice = variants.find(
+        (variant) => variant.sku === variantSku,
+      )?.bc_calculated_price;
+      priceNumber =
+        (showInclusiveTaxPrice
+          ? variantCalculatePrice?.tax_inclusive
+          : variantCalculatePrice?.tax_exclusive) || 0;
+    } else {
+      const variantCalculatePrice = variants[0]?.bc_calculated_price;
+      priceNumber =
+        parseFloat(
+          (showInclusiveTaxPrice
+            ? variantCalculatePrice?.tax_inclusive
+            : variantCalculatePrice?.tax_exclusive
+          )?.toString(),
+        ) || 0;
+    }
+
+    return priceNumber;
+  };
+
+  const {
+    control,
+    // handleSubmit,
+    getValues,
+    formState: { errors },
+    watch,
+    setValue,
+    // reset,
+  } = useForm({
+    mode: 'all',
+  });
+
+  const formValues = watch();
+  const cache = useRef(formValues);
+
+  const getProductVariantId = useCallback(
+    async (value: CustomFieldItems, changeName = '') => {
+      const isVariantOptionChange =
+        formFields.find((item: CustomFieldItems) => item.name === changeName)?.isVariantOption ||
+        false;
+
+      if (!isVariantOptionChange || !product || !changeName) {
+        return;
+      }
+
+      const { variants = [] } = product || {};
+
+      const variantInfo =
+        variants.find((variant: any) => {
+          const { option_values: optionValues = [] } = variant;
+
+          const isSelectVariant = optionValues.reduce((isSelect: any, option: any) => {
+            if (
+              value[Base64.encode(`attribute[${option.option_id}]`)].toString() !==
+              (option.id || '').toString()
+            ) {
+              return false;
+            }
+            return isSelect;
+          }, true);
+
+          return isSelectVariant;
+        }) || null;
+
+      setVariantSku(variantInfo ? variantInfo.sku : '');
+      setVariantInfo(variantInfo);
+
+      if (variantInfo && (variantInfo.sku || variantInfo.variant_id)) {
+        const currentVariant = variants.find(
+          (variant: any) =>
+            variant.sku === variantInfo.sku || variant.variant_id === variantInfo.variant_id,
+        );
+
+        setCurrentImage(currentVariant?.image_url || product.imageUrl || '');
+      }
+    },
+    [formFields, product],
+  );
+
+  const handleOptionSelect = (product: any) => {
+    // setSelectedProductSku((prev: any) => ({
+    //   ...prev,
+    //   [product.id]: variantSku,
+    // }));
+    if (variantSku) {
+      const updatedFields: any = [...searchFields];
+      updatedFields[index].searchText = variantSku;
+      updatedFields[index].isVisibleProductOption = false;
+      updatedFields[index].variantSku = variantSku;
+      setSearchFields(updatedFields);
+    } else if (product.variants.length === 1) {
+      const updatedFields: any = [...searchFields];
+      updatedFields[index].searchText = product?.variants[0]?.sku;
+      updatedFields[index].isVisibleProductOption = false;
+      updatedFields[index].variantSku = product?.variants[0]?.sku;
+      setSearchFields(updatedFields);
+    }
+  };
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      getProductVariantId(value, name);
+    });
+
+    if (formFields[0]) {
+      const defaultValues: SimpleObject = formFields.reduce((value: SimpleObject, fields) => {
+        const formFieldValue = value;
+        formFieldValue[fields.name] = fields.default;
+        setValue(fields.name, fields.default);
+        return value;
+      }, {});
+      getProductVariantId(defaultValues, formFields[0].name);
+    }
+
+    return () => subscription.unsubscribe();
+    // disabling as we don't need dispatchers or subscribers in the dep array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formFields, getProductVariantId]);
+
+  const validateQuantityNumber = useCallback(() => {
+    const { purchasing_disabled: purchasingDisabled = true } = variantInfo || {};
+
+    if (type !== 'shoppingList' && purchasingDisabled === true && !isEnableProduct) {
+      snackbar.error(b3Lang('shoppingList.chooseOptionsDialog.productNoLongerForSale'));
+      return false;
+    }
+
+    return true;
+    // disabling as b3Lang will render errors
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEnableProduct, type, variantInfo]);
+
+  const getOptionList = useCallback(
+    (value: FieldValues) => {
+      const optionsData = getOptionRequestData(formFields, {}, value);
+      return Object.keys(optionsData).map((optionId) => ({
+        optionId,
+        optionValue: optionsData[optionId]?.toString(),
+      }));
+    },
+    [formFields],
+  );
+
+  useEffect(() => {
+    if (cache?.current && isEqual(cache?.current, formValues)) {
+      return;
+    }
+
+    cache.current = formValues;
+    if (Object.keys(formValues).length && formFields.length && productPriceChangeOptions.length) {
+      const optionList = getOptionList(formValues);
+      const { variant_id: variantId = '' } = variantInfo || {};
+      if (!product || !product.id || !variantId || !validateQuantityNumber()) {
+        return;
+      }
+
+      const newChooseOptionsProduct = [
+        {
+          ...product,
+          newSelectOptionList: optionList,
+          productId: product?.id,
+          quantity: parseInt(quantity.toString(), 10) || 1,
+          variantId: parseInt(variantId.toString(), 10) || 1,
+          additionalProducts,
+        },
+      ];
+
+      if (chooseOptionsProduct[0]) {
+        let optionChangeFlag = false;
+        const { newSelectOptionList } = chooseOptionsProduct[0];
+        newSelectOptionList.forEach((option) => {
+          const findAttributeId = productPriceChangeOptions.findIndex((item) =>
+            option.optionId.includes(String(item.id)),
+          );
+          optionList.forEach((newOption) => {
+            if (
+              option.optionId === newOption.optionId &&
+              option.optionValue !== newOption.optionValue &&
+              findAttributeId !== -1
+            ) {
+              optionChangeFlag = true;
+            }
+          });
+        });
+        if (optionChangeFlag) {
+          setChooseOptionsProduct(newChooseOptionsProduct);
+        }
+      } else {
+        setChooseOptionsProduct(newChooseOptionsProduct);
+      }
+    }
+  }, [
+    additionalProducts,
+    chooseOptionsProduct,
+    formFields.length,
+    formValues,
+    getOptionList,
+    product,
+    productPriceChangeOptions,
+    quantity,
+    validateQuantityNumber,
+    variantInfo,
+  ]);
+
+  useEffect(() => {
+    const getNewProductPrice = async () => {
+      try {
+        if (chooseOptionsProduct.length) {
+          // setIsRequestLoading(true);
+          const products = await calculateProductListPrice(chooseOptionsProduct);
+
+          if (products[0]) {
+            const { basePrice, taxPrice } = products[0];
+            const price = getBCPrice(+basePrice, +taxPrice);
+            setNewPrice(price);
+          }
+        }
+      } catch (err) {
+        b2bLogger.error(err);
+      } finally {
+        // setIsRequestLoading(false);
+      }
+    };
+
+    getNewProductPrice();
+  }, [chooseOptionsProduct]);
+
+  return (
+    <>
+      {product && (
+        <div className="mb-5 pb-5 border-b border-gray-10 pl-5 pr-5">
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+              }}
+            >
+              <Box sx={{ width: '80px' }}>
+                <ProductImage src={currentImage || product.imageUrl || PRODUCT_DEFAULT_IMAGE} />
+              </Box>
+              <Box sx={{ width: 'calc(100% - 80px)', paddingLeft: '20px' }}>
+                <Typography
+                  sx={{ fontSize: '18px', marginBottom: '10px' }}
+                  variant="body1"
+                  color="#212121"
+                >
+                  {product.name}
+                </Typography>
+                <Typography
+                  sx={{ display: 'flex', alignItems: 'center', marginBottom: '4px' }}
+                  variant="body1"
+                  color="#616161"
+                >
+                  SKU: {variantSku || product.sku}
+                </Typography>
+
+                <Box>
+                  <span>{b3Lang('shoppingList.chooseOptionsDialog.price')}</span>
+                  {!isShowPrice
+                    ? ''
+                    : currencyFormat(newPrice * +quantity || getProductPrice(product))}
+                </Box>
+              </Box>
+            </Box>
+            <div className="[&_.MuiGrid-container]:-mt-3 [&_.MuiGrid-container]:w-full [&_.MuiGrid-container]:ml-0 [&_.MuiGrid-item]:pt-3 [&_.MuiGrid-item]:pl-0 mt-5 [&_.MuiFormControlLabel-label]:text-sm [&_.MuiFormControlLabel-root]:py-[3px] [&_.MuiFormControlLabel-root]:mt-2 [&_.MuiFormControlLabel-root]:mr-2.5 [&_.MuiGrid-item]:pt-4 [&_.MuiFormLabel-root]:text-sm">
+              <B3CustomForm
+                formFields={formFields}
+                errors={errors}
+                control={control}
+                getValues={getValues}
+                setValue={setValue}
+              />
+            </div>
+          </Box>
+          <Box sx={{ marginTop: '16px', textAlign: 'center' }}>
+            <Button
+              onClick={() => handleOptionSelect(product)}
+              disabled={product.variants.length === 1 ? false : !variantSku}
+            >
+              Select
+            </Button>
+          </Box>
+        </div>
+      )}
+    </>
+  );
+}
+export default QuickPadChooseOptions;

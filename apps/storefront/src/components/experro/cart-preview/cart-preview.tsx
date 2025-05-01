@@ -21,7 +21,7 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
   return (
     <div
       ref={divRef}
-      className={`hidden dropdown-menu w-[28.125rem] 3xl:mr-5 2xl:mr-4 xl:mr-3 mr-3 absolute bg-white right-0 ${
+      className={`hidden dropdown-menu w-[28.125rem] absolute bg-white right-0 top-full ${
         isCartPreview ? 'is-open !block' : ''
       }`}
     >
@@ -85,7 +85,7 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
                 <ExpLinkParser
                   to="/checkout/"
                   onClick={() => setIsCartPreview(false)}
-                  className="button button-secondary w-full text-center"
+                  className="inline-block md:text-base text-sm leading-5 border bg-primary border-primary text-white md:py-3 md:px-8 py-[0.5625rem] px-5 font-normal hover:bg-white hover:text-primary transition-all duration-200 ease-linear rounded w-full text-center"
                 >
                   Checkout Now
                 </ExpLinkParser>
@@ -95,7 +95,7 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
                 <ExpLinkParser
                   to="/cart/"
                   onClick={() => setIsCartPreview(false)}
-                  className="button button-primary w-full text-center"
+                  className="inline-block md:text-base text-sm leading-5 border border-primary text-primary bg-white md:py-3 md:px-8 py-[0.5625rem] px-5 font-normal hover:bg-primary hover:text-white hover:border-white transition-all duration-200 ease-linear rounded w-full text-center"
                 >
                   View Cart
                 </ExpLinkParser>

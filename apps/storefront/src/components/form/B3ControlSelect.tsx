@@ -59,6 +59,7 @@ export default function B3ControlSelect({ control, errors, ...rest }: Form.B3UIP
       style={{
         width: '100%',
         color: muiSelectProps?.disabled ? 'rgba(0, 0, 0, 0.38)' : 'rgba(0, 0, 0, 0.6)',
+        display: label === 'backorder' ? 'none' : 'flex',
       }}
       disabled={disabled}
     >
@@ -86,7 +87,11 @@ export default function B3ControlSelect({ control, errors, ...rest }: Form.B3UIP
             sx={{
               ...extraPadding,
             }}
+            displayEmpty
           >
+            <MenuItem disabled value="">
+              Choose Options
+            </MenuItem>
             {options?.length &&
               options.map((option: any) => (
                 <MenuItem
