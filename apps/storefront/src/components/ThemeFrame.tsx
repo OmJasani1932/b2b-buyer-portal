@@ -165,6 +165,8 @@ export default function ThemeFrame(props: ThemeFrameProps) {
                 red: '#ff0000',
                 magento: '#5F1248',
                 quartzGray: '#484454',
+                cnbltblue: '#b3e1e7',
+                pantongray: '#696b73',
                 gray: {
                   10: '#cccccc',
                   20: '#eaebec',

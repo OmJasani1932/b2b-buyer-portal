@@ -134,7 +134,7 @@ const ExpPencilMenu = (props: ExpPencilMenuInterface) => {
                         )}
                       </strong>
                     )}
-                    <strong className="menu-name">{getMenuNameToShow(menuItem)}</strong>
+                    <strong className="menu-name font-normal">{getMenuNameToShow(menuItem)}</strong>
                     <strong className="xl:hidden block">
                       <i className="icon flex md:w-2 w-2 absolute right-8 top-1/2 -translate-y-1/2">
                         <HeroIconArrowRight />

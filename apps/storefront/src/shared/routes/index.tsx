@@ -125,7 +125,7 @@ const routes: RouteItem[] = [
     idLang: 'global.navMenu.shoppingLists',
   },
   {
-    path: '/purchased-products',
+    path: '/quick-order-pad',
     name: 'Quick order',
     pageTitle: 'Purchased products',
     wsKey: 'quickorder',

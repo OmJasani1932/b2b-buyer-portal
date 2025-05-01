@@ -1,23 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useB3Lang } from '@b3/lang';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { Box, Card, CardContent, Divider, Link, Typography } from '@mui/material';
-
-import { B3Upload, successTip } from '@/components';
-import CustomButton from '@/components/button/CustomButton';
+import { Link } from '@mui/material';
+import { successTip } from '@/components';
 import { CART_URL } from '@/constants';
-import { useBlockPendingAccountViewPrice } from '@/hooks';
-import useMobile from '@/hooks/useMobile';
-import { useAppSelector } from '@/store';
+// import { useBlockPendingAccountViewPrice } from '@/hooks';
+// import { useAppSelector } from '@/store';
 import { snackbar } from '@/utils';
 import b2bLogger from '@/utils/b3Logger';
 import b3TriggerCartNumber from '@/utils/b3TriggerCartNumber';
 import { callCart } from '@/utils/cartUtils';
 
-import SearchProduct from '../../ShoppingListDetails/components/SearchProduct';
 import { addCartProductToVerify } from '../utils';
 
-import QuickAdd from './QuickAdd';
+import QuickPadSearchProduct from '@/pages/ShoppingListDetails/components/QuickPadSearchProduct';
+import QuickOrderUpload from '@/pages/ShoppingListDetails/components/QuickOrderUpload';
 
 interface QuickOrderPadProps {
   isB2BUser: boolean;
@@ -25,16 +21,15 @@ interface QuickOrderPadProps {
 
 export default function QuickOrderPad(props: QuickOrderPadProps) {
   const { isB2BUser } = props;
-  const [isMobile] = useMobile();
   const b3Lang = useB3Lang();
 
   const [isOpenBulkLoadCSV, setIsOpenBulkLoadCSV] = useState(false);
   const [productData, setProductData] = useState<CustomFieldItems>([]);
   const [addBtnText, setAddBtnText] = useState<string>('Add to cart');
   const [isLoading, setIsLoading] = useState(false);
-  const [blockPendingAccountViewPrice] = useBlockPendingAccountViewPrice();
+  // const [blockPendingAccountViewPrice] = useBlockPendingAccountViewPrice();
 
-  const companyStatus = useAppSelector(({ company }) => company.companyInfo.status);
+  // const companyStatus = useAppSelector(({ company }) => company.companyInfo.status);
 
   const getSnackbarMessage = (res: any) => {
     if (res && !res.errors) {
@@ -308,17 +303,16 @@ export default function QuickOrderPad(props: QuickOrderPadProps) {
     } catch (error) {
       b2bLogger.error(error);
     }
-
     return productData;
   };
 
-  const handleOpenUploadDiag = () => {
-    if (blockPendingAccountViewPrice && companyStatus === 0) {
-      snackbar.info(b3Lang('purchasedProducts.quickOrderPad.addNProductsToCart'));
-    } else {
-      setIsOpenBulkLoadCSV(true);
-    }
-  };
+  // const handleOpenUploadDiag = () => {
+  //   if (blockPendingAccountViewPrice && companyStatus === 0) {
+  //     snackbar.info(b3Lang('purchasedProducts.quickOrderPad.addNProductsToCart'));
+  //   } else {
+  //     setIsOpenBulkLoadCSV(true);
+  //   }
+  // };
 
   useEffect(() => {
     if (productData?.length > 0) {
@@ -331,54 +325,9 @@ export default function QuickOrderPad(props: QuickOrderPadProps) {
     // disabling this rule as b3Lang has rendering issues
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData]);
-
   return (
-    <Card
-      sx={{
-        marginBottom: isMobile ? '8.5rem' : '50px',
-      }}
-    >
-      <CardContent className="!p-0">
-        <Box>
-          <Typography variant="h3">
-            {b3Lang('purchasedProducts.quickOrderPad.quickOrderPad')}
-          </Typography>
-
-          <SearchProduct
-            addToList={handleQuickSearchAddCart}
-            searchDialogTitle={b3Lang('purchasedProducts.quickOrderPad.quickOrderPad')}
-            type="quickOrder"
-            addButtonText={b3Lang('purchasedProducts.quickOrderPad.addToCart')}
-            isB2BUser={isB2BUser}
-          />
-
-          <Divider />
-
-          <QuickAdd
-            quickAddToList={quickAddToList}
-            buttonText={b3Lang('purchasedProducts.quickOrderPad.addProductsToCart')}
-          />
-
-          <Divider />
-
-          <Box
-            sx={{
-              margin: '20px 0 0',
-            }}
-          >
-            <CustomButton variant="text" onClick={() => handleOpenUploadDiag()}>
-              <UploadFileIcon
-                sx={{
-                  marginRight: '8px',
-                }}
-              />
-              {b3Lang('purchasedProducts.quickOrderPad.bulkUploadCSV')}
-            </CustomButton>
-          </Box>
-        </Box>
-      </CardContent>
-
-      <B3Upload
+    <>
+      <QuickOrderUpload
         isOpen={isOpenBulkLoadCSV}
         setIsOpen={setIsOpenBulkLoadCSV}
         handleAddToList={handleAddToCart}
@@ -387,6 +336,69 @@ export default function QuickOrderPad(props: QuickOrderPadProps) {
         isLoading={isLoading}
         isToCart
       />
-    </Card>
+      <QuickPadSearchProduct
+        addToList={handleQuickSearchAddCart}
+        searchDialogTitle={b3Lang('purchasedProducts.quickOrderPad.quickOrderPad')}
+        type="quickOrder"
+        addButtonText={b3Lang('purchasedProducts.quickOrderPad.addToCart')}
+        isB2BUser={isB2BUser}
+      />
+
+      {/* <Card
+        sx={{
+          marginBottom: isMobile ? '8.5rem' : '50px',
+        }}
+      >
+        <CardContent className="!p-0">
+          <Box>
+            <Typography variant="h3">
+              {b3Lang('purchasedProducts.quickOrderPad.quickOrderPad')}
+            </Typography>
+
+            <SearchProduct
+              addToList={handleQuickSearchAddCart}
+              searchDialogTitle={b3Lang('purchasedProducts.quickOrderPad.quickOrderPad')}
+              type="quickOrder"
+              addButtonText={b3Lang('purchasedProducts.quickOrderPad.addToCart')}
+              isB2BUser={isB2BUser}
+            />
+
+            <Divider />
+
+            <QuickAdd
+              quickAddToList={quickAddToList}
+              buttonText={b3Lang('purchasedProducts.quickOrderPad.addProductsToCart')}
+            />
+
+            <Divider />
+
+            <Box
+              sx={{
+                margin: '20px 0 0',
+              }}
+            >
+              <CustomButton variant="text" onClick={() => handleOpenUploadDiag()}>
+                <UploadFileIcon
+                  sx={{
+                    marginRight: '8px',
+                  }}
+                />
+                {b3Lang('purchasedProducts.quickOrderPad.bulkUploadCSV')}
+              </CustomButton>
+            </Box>
+          </Box>
+        </CardContent>
+
+        <B3Upload
+          isOpen={isOpenBulkLoadCSV}
+          setIsOpen={setIsOpenBulkLoadCSV}
+          handleAddToList={handleAddToCart}
+          setProductData={setProductData}
+          addBtnText={addBtnText}
+          isLoading={isLoading}
+          isToCart
+        />
+      </Card> */}
+    </>
   );
 }

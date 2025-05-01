@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
 import { useB3Lang } from '@b3/lang';
-import { InsertDriveFile, MoreHoriz } from '@mui/icons-material';
-import { Box, Button, Link, Menu, MenuItem, Tab, Tabs, Typography } from '@mui/material';
+import { InsertDriveFile} from '@mui/icons-material';
+import { Box, Button, Link, Tab, Tabs, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { B3PaginationTable } from '@/components/table/B3PaginationTable';
 import { TableColumnItem } from '@/components/table/B3Table';
@@ -24,6 +25,8 @@ const StyledTableContainer = styled(Box)(() => {
   const [isMobile] = useMobile();
   const style = {
     boxShadow: 'none',
+    // borderLeft: '0px',
+    // borderRight: '0px',
   };
 
   const mobileStyle = {
@@ -90,6 +93,7 @@ function BulkUploadTable(props: BulkUploadTableProps) {
         <Typography
           sx={{
             fontSize: '14px',
+            color:'red'
           }}
         >
           {row.error}
@@ -200,22 +204,24 @@ function BulkUploadTable(props: BulkUploadTableProps) {
         </Box>
 
         <Button
-          sx={{
-            color: 'rgba(0, 0, 0, 0.54)',
-          }}
+          variant='outlined'
+          
+          size='small'
           ref={ref}
+          startIcon={<DeleteIcon />}
           onClick={() => {
-            handleOpenBtnList();
+            handleRemoveCsv();
           }}
         >
-          <MoreHoriz
+          {/* <MoreHoriz
             sx={{
               color: '#5E637A',
             }}
-          />
+          /> */}
+          Remove
         </Button>
 
-        <Menu anchorEl={ref.current} open={isOpen} onClose={handleClose}>
+        {/* <Menu anchorEl={ref.current} open={isOpen} onClose={handleClose}>
           <MenuItem
             onClick={() => {
               handleRemoveCsv();
@@ -227,16 +233,19 @@ function BulkUploadTable(props: BulkUploadTableProps) {
           >
             Remove
           </MenuItem>
-        </Menu>
+        </Menu> */}
       </Box>
+      <div className='[&_.MuiPaper-elevation]:border-l-0 [&_.MuiPaper-elevation]:border-r-0'>
       <Box
         sx={{
           marginTop: '20px',
+          border: "1px solid #D2D2D3",
           boxShadow: isMobile
             ? 'none'
-            : '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)',
+            : 'none',
           borderRadius: '4px',
           position: 'relative',
+          
         }}
       >
         <Box>
@@ -278,15 +287,16 @@ function BulkUploadTable(props: BulkUploadTableProps) {
         {activeTab === 'error' && (
           <Box
             sx={{
-              padding: isMobile ? '18px 0' : '0 16px 18px 16px',
+              padding: isMobile ? '18px 0' : '18px 16px 18px 16px',
             }}
           >
-            <Link href={fileDatas?.errorFile} underline="none">
+            <Link className='text-red' href={fileDatas?.errorFile} underline="none">
               {b3Lang('global.B3Upload.downloadErrorResults')}
             </Link>
           </Box>
         )}
       </Box>
+      </div>
     </Box>
   );
 }
