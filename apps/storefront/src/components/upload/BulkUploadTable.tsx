@@ -136,12 +136,12 @@ function BulkUploadTable(props: BulkUploadTableProps) {
   const errorProduct = fileDatas?.errorProduct || [];
   const validProduct = fileDatas?.validProduct || [];
   const ref = useRef<HTMLButtonElement | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(errorProduct.length > 0 ? 'error' : 'valid');
 
-  const handleOpenBtnList = () => {
-    setIsOpen(true);
-  };
+  // const handleOpenBtnList = () => {
+  //   setIsOpen(true);
+  // };
 
   const handleClose = () => {
     setIsOpen(false);

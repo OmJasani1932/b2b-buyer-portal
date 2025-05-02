@@ -31,6 +31,7 @@ import { successTip } from '@/components';
 import b3TriggerCartNumber from '@/utils/b3TriggerCartNumber';
 import { getCartProductInfo } from '@/pages/QuickOrder/utils';
 import styled from '@emotion/styled';
+import { ExpSearch } from '@/components/experro/api';
 
 interface SearchProductProps {
   updateList?: () => void;
@@ -193,6 +194,7 @@ export default function QuickPadSearchProduct({
       if (product?.length === 0) {
         updatedFields[index].errors = 'No products found';
       } else {
+        updatedFields[index].isVisibleProductOption = true;
         updatedFields[index].errors = '';
       }
       updatedFields[index].productListOpen = true;
@@ -263,7 +265,6 @@ export default function QuickPadSearchProduct({
       const qty = element.quantity;
       if (sku.length) {
         isValid = validateSkuInput(index, sku, qty) === false ? false : isValid;
-
         if (isValid && sku) {
           const quantity = parseInt(qty, 10) || 0;
           skuValue[sku] = skuValue[sku] ? (skuValue[sku] as number) + quantity : quantity;
@@ -277,72 +278,141 @@ export default function QuickPadSearchProduct({
       skus: Object.keys(skuValue),
     };
   };
-
   const getVariantList = async (skus: string[]) => {
-    const getProducts = isB2BUser ? searchB2BProducts : searchBcProducts;
+    const searchObj = {
+      skip: 0,
+      limit: 1000,
+      sortBy: 'relevance',
+      orderBy: '',
+      body: {
+        filter: {
+          sku_esi: skus,
+        },
+      },
+      fieldsToQuery:
+        'brand_esi,brand_page_slug_esi,categories_esai,category_ids_esai,provider_id_esi,provider_specific_data_ej,sku_esi, sku_for_analytics_esli,variant_options_ej,variants_ej',
+      byPassMerchandising: true,
+    };
+    const data = await ExpSearch({
+      searchObj,
+    });
+    const allvaildSku: any = [];
 
-    // Parallel API calls for all SKUs
-    const productPromises = skus.map((sku) =>
-      getProducts({
-        search: sku,
-        companyId,
-        customerGroupId,
-        categoryFilter: true,
-      })
-        .then((result) => ({ status: 'fulfilled', sku, result }))
-        .catch(() => ({ status: 'rejected', sku })),
-    );
+    data.Data?.items.forEach((product: any) => {
+      const iSDefaultSku = skus?.filter(
+        (sku: any) => product?.sku_esi.toLowerCase() == sku.toLowerCase(),
+      );
 
-    const results = await Promise.all(productPromises);
-
-    const validSkus: string[] = [];
-    const updatedFields = [...searchFields];
-
-    results.forEach((res: any) => {
-      if (res.status === 'fulfilled') {
-        const product = conversionProductsList(res.result.productsSearch);
-        if (product.length === 0) {
-          const matchAll = updatedFields.filter((ele) => ele.searchText === res.sku);
-          matchAll.forEach((match: any) => {
-            if (match) {
-              match.errors = b3Lang('purchasedProducts.quickAdd.notFoundSku', {
-                notFoundSku: res.sku,
-              });
-            } else {
-              match.errors = '';
-            }
-          });
-        } else {
-          const matchAll = updatedFields.filter((ele) => ele.searchText === res.sku);
-          matchAll.forEach((match: any) => {
-            if (match) {
-              match.errors = '';
-            }
-          });
-          validSkus.push(res.sku);
-        }
-      } else {
-        const matchAll = updatedFields.filter((ele) => ele.searchText === res.sku);
-        matchAll.forEach((match: any) => {
-          if (match) {
-            match.errors = '';
-          }
+      if (iSDefaultSku.length) {
+        iSDefaultSku?.forEach((ele: any) => {
+          allvaildSku.push(ele);
         });
       }
+
+      skus.forEach((enterdSku: any) => {
+        const filterdValidSku = product?.variants_ej.filter(
+          (varaint: any) => varaint.sku.toLowerCase() === enterdSku.toLowerCase(),
+        );
+        if (filterdValidSku.length) {
+          filterdValidSku?.forEach((element: any) => {
+            if (element.sku) {
+              allvaildSku.push(element.sku);
+            }
+          });
+        }
+      });
     });
 
-    setSearchFields(updatedFields);
+    const invalidSkus = skus.filter((sku) => !allvaildSku.includes(sku));
 
-    if (validSkus.length === 0) {
+    const updatedFields1 = [...searchFields];
+    invalidSkus?.forEach((invalidSku: any) => {
+      const matchAll = updatedFields1?.filter((ele) => ele?.searchText === invalidSku);
+      matchAll.forEach((match: any) => {
+        if (match) {
+          match.errors = b3Lang('purchasedProducts.quickAdd.notFoundSku', {
+            notFoundSku: invalidSku,
+          });
+        } else {
+          match.errors = '';
+        }
+      });
+      setSearchFields(updatedFields1);
+    });
+    // const getProducts = isB2BUser ? searchB2BProducts : searchBcProducts;
+
+    // Parallel API calls for all SKUs
+    // const productPromises = skus.map((sku) =>
+    //   getProducts({
+    //     search: sku,
+    //     companyId,
+    //     customerGroupId,
+    //     categoryFilter: true,
+    //   })
+    //     .then((result) => ({ status: 'fulfilled', sku, result }))
+    //     .catch(() => ({ status: 'rejected', sku })),
+    // );
+
+    // const results = await Promise.all(productPromises);
+
+    // const validSkus: string[] = [];
+    // const updatedFields = [...searchFields];
+
+    // results.forEach((res: any) => {
+    //   if (res.status === 'fulfilled') {
+    //     const product = conversionProductsList(res.result.productsSearch);
+    //     if (product.length === 0) {
+    //       const matchAll = updatedFields.filter((ele) => ele.searchText === res.sku);
+    //       matchAll.forEach((match: any) => {
+    //         if (match) {
+    //           match.errors = b3Lang('purchasedProducts.quickAdd.notFoundSku', {
+    //             notFoundSku: res.sku,
+    //           });
+    //         } else {
+    //           match.errors = '';
+    //         }
+    //       });
+    //     } else {
+    //       const matchAll = updatedFields.filter((ele) => ele.searchText === res.sku);
+    //       matchAll.forEach((match: any) => {
+    //         if (match) {
+    //           match.errors = '';
+    //         }
+    //       });
+    //       validSkus.push(res.sku);
+    //     }
+    //   } else {
+    //     const matchAll = updatedFields.filter((ele) => ele.searchText === res.sku);
+    //     matchAll.forEach((match: any) => {
+    //       if (match) {
+    //         match.errors = '';
+    //       }
+    //     });
+    //   }
+    // });
+
+    // setSearchFields(updatedFields);
+
+    if (allvaildSku.length === 0) {
       setIsLoading(false);
       return [];
     }
-
+    allvaildSku.forEach((validSku: any) => {
+      const matchAll = updatedFields1.filter((ele) => ele.searchText === validSku);
+      matchAll.forEach((match: any) => {
+        if (match) {
+          match.errors = '';
+        } else {
+          match.errors = '';
+        }
+      });
+      setSearchFields(updatedFields1);
+    });
     const getVariantInfoBySku = isB2BUser ? getB2BVariantInfoBySkus : getBcVariantInfoBySkus;
     try {
       // setIsLoading(true);
       const { variantSku: variantInfoList }: CustomFieldItems = await getVariantInfoBySku(
-        { skus: validSkus },
+        { skus: allvaildSku },
         true,
       );
 
@@ -505,12 +575,13 @@ export default function QuickPadSearchProduct({
       );
       return;
     }
-    setIsLoading(true);
     try {
       const { skuValue, isValid, skus }: any = getProductData();
+
       if (!isValid || skus.length <= 0) {
         return;
       }
+      setIsLoading(true);
       const variantInfoList: any = await getVariantList(skus);
 
       const { notFoundSku, notPurchaseSku, productItems, passSku, notStockSku, orderLimitSku } =
