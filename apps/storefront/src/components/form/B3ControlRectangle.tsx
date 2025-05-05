@@ -65,8 +65,8 @@ export default function B3ControlRectangle({ control, errors, ...rest }: Form.B3
                     label={option.label}
                     key={option.value}
                     sx={{
-                      border: isActive ? `1px solid ${primaryColor}` : '1px solid #767676',
-                      boxShadow: isActive ? `0 0 0 1px ${primaryColor}` : 'none',
+                      border: isActive ? `1px solid #004270` : '1px solid #dddddd',
+                      boxShadow: isActive ? `0 0 0 1px #004270` : 'none',
                       ...labelStyle,
                     }}
                     control={<Radio />}

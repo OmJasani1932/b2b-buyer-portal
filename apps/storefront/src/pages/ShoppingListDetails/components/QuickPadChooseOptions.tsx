@@ -474,12 +474,16 @@ function QuickPadChooseOptions(props: any) {
                 getValues={getValues}
                 setValue={setValue}
               />
-            </div>
+            </div>  
           </Box>
           <Box sx={{ marginTop: '16px', textAlign: 'center' }}>
             <Button
               onClick={() => handleOptionSelect(product)}
-              disabled={product.variants.length === 1 ? false : !variantSku}
+              disabled={
+                product?.variants?.length === 1 && product?.sku == product?.variants[0]?.sku
+                  ? false
+                  : !variantSku
+              }
             >
               Select
             </Button>

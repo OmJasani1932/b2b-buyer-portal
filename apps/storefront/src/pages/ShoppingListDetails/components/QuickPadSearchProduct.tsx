@@ -839,6 +839,7 @@ export default function QuickPadSearchProduct({
                           variant="filled"
                           fullWidth
                           size="small"
+                          autoComplete='off'
                           value={field.searchText}
                           onChange={(e: any) => handleSearchTextChange(e, index)}
                           onKeyDown={(e) => e.key === 'Enter' && searchProduct(index)}
@@ -888,6 +889,7 @@ export default function QuickPadSearchProduct({
                           type="number"
                           variant="filled"
                           size="small"
+                          autoComplete='off'
                           value={field.quantity}
                           onChange={(e: any) => handleQuantityChange(index, e)}
                           // onKeyDown={(e) => e.key === 'Enter' && searchProduct(index)}
@@ -908,7 +910,7 @@ export default function QuickPadSearchProduct({
                       </QtyWraper>
                     </VariantSkuBlock>
                     {field?.productList?.length > 0 && field?.isVisibleProductOption && (
-                      <div className="pr-[120px] pt-3 flex justify-end">
+                      <div className="md:pr-[120px] pr-[110px] pt-3 flex justify-end">
                         <span
                           className="w-6 cursor-pointer flex"
                           onClick={() => handleCrossIcon(index)}

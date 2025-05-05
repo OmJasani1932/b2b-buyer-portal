@@ -55,7 +55,7 @@ function B3QuickPadProductList(props: any) {
   }, [pageNumber, products]);
 
   return products.length > 0 ? (
-    <Box sx={{ padding: '30px 34px 20px 34px' }}>
+    <Box sx={{ padding: isMobile ? '20px 0px 20px 0px' : '30px 34px 20px 34px' }}>
       {isMobile && showCheckbox && (
         <FormControlLabel
           label={selectAllText}
@@ -84,13 +84,15 @@ function B3QuickPadProductList(props: any) {
           </>
         );
       })}
-      <ExpPagination
-        itemList={products}
-        setPageNumber={setPageNumber}
-        skip={productLimit}
-        totalCount={products.length}
-        pageNumber={pageNumber}
-      />
+      {products?.length > 1 && (
+        <ExpPagination
+          itemList={products}
+          setPageNumber={setPageNumber}
+          skip={productLimit}
+          totalCount={products.length}
+          pageNumber={pageNumber}
+        />
+      )}
     </Box>
   ) : null;
 }
