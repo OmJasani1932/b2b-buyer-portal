@@ -261,7 +261,7 @@ export default function QuickPadSearchProduct({
     const skuValue: SimpleObject = {};
     let isValid = true;
     searchFields.forEach((element: any, index: any) => {
-      const sku = element.searchText ? element.searchText : '';
+      const sku = element.variantSku ? element.variantSku : '';
       const qty = element.quantity;
       if (sku.length) {
         isValid = validateSkuInput(index, sku, qty) === false ? false : isValid;
@@ -327,7 +327,7 @@ export default function QuickPadSearchProduct({
 
     const updatedFields1 = [...searchFields];
     invalidSkus?.forEach((invalidSku: any) => {
-      const matchAll = updatedFields1?.filter((ele) => ele?.searchText === invalidSku);
+      const matchAll = updatedFields1?.filter((ele) => ele?.variantSku === invalidSku);
       matchAll.forEach((match: any) => {
         if (match) {
           match.errors = b3Lang('purchasedProducts.quickAdd.notFoundSku', {
@@ -839,7 +839,7 @@ export default function QuickPadSearchProduct({
                           variant="filled"
                           fullWidth
                           size="small"
-                          autoComplete='off'
+                          autoComplete="off"
                           value={field.searchText}
                           onChange={(e: any) => handleSearchTextChange(e, index)}
                           onKeyDown={(e) => e.key === 'Enter' && searchProduct(index)}
@@ -885,11 +885,12 @@ export default function QuickPadSearchProduct({
                       </Box>
                       <QtyWraper>
                         <TextField
+                          inputProps={{ className: 'qty-pad' }}
                           hiddenLabel
                           type="number"
                           variant="filled"
                           size="small"
-                          autoComplete='off'
+                          autoComplete="off"
                           value={field.quantity}
                           onChange={(e: any) => handleQuantityChange(index, e)}
                           // onKeyDown={(e) => e.key === 'Enter' && searchProduct(index)}

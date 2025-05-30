@@ -1,6 +1,6 @@
 import { Controller } from 'react-hook-form';
 import { useB3Lang } from '@b3/lang';
-import { FormControl, FormHelperText, FormLabel, Radio, RadioGroup, useTheme } from '@mui/material';
+import { FormControl, FormHelperText, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 import { StyleRectangleFormControlLabel } from './styled';
 import Form from './ui';
@@ -18,9 +18,9 @@ export default function B3ControlRectangle({ control, errors, ...rest }: Form.B3
   } = rest;
 
   const b3Lang = useB3Lang();
-  const theme = useTheme();
+  // const theme = useTheme();
 
-  const primaryColor = theme.palette.primary.main;
+  // const primaryColor = theme.palette.primary.main;
 
   const fieldsProps = {
     type: fieldType,

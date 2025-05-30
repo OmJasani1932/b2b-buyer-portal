@@ -281,17 +281,40 @@ function QuickPadChooseOptions(props: any) {
     //   ...prev,
     //   [product.id]: variantSku,
     // }));
+
+    let b2bIframe: any = document.getElementById('b2b-iframe');
+    let iframeDocument: any = null;
+
+    if (b2bIframe) {
+      iframeDocument = b2bIframe.contentDocument;
+    }
+    const allQuantityClass = iframeDocument.querySelectorAll('.qty-pad');
+
     if (variantSku) {
       const updatedFields: any = [...searchFields];
-      updatedFields[index].searchText = variantSku;
+      // updatedFields[index].searchText = variantSku;
+      updatedFields[index].searchText = product?.name;
       updatedFields[index].isVisibleProductOption = false;
       updatedFields[index].variantSku = variantSku;
+      updatedFields[index].productName = product?.name;
+      allQuantityClass?.forEach((element: any, qtyIndex: any) => {
+        if (index == qtyIndex) {
+          element?.focus();
+        }
+      });
       setSearchFields(updatedFields);
     } else if (product.variants.length === 1) {
       const updatedFields: any = [...searchFields];
-      updatedFields[index].searchText = product?.variants[0]?.sku;
+      // updatedFields[index].searchText = product?.variants[0]?.sku;
+      updatedFields[index].searchText = product?.name;
       updatedFields[index].isVisibleProductOption = false;
       updatedFields[index].variantSku = product?.variants[0]?.sku;
+      updatedFields[index].productName = product?.name;
+      allQuantityClass?.forEach((element: any, qtyIndex: any) => {
+        if (index == qtyIndex) {
+          element?.focus();
+        }
+      });
       setSearchFields(updatedFields);
     }
   };
@@ -474,7 +497,7 @@ function QuickPadChooseOptions(props: any) {
                 getValues={getValues}
                 setValue={setValue}
               />
-            </div>  
+            </div>
           </Box>
           <Box sx={{ marginTop: '16px', textAlign: 'center' }}>
             <Button
