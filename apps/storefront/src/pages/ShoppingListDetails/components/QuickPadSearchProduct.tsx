@@ -821,7 +821,7 @@ export default function QuickPadSearchProduct({
                   >
                     <VariantSkuBlock>
                       <RemoveIconBlock
-                        className={searchFields.length <= 1 ? 'opacity-50 pointer-events-none' : ''}
+                        className={searchFields.length <= 1 ? 'opacity-50 cursor-not-allowed' : 'bg-yellow text-white border-yellow hover:bg-primary hover:border-primary'}
                         onClick={() => handleDeleteRow(index)}
                       >
                         <RemoveIcon />

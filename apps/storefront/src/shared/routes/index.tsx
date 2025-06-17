@@ -32,6 +32,7 @@ const RegisteredBCToB2B = lazy(() => import('@/pages/RegisteredBCToB2B'));
 const ShippingLists = lazy(() => import('@/pages/ShoppingLists'));
 const ShoppingListDetails = lazy(() => import('@/pages/ShoppingListDetails'));
 const UserManagement = lazy(() => import('@/pages/UserManagement'));
+// const CustomQuote = lazy(() => import('@/pages/CustomQuote'));
 
 interface RouteItemBasic {
   component: FC<PageProps>;
@@ -229,6 +230,16 @@ const routes: RouteItem[] = [
     isTokenLogin: false,
     idLang: 'global.navMenu.quoteDetail',
   },
+  // {
+  //   path: '/custom-quote',
+  //   name: 'Custom Quote',
+  //   wsKey: 'customQuote',
+  //   isMenuItem: true,
+  //   component: CustomQuote,
+  //   permissions: [0, 1, 2, 3, 99],
+  //   isTokenLogin: true,
+  //   idLang: 'Custom quote',
+  // }
 ];
 
 const firstLevelRouting: RouteFirstLevelItem[] = [

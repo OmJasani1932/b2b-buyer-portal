@@ -320,23 +320,26 @@ export default function QuickOrderUpload(props: B3UploadProps) {
               marginLeft: '0.5rem',
             }}
           >
-            <Link
+           
+          </Box>
+        </Grid>
+
+        <Grid display="flex" justifyContent="center" alignItems="center"  xs={12}>
+          <CustomButton  variant="outlined" onClick={openFile} className="test-buttomn bg-yellow border-yellow text-white">
+            Upload file
+          </CustomButton>
+           <Link
               href="https://silk-demo-store45.mybigcommerce.com/content/sample_template.csv"
               underline="none"
+              className='flex pt-1.5 pb-2 px-6 border border-primary text-primary hover:bg-primary hover:border-primary hover:text-white'
               sx={{
                 color: primaryColor,
                 pointerEvents: 'auto',
+                marginLeft: '16px',
               }}
             >
               Download sample
             </Link>
-          </Box>
-        </Grid>
-
-        <Grid display="flex" justifyContent="center" xs={12}>
-          <CustomButton variant="outlined" onClick={openFile} className="test-buttomn">
-            Upload file
-          </CustomButton>
         </Grid>
       </Grid>
     </Box>
