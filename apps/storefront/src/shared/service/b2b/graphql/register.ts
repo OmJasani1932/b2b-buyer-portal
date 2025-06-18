@@ -313,11 +313,15 @@ export const getBCStoreChannelId = () =>
     variables: { storeHash, bcChannelId: channelId },
   });
 
-export const createBCCompanyUser = (customerData: Partial<CreateCustomer>) =>
-  B3Request.graphqlB2B({
-    query: customerCreateBC,
-    variables: { customerData: convertObjectOrArrayKeysToCamel(customerData) },
-  });
+  export const createBCCompanyUser = (customerData: Partial<CreateCustomer>) => {
+    if (customerData?.channel_ids?.length) {
+      customerData?.channel_ids?.push(1);
+    }
+    return B3Request.graphqlB2B({
+      query: customerCreateBC,
+      variables: { customerData: convertObjectOrArrayKeysToCamel(customerData) },
+    });
+  };
 
 export const sendSubscribersState = (data: Partial<CustomerSubscribers>) =>
   B3Request.graphqlB2B({
