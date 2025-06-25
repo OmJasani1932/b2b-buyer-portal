@@ -27,6 +27,7 @@ export interface OrderItemCardProps {
   isPermissions: boolean;
   isB2BUser: boolean;
   isb2bCustome?: boolean;
+  quoteConfigurationId?: any;
 }
 
 interface PermissionLevelInfoProps {
@@ -52,7 +53,16 @@ const FlexItem = styled(Box)(() => ({
 }));
 
 function ShoppingListsCard(props: OrderItemCardProps) {
-  const { item: shoppingList, onEdit, onDelete, onCopy, isPermissions, isB2BUser,isb2bCustome } = props;
+  const {
+    item: shoppingList,
+    onEdit,
+    onDelete,
+    onCopy,
+    isPermissions,
+    isB2BUser,
+    isb2bCustome,
+    quoteConfigurationId,
+  } = props;
   const b3Lang = useB3Lang();
 
   const [isCanEditShoppingList, setIsCanEditShoppingList] = useState<boolean>(true);
@@ -114,7 +124,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
 
   return (
     <Card
-    className='h-full'
+      className="h-full"
       key={shoppingList.id}
       sx={{
         '& .b2b-card-content': {
@@ -151,7 +161,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
             >
               {shoppingList.description}
             </Box>
- 
+
             {isB2BUser && (
               <FlexItem className="mb-1 text-gray-200">
                 <FontBold className="text-gray-200">
@@ -199,7 +209,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
                   <EditIcon fontSize="inherit" />
                 </IconButton>
               )}
- 
+
               <IconButton
                 aria-label="duplicate"
                 size="small"
@@ -225,10 +235,13 @@ function ShoppingListsCard(props: OrderItemCardProps) {
               )}
             </Box>
           </Flex>
- 
+
           {shoppingList.id && isb2bCustome && (
             <div className="mt-4">
-              <ShoppingDownload />
+              <ShoppingDownload
+                shoppingListId={shoppingList?.id}
+                quoteConfigurationId={quoteConfigurationId}
+              />
             </div>
           )}
         </div>

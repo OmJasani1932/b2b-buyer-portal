@@ -33,8 +33,10 @@ export default function B3RenderRouter(props: B3RenderRouterProps) {
   const { setOpenPage, openUrl, isOpen, globalSettings, categories, isCategoryLoading } = props;
   const { state: globaledState } = useContext(GlobalContext);
   const showQuote = sessionStorage.getItem('showQuote') === 'true';
+  const showCustomQuote = sessionStorage.getItem('showCustomQuote') === 'true';
   const newRoutes = () => getAllowedRoutes(globaledState)
-  const routes = showQuote ? newRoutes() : newRoutes()?.filter((elem: any) => elem.path !== '/quotes');
+  let routes = showQuote ? newRoutes() : newRoutes()?.filter((elem: any) => elem.path !== '/quotes');
+  routes = showCustomQuote ? routes : routes?.filter((elem: any) => elem.path !== '/custom-quote');
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

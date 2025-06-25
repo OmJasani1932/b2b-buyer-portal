@@ -150,6 +150,20 @@ export default function QuickPadSearchProduct({
     setSearchFields([...updatedFields]);
   };
 
+  function getCookie(name: any) {
+    const nameEQ = `${name}=`;
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      const c = ca[i].trim();
+      if (c.indexOf(nameEQ) === 0) {
+        return c.substring(nameEQ.length, c.length);
+      }
+    }
+    return null;
+  }
+
+  const disableCart = getCookie('isEditableCart') === 'false';
+
   const handleQuantityChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     const updatedFields: any = [...searchFields];
     updatedFields[index].quantity = e.target.value;
@@ -821,7 +835,11 @@ export default function QuickPadSearchProduct({
                   >
                     <VariantSkuBlock>
                       <RemoveIconBlock
-                        className={searchFields.length <= 1 ? 'opacity-50 cursor-not-allowed' : 'bg-yellow text-white border-yellow hover:bg-primary hover:border-primary'}
+                        className={
+                          searchFields.length <= 1
+                            ? 'opacity-50 cursor-not-allowed'
+                            : 'bg-yellow text-white border-yellow hover:bg-primary hover:border-primary'
+                        }
                         onClick={() => handleDeleteRow(index)}
                       >
                         <RemoveIcon />
@@ -967,7 +985,7 @@ export default function QuickPadSearchProduct({
           <CustomButton
             onClick={handleAddToList}
             type="button"
-            disabled={searchFields?.every((ele: any) => ele.searchText.length === 0)}
+            disabled={searchFields?.every((ele: any) => ele.searchText.length === 0) || disableCart}
           >
             Add to cart
           </CustomButton>

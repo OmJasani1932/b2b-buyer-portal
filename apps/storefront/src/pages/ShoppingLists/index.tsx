@@ -41,6 +41,8 @@ function ShoppingLists() {
 
   const [paginationTableRef] = useTableRef();
 
+  const [quoteConfigurationId, setQuoteConfigurationId] = useState<number>(0);
+
   const b3Lang = useB3Lang();
 
   const salesRepCompanyId = useAppSelector(({ b2bFeatures }) => b2bFeatures.masqueradeCompany.id);
@@ -233,7 +235,7 @@ function ShoppingLists() {
 
       const data = await response.json();
       const userGroup = localStorage.getItem('user-group');
-      const groupName = userGroup ? JSON.parse(userGroup)?.toLowerCase() : null;
+      const groupName = userGroup ? JSON.parse(userGroup) : null;
 
       if (!groupName) {
         setb2bCustome(false);
@@ -241,9 +243,15 @@ function ShoppingLists() {
       }
 
       const quoteType = data?.Data?.find(
-        (item: any) => item?.storeName?.toLowerCase() === groupName,
+        (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
       )?.quoteType;
 
+      const quoteConfigurationId = data?.Data?.find(
+        (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
+      )?.quoteConfiguration;
+      if (quoteConfigurationId?.toString()?.length) {
+        setQuoteConfigurationId(quoteConfigurationId);
+      }
       setb2bCustome(quoteType === 'custom');
     } catch (error) {
       setb2bCustome(false);
@@ -290,6 +298,7 @@ function ShoppingLists() {
               onCopy={handleCopy}
               isB2BUser={isB2BUser}
               isb2bCustome={isb2bCustome}
+              quoteConfigurationId={quoteConfigurationId}
             />
           )}
         />

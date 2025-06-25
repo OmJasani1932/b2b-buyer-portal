@@ -73,11 +73,12 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
   const menuItems = () => {
     const newRoutes = getAllowedRoutes(globalState).filter((route) => route.isMenuItem);
     const showQuote = sessionStorage.getItem('showQuote') === 'true';
-    if(showQuote){
-      return newRoutes;
-    }else{
-      return newRoutes?.filter((elem: any) => elem.path !== '/quotes');
-    }
+    const showCustomQuote = sessionStorage.getItem('showCustomQuote') === 'true';
+
+    let filteredRoutes = showQuote ? newRoutes : newRoutes?.filter((elem: any) => elem.path !== '/quotes');
+    filteredRoutes = showCustomQuote ? filteredRoutes : filteredRoutes?.filter((elem: any) => elem.path !== '/custom-quote');
+
+    return filteredRoutes;
   };
   const newRoutes = menuItems();
 

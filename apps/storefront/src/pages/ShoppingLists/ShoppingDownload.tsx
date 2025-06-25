@@ -13,8 +13,10 @@ import {
 
 import B3Dialog from '@/components/B3Dialog';
 import { getB2BCountries } from '@/shared/service/b2b';
+import { useAppSelector } from '@/store';
 
-function ShoppingDownload() {
+function ShoppingDownload(props: any) {
+  const { shoppingListId, quoteConfigurationId } = props;
   const tempallAddressFields = [
     { name: 'firstName', label: 'First Name', required: true, fieldType: 'text' },
     { name: 'lastName', label: 'Last Name', required: true, fieldType: 'text' },
@@ -67,14 +69,15 @@ function ShoppingDownload() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  const customerId = useAppSelector(({ company }) => company.customer.id);
 
   const handleSubmit = async () => {
     if (validateForm()) {
       setIsloading(true);
       const requestData = {
         // shoppingListId: Number(shoppingList?.id),
-        shoppingListId: 290963,
-        customerId: 10125,
+        shoppingListId: Number(shoppingListId),
+        customerId: Number(customerId),
         poNumber: formData.poNumber,
         notes: formData.quoteNote,
         orderName: formData.orderName,
@@ -90,7 +93,7 @@ function ShoppingDownload() {
             country: formData.country,
           },
         },
-        quoteConfigurationId: 17,
+        quoteConfigurationId: Number(quoteConfigurationId),
       };
 
       try {

@@ -43,6 +43,11 @@ interface CustomQuoteItem {
   };
 }
 
+const CUSTOM_QUOTE_API = {
+  URL: 'https://dev-ProductAddRequest.cookandboardman.io/api/v1/add-quote',
+  ACCESS_KEY: '11afb7c2-7381-4a74-ac55-9728ad6205b6',
+};
+
 function CustomQuote() {
   const customerId = useAppSelector(({ company }) => company.customer.id);
   const [items, setItems] = useState<CustomQuoteItem[]>([
@@ -174,7 +179,7 @@ function CustomQuote() {
     return isValid;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
 
     if (!validateItems()) {
@@ -190,19 +195,33 @@ function CustomQuote() {
     }));
 
     const requestBody = {
-      customerId: customerId?.toString() || '',
+      customerId: parseInt(customerId?.toString() || '0', 10),
       products,
     };
 
-    console.log('Submitted data:', requestBody);
-
-    // Simulate API call
-    setTimeout(() => {
-      snackbar.success('Custom quote submitted successfully');
-      setIsSubmitting(false);
-      // Reset form after successful submission
-      resetForm();
-    }, 1000);
+    const apiUrl = `${CUSTOM_QUOTE_API.URL}`;
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        appaccesskey: CUSTOM_QUOTE_API.ACCESS_KEY,
+      },
+      body: JSON.stringify(requestBody),
+    };
+    try {
+      const response = await fetch(apiUrl, requestOptions);
+      if (response?.status === 200) {
+        snackbar.success('Custom quote submitted successfully');
+        setIsSubmitting(false);
+        // Reset form after successful submission
+        resetForm();
+      } else {
+        snackbar.error('Failed to submit custom quote. Please try again.');
+        setIsSubmitting(false);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
   };
 
   return (
@@ -380,7 +399,7 @@ function CustomQuote() {
                         className="py-[11px] line-clamp-1 text-center"
                         // color={item.errors?.image ? 'error' : 'primary'}
                       >
-                        {isUploadingImage ? 'Uploading...' : 'Upload Image'}
+                        Upload Image
                       </CustomButton>
                       {item.imageName && (
                         <Typography

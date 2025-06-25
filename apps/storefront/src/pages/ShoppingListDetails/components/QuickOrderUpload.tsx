@@ -58,6 +58,18 @@ export default function QuickOrderUpload(props: B3UploadProps) {
     withModifiers = false,
   } = props;
 
+  const getCookie = (name: any) => {
+    const nameEQ = `${name}=`;
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      const c = ca[i].trim();
+      if (c.indexOf(nameEQ) === 0) {
+        return c.substring(nameEQ.length, c.length);
+      }
+    }
+    return null;
+  };
+  const disableCart = getCookie('isEditableCart') === 'false';
   const [isMobile] = useMobile();
 
   const uploadRef = useRef<HTMLInputElement>(null);
@@ -423,6 +435,7 @@ export default function QuickOrderUpload(props: B3UploadProps) {
             }}
             variant='contained'
             onClick={handleConfirmToList}
+            disabled={disableCart}
           >
             Add to cart
           </CustomButton>
