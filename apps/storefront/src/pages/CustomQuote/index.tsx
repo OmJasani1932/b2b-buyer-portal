@@ -1,12 +1,13 @@
 import { ChangeEvent, useState } from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, TextField, Typography, Skeleton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import CustomButton from '@/components/button/CustomButton';
 import { useAppSelector } from '@/store';
 import { snackbar } from '@/utils';
-
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import { IconCross } from '@/components/experro/assets/icons/icon-cross';
 const RemoveIconBlock = styled('div')({
   cursor: 'pointer',
   display: 'flex',
@@ -14,14 +15,14 @@ const RemoveIconBlock = styled('div')({
   marginRight: '10px',
 });
 
-const VariantSkuBlock = styled('div')({
-  display: 'flex',
-  width: '100%',
-});
+// const VariantSkuBlock = styled('div')({
+//   display: 'flex',
+//   width: '100%',
+// });
 
-const QtyWraper = styled('div')({
-  width: '120px',
-});
+// const QtyWraper = styled('div')({
+//   width: '120px',
+// });
 
 const ButtonContainer = styled('div')({
   display: 'flex',
@@ -30,15 +31,22 @@ const ButtonContainer = styled('div')({
   justifyContent: 'space-between',
 });
 
+interface ImageItem {
+  file: File;
+  url?: string;
+  name?: string;
+  uploading?: boolean;
+}
+
 interface CustomQuoteItem {
   name: string;
-  image: File | null;
-  imageUrl?: string;
-  imageName?: string;
+  description: string;
+  images: ImageItem[];
   quantity: string;
   errors?: {
     name?: string;
-    image?: string;
+    description?: string;
+    images?: string;
     quantity?: string;
   };
 }
@@ -51,10 +59,9 @@ const CUSTOM_QUOTE_API = {
 function CustomQuote() {
   const customerId = useAppSelector(({ company }) => company.customer.id);
   const [items, setItems] = useState<CustomQuoteItem[]>([
-    { name: '', image: null, quantity: '', errors: {} },
+    { name: '', description: '', images: [], quantity: '', errors: {} },
   ]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
 
   const handleNameChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     const updatedItems = [...items];
@@ -66,23 +73,40 @@ function CustomQuote() {
     setItems(updatedItems);
   };
 
+  const handleDescriptionChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
+    const updatedItems = [...items];
+    updatedItems[index].description = e.target.value;
+    // Clear error when user types
+    if (updatedItems[index].errors?.description) {
+      updatedItems[index].errors = { ...updatedItems[index].errors, description: undefined };
+    }
+    setItems(updatedItems);
+  };
+
   const handleImageChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setIsUploadingImage(true);
+    if (e.target.files && e.target.files.length > 0) {
       const updatedItems = [...items];
-      // eslint-disable-next-line prefer-destructuring
-      updatedItems[index].image = e.target.files[0];
+      const files = Array.from(e.target.files);
+
       // Clear error when user uploads
-      if (updatedItems[index].errors?.image) {
-        updatedItems[index].errors = { ...updatedItems[index].errors, image: undefined };
+      if (updatedItems[index].errors?.images) {
+        updatedItems[index].errors = { ...updatedItems[index].errors, images: undefined };
       }
 
-      const file = e.target.files[0];
-      const formData = new FormData();
-      const reader = new FileReader();
+      // Add new images to the existing images array
+      files.forEach((file) => {
+        const newImage: ImageItem = {
+          file,
+          uploading: true,
+        };
+        updatedItems[index].images.push(newImage);
+      });
 
-      // eslint-disable-next-line func-names
-      reader.onload = function () {
+      setItems([...updatedItems]);
+
+      // Upload each file
+      files.forEach((file) => {
+        const formData = new FormData();
         formData.append('file', file);
 
         const apiUrl =
@@ -105,23 +129,47 @@ function CustomQuote() {
           })
           .then((data) => {
             if (data?.Status === 'success') {
-              // Store the image URL and name
-              updatedItems[index].imageUrl = data?.Data?.item;
-              updatedItems[index].imageName = data?.Data?.file_meta_data.name;
-              setItems([...updatedItems]);
-              setIsUploadingImage(false);
+              // Update the specific image with URL and name
+              setItems((currentItems) => {
+                const newItems = [...currentItems];
+                const imageIndex = newItems[index].images.findIndex(
+                  (img) => img.file === file && img.uploading,
+                );
+                if (imageIndex !== -1) {
+                  newItems[index].images[imageIndex] = {
+                    ...newItems[index].images[imageIndex],
+                    url: data?.Data?.item,
+                    name: data?.Data?.file_meta_data.name,
+                    uploading: false,
+                  };
+                }
+                return newItems;
+              });
             }
           })
           .catch((error) => {
             console.error('Fetch error:', error);
-            setIsUploadingImage(false);
-            snackbar.error('Failed to upload image');
+            snackbar.error(`Failed to upload ${file.name}`);
+            // Remove the failed image from the list
+            setItems((currentItems) => {
+              const newItems = [...currentItems];
+              newItems[index].images = newItems[index].images.filter(
+                (img) => !(img.file === file && img.uploading),
+              );
+              return newItems;
+            });
           });
-      };
+      });
 
-      reader.readAsBinaryString(file);
-      // setItems(updatedItems);
+      // Reset the input value to allow re-uploading the same file
+      e.target.value = '';
     }
+  };
+
+  const handleRemoveImage = (itemIndex: number, imageIndex: number) => {
+    const updatedItems = [...items];
+    updatedItems[itemIndex].images.splice(imageIndex, 1);
+    setItems(updatedItems);
   };
 
   const handleQuantityChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
@@ -135,7 +183,7 @@ function CustomQuote() {
   };
 
   const handleAddRow = () => {
-    setItems([...items, { name: '', image: null, quantity: '', errors: {} }]);
+    setItems([...items, { name: '', description: '', images: [], quantity: '', errors: {} }]);
   };
 
   const handleDeleteRow = (index: number) => {
@@ -147,7 +195,7 @@ function CustomQuote() {
   };
 
   const resetForm = () => {
-    setItems([{ name: '', image: null, quantity: '', errors: {} }]);
+    setItems([{ name: '', description: '', images: [], quantity: '', errors: {} }]);
   };
 
   const validateItems = (): boolean => {
@@ -162,8 +210,13 @@ function CustomQuote() {
         isValid = false;
       }
 
-      if (!item.imageUrl) {
-        errors.image = 'Image is required';
+      if (!item.description.trim()) {
+        errors.description = 'Description is required';
+        isValid = false;
+      }
+
+      if (!item.images.length || !item.images.some((img) => img.url && !img.uploading)) {
+        errors.images = 'Image is required';
         isValid = false;
       }
 
@@ -190,7 +243,8 @@ function CustomQuote() {
 
     const products = items.map((item) => ({
       name: item.name,
-      url: item.imageUrl, // Use the stored image URL
+      description: item.description,
+      url: item.images.filter((img) => img.url && !img.uploading).map((img) => img.url), // Multiple image URLs
       quantity: parseInt(item.quantity, 10),
     }));
 
@@ -313,7 +367,7 @@ function CustomQuote() {
                         }
         `}
       </style>
-      {(isSubmitting || isUploadingImage) && (
+      {(isSubmitting || items.some((item) => item.images.some((img) => img.uploading))) && (
         <div className="fixed top-0 left-0 w-full h-dvh bg-black/50 z-[9999] flex items-center justify-center">
           <div className="lds-spinner">
             <div />
@@ -331,7 +385,7 @@ function CustomQuote() {
           </div>
         </div>
       )}
-      <Box sx={{ padding: '20px' }}>
+      <div className="[&_.quote-items+.quote-items]:mt-8">
         <Typography variant="h4" sx={{ marginBottom: '20px' }}>
           Custom Quote
         </Typography>
@@ -339,8 +393,8 @@ function CustomQuote() {
         <div>
           {items.map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Box key={index} sx={{ marginBottom: '30px' }}>
-              <VariantSkuBlock className="md:items-end">
+            <div className="flex w-full md:items-start quote-items">
+              <div className="mt-[31px]">
                 <RemoveIconBlock
                   className={`${
                     items.length <= 1 ? 'opacity-50 pointer-events-none' : ''
@@ -349,117 +403,240 @@ function CustomQuote() {
                 >
                   <RemoveIcon />
                 </RemoveIconBlock>
+              </div>
 
-                <Box
-                  sx={{
-                    display: 'flex',
-                    width: '100%',
-                    gap: '15px',
-                    alignItems: 'flex-end',
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  <div className="md:w-[60%] w-full relative">
-                    <TextField
-                      label="Name"
-                      variant="filled"
-                      autoComplete="off"
-                      size="small"
-                      fullWidth
-                      value={item.name}
-                      onChange={(e: any) => handleNameChange(index, e)}
-                      error={!!item.errors?.name}
-                      className="w-full"
-                    />
-                    {item.errors?.name && (
-                      <Typography
-                        className="absolute top-full bottom-auto left-0"
-                        color="error"
-                        variant="caption"
-                        sx={{ display: 'block', mt: 0.5 }}
-                      >
-                        {item.errors.name}
-                      </Typography>
-                    )}
-                  </div>
-
-                  <Box sx={{ flex: 1 }}>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id={`image-upload-${index}`}
-                      onChange={(e: any) => handleImageChange(index, e)}
-                      style={{ display: 'none' }}
-                    />
-                    <label className="relative" htmlFor={`image-upload-${index}`}>
-                      <CustomButton
-                        component="span"
-                        variant="outlined"
+              <div className="w-full">
+                <div className="flex gap-4">
+                  <div className="flex md:flex-nowrap flex-wrap gap-4 md:w-[calc(100%_-_60px)]">
+                    <div className="md:w-[calc(50%_-_60px)] w-full relative">
+                      <TextField
+                        label={
+                          <span>
+                            Name/sku <span style={{ color: '#d32f2f' }}>*</span>
+                          </span>
+                        }
+                        variant="filled"
+                        autoComplete="off"
+                        size="small"
                         fullWidth
-                        className="py-[11px] line-clamp-1 text-center"
-                        // color={item.errors?.image ? 'error' : 'primary'}
-                      >
-                        Upload Image
-                      </CustomButton>
-                      {item.imageName && (
-                        <Typography
-                          className="line-clamp-1 text-black absolute top-full bottom-auto left-0"
-                          title={item.imageName}
-                          variant="caption"
-                          sx={{ display: 'block', mt: 0.5 }}
-                        >
-                          {item.imageName ? item.imageName : ''}
-                        </Typography>
-                      )}
-                      {item.errors?.image && (
+                        value={item.name}
+                        onChange={(e: any) => handleNameChange(index, e)}
+                        error={!!item.errors?.name}
+                        className="w-full [&_.Mui-error]:border-[#d32f2f]"
+                      />
+                      {/* {item.errors?.name && (
                         <Typography
                           className="absolute top-full bottom-auto left-0"
                           color="error"
                           variant="caption"
                           sx={{ display: 'block', mt: 0.5 }}
                         >
-                          {item.errors.image}
+                          {item.errors.name}
                         </Typography>
-                      )}
-                    </label>
-                  </Box>
+                      )} */}
+                    </div>
 
-                  <QtyWraper className="relative">
-                    <TextField
-                      label="Qty"
-                      inputProps={{ className: 'qty-pad' }}
-                      hiddenLabel
-                      type="number"
-                      variant="filled"
-                      size="small"
-                      autoComplete="off"
-                      value={item.quantity}
-                      onChange={(e: any) => handleQuantityChange(index, e)}
-                      error={!!item.errors?.quantity}
-                      sx={{
-                        '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
-                          display: 'none',
-                        },
-                        '& input[type=number]': {
-                          MozAppearance: 'textfield',
-                        },
-                        width: '100%',
-                      }}
+                    <div className="md:w-[calc(50%_-_60px)] w-full relative">
+                      <TextField
+                        label={
+                          <span>
+                            Description <span style={{ color: '#d32f2f' }}>*</span>
+                          </span>
+                        }
+                        variant="filled"
+                        autoComplete="off"
+                        size="small"
+                        fullWidth
+                        multiline
+                        rows={1}
+                        value={item.description}
+                        onChange={(e: any) => handleDescriptionChange(index, e)}
+                        error={!!item.errors?.description}
+                        className="w-full [&_textarea]:!h-5 [&_.Mui-error]:border-[#d32f2f]"
+                      />
+                      {/* {item.errors?.description && (
+                        <Typography
+                          className="absolute top-full bottom-auto left-0"
+                          color="error"
+                          variant="caption"
+                          sx={{ display: 'block', mt: 0.5 }}
+                        >
+                          {item.errors.description}
+                        </Typography>
+                      )} */}
+                    </div>
+
+                    <div className="relative w-[120px]">
+                      <TextField
+                        label={
+                          <span>
+                            Qty <span style={{ color: '#d32f2f' }}>*</span>
+                          </span>
+                        }
+                        inputProps={{ className: 'qty-pad' }}
+                        hiddenLabel
+                        type="number"
+                        variant="filled"
+                        size="small"
+                        autoComplete="off"
+                        value={item.quantity}
+                        onChange={(e: any) => handleQuantityChange(index, e)}
+                        error={!!item.errors?.quantity}
+                        className="[&_.Mui-error]:border-[#d32f2f]"
+                        sx={{
+                          '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button':
+                            {
+                              display: 'none',
+                            },
+                          '& input[type=number]': {
+                            MozAppearance: 'textfield',
+                          },
+                          width: '100%',
+                        }}
+                      />
+                      {/* {item.errors?.quantity && (
+                        <Typography
+                          className="absolute top-full bottom-auto left-0"
+                          color="error"
+                          variant="caption"
+                          sx={{ display: 'block', mt: 0.5 }}
+                        >
+                          {item.errors.quantity}
+                        </Typography>
+                      )} */}
+                    </div>
+                    <div className="w-11 relative md:hidden flex items-end">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        id={`image-upload-${index}`}
+                        onChange={(e: any) => handleImageChange(index, e)}
+                        style={{ display: 'none' }}
+                      />
+                      <label className="relative" htmlFor={`image-upload-${index}`}>
+                        <span
+                          className={`p-0 line-clamp-1 text-center w-[44px] h-[44px] flex items-center justify-center border cursor-pointer hover:bg-primary hover:border-primary hover:text-white ${
+                            item.errors?.images ? 'border-[#d32f2f]' : ''
+                          }`}
+                        >
+                          <CloudUploadOutlinedIcon />
+                        </span>
+                        {/* {item.errors?.images && (
+                            <Typography
+                              className="absolute top-full bottom-auto left-0"
+                              color="error"
+                              variant="caption"
+                              sx={{ display: 'block', mt: 0.5 }}
+                            >
+                              {item.errors.images}
+                            </Typography>
+                          )} */}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="w-11 relative md:flex hidden items-end">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      id={`image-upload-${index}`}
+                      onChange={(e: any) => handleImageChange(index, e)}
+                      style={{ display: 'none' }}
                     />
-                    {item.errors?.quantity && (
-                      <Typography
-                        className="absolute top-full bottom-auto left-0"
-                        color="error"
-                        variant="caption"
-                        sx={{ display: 'block', mt: 0.5 }}
+                    <label className="relative" htmlFor={`image-upload-${index}`}>
+                      <span
+                        className={`p-0 line-clamp-1 text-center w-[44px] h-[44px] flex items-center justify-center border cursor-pointer hover:bg-primary hover:border-primary hover:text-white ${
+                          item.errors?.images ? 'border-[#d32f2f]' : ''
+                        }`}
                       >
-                        {item.errors.quantity}
-                      </Typography>
-                    )}
-                  </QtyWraper>
-                </Box>
-              </VariantSkuBlock>
-            </Box>
+                        {item.images.some((img) => img.uploading) ? (
+                          <Skeleton
+                            variant="circular"
+                            width={24}
+                            height={24}
+                            className="animate-pulse"
+                          />
+                        ) : (
+                          <CloudUploadOutlinedIcon />
+                        )}
+                      </span>
+                      {/* {item.errors?.images && (
+                        <Typography
+                          className="absolute top-full bottom-auto left-0"
+                          color="error"
+                          variant="caption"
+                          sx={{ display: 'block', mt: 0.5 }}
+                        >
+                          {item.errors.images}
+                        </Typography>
+                      )} */}
+                    </label>
+                  </div>
+                </div>
+                {/* Display uploaded images */}
+                {item.images.length > 0 && (
+                  <Box sx={{ mt: 2 }}>
+                    <label
+                      className="text-base text-gray-200 mb-2 block"
+                      htmlFor="image-upload-{index}"
+                    >
+                      Uploaded Images ({item.images.length}):
+                    </label>
+                    <div className="flex flex-wrap -mx-2 -mt-4">
+                      {item.images.map((image, imageIndex) => (
+                        <div className=" w-4/12 md:w-[117px] px-2 pt-4">
+                          <div
+                            // key={imageIndex}
+                            className="relative border border-[#dddddd] p-1 h-full"
+                          >
+                            {image.uploading ? (
+                              <div className="flex flex-col gap-2">
+                                <Skeleton
+                                  variant="rectangular"
+                                  width="100%"
+                                  height={80}
+                                  className="aspect-[1/0.7]"
+                                />
+                                <Skeleton variant="text" width="80%" height={16} />
+                              </div>
+                            ) : (
+                              <>
+                                <div
+                                  className="flex flex-col gap-2 overflow-hidden"
+                                  title={image.name}
+                                >
+                                  <span>
+                                    <img
+                                      className="w-full h-full object-cover max-h-[80px] aspect-[1/0.7]"
+                                      width={80}
+                                      height={80}
+                                      alt=""
+                                      src={image.url}
+                                    />
+                                  </span>
+                                  <span>
+                                    {image.name?.substring(0, 15)}
+                                    {image.name && image.name.length > 15 ? '...' : ''}
+                                  </span>
+                                </div>
+                                <span
+                                  className="w-5 h-5 p-1 bg-primary rounded-full flex items-center justify-center absolute -top-2 -right-2 cursor-pointer text-white hover:opacity-70"
+                                  onClick={() => handleRemoveImage(index, imageIndex)}
+                                >
+                                  <IconCross />
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Box>
+                )}
+              </div>
+            </div>
           ))}
         </div>
 
@@ -476,7 +653,7 @@ function CustomQuote() {
             + Add Row
           </CustomButton>
         </ButtonContainer>
-      </Box>
+      </div>
     </>
   );
 }
