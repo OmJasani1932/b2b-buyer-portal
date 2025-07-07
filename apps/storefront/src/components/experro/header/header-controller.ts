@@ -310,7 +310,10 @@ const HeaderController = () => {
   const getCartQuantity = (cartObj: any) => {
     let quantity = 0;
     if (cartObj) {
-      cartObj?.line_items?.physical_items.forEach((elem: any) => {
+      [
+        ...(cartObj?.line_items?.physical_items || []),
+        ...(cartObj?.line_items?.custom_items || []),
+      ].forEach((elem: any) => {
         quantity += elem.quantity;
       });
     }

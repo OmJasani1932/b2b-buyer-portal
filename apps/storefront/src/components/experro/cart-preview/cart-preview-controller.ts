@@ -20,8 +20,16 @@ const ExpCartPreviewController = (props: ExpCartPreviewControllerProps) => {
   const [cartItems, setCartItems] = useState<any>([]);
 
   const updateCartItems = (userDetails: any) => {
-    if (userDetails?.line_items?.physical_items) {
-      setCartItems(userDetails?.line_items?.physical_items);
+    if (
+      [
+        ...(userDetails?.line_items?.physical_items || []),
+        ...(userDetails?.line_items?.custom_items || []),
+      ].length
+    ) {
+      setCartItems([
+        ...(userDetails?.line_items?.physical_items || []),
+        ...(userDetails?.line_items?.custom_items || []),
+      ]);
     } else {
       setCartItems([]);
     }

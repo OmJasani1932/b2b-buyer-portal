@@ -5,11 +5,11 @@ export interface ExpCartPreviewProps {
   isCartPreview: boolean;
   setIsCartPreview: (value: boolean) => void;
   basketRef: any;
-  cartDetails:any;
+  cartDetails: any;
 }
 
 const ExpCartPreview = (props: ExpCartPreviewProps) => {
-  const { isCartPreview, setIsCartPreview, basketRef,cartDetails } = props;
+  const { isCartPreview, setIsCartPreview, basketRef, cartDetails } = props;
 
   const { cartItems, divRef } = ExpCartPreviewController({
     isCartPreview,
@@ -29,16 +29,28 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
         {cartItems.length > 0 ? (
           <ul className="previewCartList hidden-x p-5 space-y-4 [&_li+li]:pt-4 [&_li+li]:border-t [&_li+li]:border-gray-50">
             {cartItems?.map((item: any, index: number) => {
-              const itemUrl = item?.url.replace('https://', '').split('/').splice(1).join('/');
+              const itemUrl = item?.url?.replace('https://', '')?.split('/')?.splice(1)?.join('/');
 
               return (
                 <li key={index} className="previewCartItem">
                   <div className="row flex">
                     <div className="col col-4 w-20">
                       <div className="previewCartItem-image">
-                        <ExpLinkParser to={`/${itemUrl}`}>
-                          <img src={item.image_url} alt="" />
-                        </ExpLinkParser>
+                        {itemUrl ? (
+                          <ExpLinkParser to={`/${itemUrl}`}>
+                            <img src={item.image_url} alt="" />
+                          </ExpLinkParser>
+                        ) : (
+                          <p>
+                            <img
+                              className="max-h-[80px] object-contain"
+                              src={item.image_url}
+                              alt={item.name}
+                              width={80}
+                              height={80}
+                            />
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="col col-8 w-[calc(100%_-_5rem)] pl-5">
@@ -46,9 +58,13 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
                         <span className="previewCartItem-brand block">{item.brand}</span>
 
                         <h6 className="previewCartItem-name text-gray-200 mb-1 leading-5 hover:text-primary">
-                          <ExpLinkParser className="hover:text-primary" to={`/${itemUrl}`}>
-                            {item.name}
-                          </ExpLinkParser>
+                          {itemUrl ? (
+                            <ExpLinkParser className="hover:text-primary" to={`/${itemUrl}`}>
+                              {item.name}
+                            </ExpLinkParser>
+                          ) : (
+                            <p className="hover:text-primary">{item.name}</p>
+                          )}
                         </h6>
 
                         <span className="previewCartItem-sku hidden">
@@ -60,7 +76,7 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
                         </span>
                         <span className="previewCartItem-price block text-primary">
                           <CurrencyFormat
-                            value={item?.sale_price}
+                            value={item?.sale_price || item?.extended_list_price}
                             thousandSeparator={','}
                             decimalSeparator={'.'}
                             prefixSymbol={'$'}
