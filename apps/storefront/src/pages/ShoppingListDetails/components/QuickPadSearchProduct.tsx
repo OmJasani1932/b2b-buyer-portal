@@ -40,6 +40,7 @@ interface SearchProductProps {
   addButtonText?: string;
   isB2BUser: boolean;
   type?: string;
+  disableCart?:any
 }
 const VariantSkuBlock = styled.div`
   display: flex;
@@ -88,6 +89,7 @@ export default function QuickPadSearchProduct({
   addButtonText,
   isB2BUser,
   type,
+  disableCart
 }: SearchProductProps) {
   const b3Lang = useB3Lang();
   const initialState = [
@@ -150,19 +152,6 @@ export default function QuickPadSearchProduct({
     setSearchFields([...updatedFields]);
   };
 
-  function getCookie(name: any) {
-    const nameEQ = `${name}=`;
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-      const c = ca[i].trim();
-      if (c.indexOf(nameEQ) === 0) {
-        return c.substring(nameEQ.length, c.length);
-      }
-    }
-    return null;
-  }
-
-  const disableCart = getCookie('isEditableCart') === 'false';
 
   const handleQuantityChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     const updatedFields: any = [...searchFields];

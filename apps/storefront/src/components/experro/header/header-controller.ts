@@ -4,6 +4,9 @@ import { ExpNavigate } from '../utils/link-parser';
 import { getFilteredAccessibleCategoryQuery } from '../utils/customer-group';
 import useEmblaCarousel from 'embla-carousel-react';
 import { EmblaOptionsType } from 'embla-carousel';
+import { deleteCartData } from '@/utils/cartUtils';
+import { deleteCart } from '@/shared/service/bc/graphql/cart';
+import { snackbar } from '@/utils';
 
 declare let window: any;
 
@@ -297,8 +300,10 @@ const HeaderController = () => {
     setIsLoading(false);
   };
 
-  const openCartSlider = () => {
+  const openCartSlider = async() => {
     // eslint-disable-next-line no-restricted-globals
+    const userCartObj = await ExpGetCart();
+    await checkCartExpiry(userCartObj);
     if (screen.width < 757) {
       ExpNavigate('cart');
       return;
@@ -374,9 +379,59 @@ const HeaderController = () => {
   const handleMyAccountButtonClick = () => {
     ExpNavigate('login/');
   };
+  const checkCartExpiry = async (userCartObj: any) => {
+    const cartId: any = userCartObj?.id;
+    try {
+      if (!cartId) {
+        return;
+      }
+      const response = await fetch(
+        `https://dev-productaddrequest.cookandboardman.io/api/v1/cart/metafields/${cartId}`,
+        {
+          headers: {
+            'content-type': 'application/json',
+            appaccesskey: '11afb7c2-7381-4a74-ac55-9728ad6205b6',
+          },
+        },
+      );
+      const data = await response.json();
+      if (data?.Status === 'success') {
+        if (data?.Data?.data?.length) {
+          const date = data?.Data?.data[0]?.value;
+          const expiryDate = date || null; // Will be like "2025-07-07T12:44:38+00:00"
+          if (!expiryDate) {
+            return false;
+          }
+
+          try {
+            const currentDate = new Date();
+            const cartExpiryDate = new Date(expiryDate);
+
+            if (currentDate > cartExpiryDate) {
+              if (cartId) {
+                const deleteQuery: any = deleteCartData(cartId);
+                await deleteCart(deleteQuery);
+              }
+              snackbar.success('Cart has expired. All items have been removed.');
+              // toast.success('Cart has expired. All items have been removed.');
+              return true;
+            }
+
+            return false;
+          } catch (error) {
+            console.error('Error checking cart expiry:', error);
+            return false;
+          }
+        }
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
 
   const getCart = async () => {
     const userCartObj = await ExpGetCart();
+    await checkCartExpiry(userCartObj);
     setCartDetails(userCartObj);
     getCartQuantity(userCartObj);
   };

@@ -19,6 +19,7 @@ import BulkUploadTable from '@/components/upload/BulkUploadTable';
 import { parseEmptyData, ParseEmptyDataProps, removeEmptyRow } from '@/components/upload/utils';
 import CustomButton from '@/components/button/CustomButton';
 
+
 interface B3UploadProps {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -29,6 +30,7 @@ interface B3UploadProps {
   isLoading?: boolean;
   isToCart?: boolean;
   withModifiers?: boolean;
+  disableCart?:any
 }
 
 interface BulkUploadCSVProps {
@@ -56,20 +58,9 @@ export default function QuickOrderUpload(props: B3UploadProps) {
     setProductData = () => {},
     isToCart = false,
     withModifiers = false,
+    disableCart
   } = props;
 
-  const getCookie = (name: any) => {
-    const nameEQ = `${name}=`;
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-      const c = ca[i].trim();
-      if (c.indexOf(nameEQ) === 0) {
-        return c.substring(nameEQ.length, c.length);
-      }
-    }
-    return null;
-  };
-  const disableCart = getCookie('isEditableCart') === 'false';
   const [isMobile] = useMobile();
 
   const uploadRef = useRef<HTMLInputElement>(null);
@@ -331,27 +322,29 @@ export default function QuickOrderUpload(props: B3UploadProps) {
               whiteSpace: 'nowrap',
               marginLeft: '0.5rem',
             }}
-          >
-           
-          </Box>
+          ></Box>
         </Grid>
 
-        <Grid display="flex" justifyContent="center" alignItems="center"  xs={12}>
-          <CustomButton  variant="outlined" onClick={openFile} className="test-buttomn bg-yellow border-yellow text-white">
+        <Grid display="flex" justifyContent="center" alignItems="center" xs={12}>
+          <CustomButton
+            variant="outlined"
+            onClick={openFile}
+            className="test-buttomn bg-yellow border-yellow text-white"
+          >
             Upload file
           </CustomButton>
-           <Link
-              href="https://silk-demo-store45.mybigcommerce.com/content/sample_template.csv"
-              underline="none"
-              className='flex pt-1.5 pb-2 px-6 border border-primary text-primary hover:bg-primary hover:border-primary hover:text-white'
-              sx={{
-                color: primaryColor,
-                pointerEvents: 'auto',
-                marginLeft: '16px',
-              }}
-            >
-              Download sample
-            </Link>
+          <Link
+            href="https://silk-demo-store45.mybigcommerce.com/content/sample_template.csv"
+            underline="none"
+            className="flex pt-1.5 pb-2 px-6 border border-primary text-primary hover:bg-primary hover:border-primary hover:text-white"
+            sx={{
+              color: primaryColor,
+              pointerEvents: 'auto',
+              marginLeft: '16px',
+            }}
+          >
+            Download sample
+          </Link>
         </Grid>
       </Grid>
     </Box>
@@ -433,7 +426,7 @@ export default function QuickOrderUpload(props: B3UploadProps) {
             sx={{
               width: '100%',
             }}
-            variant='contained'
+            variant="contained"
             onClick={handleConfirmToList}
             disabled={disableCart}
           >

@@ -14,6 +14,7 @@ import { addCartProductToVerify } from '../utils';
 
 import QuickPadSearchProduct from '@/pages/ShoppingListDetails/components/QuickPadSearchProduct';
 import QuickOrderUpload from '@/pages/ShoppingListDetails/components/QuickOrderUpload';
+import { ExpGetCart } from '@/components/experro/api';
 
 interface QuickOrderPadProps {
   isB2BUser: boolean;
@@ -27,6 +28,7 @@ export default function QuickOrderPad(props: QuickOrderPadProps) {
   const [productData, setProductData] = useState<CustomFieldItems>([]);
   const [addBtnText, setAddBtnText] = useState<string>('Add to cart');
   const [isLoading, setIsLoading] = useState(false);
+  const [disableCart, setDisableCart] = useState<boolean>(false);
   // const [blockPendingAccountViewPrice] = useBlockPendingAccountViewPrice();
 
   // const companyStatus = useAppSelector(({ company }) => company.companyInfo.status);
@@ -313,6 +315,27 @@ export default function QuickOrderPad(props: QuickOrderPadProps) {
   //     setIsOpenBulkLoadCSV(true);
   //   }
   // };
+  const getCookie = (name: any) => {
+    const nameEQ = `${name}=`;
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      const c = ca[i].trim();
+      if (c.indexOf(nameEQ) === 0) {
+        return c.substring(nameEQ.length, c.length);
+      }
+    }
+    return null;
+  };
+
+  const checkDisableCart = async () => {
+    const userCartObj = await ExpGetCart();
+    const cartId = userCartObj?.id;
+    if (getCookie('isEditableCart') === `false_${cartId}`) {
+      setDisableCart(true);
+    } else {
+      setDisableCart(false);
+    }
+  };
 
   useEffect(() => {
     if (productData?.length > 0) {
@@ -325,6 +348,11 @@ export default function QuickOrderPad(props: QuickOrderPadProps) {
     // disabling this rule as b3Lang has rendering issues
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productData]);
+
+  useEffect(() => {
+    checkDisableCart();
+  }, []);
+
   return (
     <>
       <QuickOrderUpload
@@ -335,6 +363,7 @@ export default function QuickOrderPad(props: QuickOrderPadProps) {
         addBtnText={addBtnText}
         isLoading={isLoading}
         isToCart
+        disableCart={disableCart}
       />
       <QuickPadSearchProduct
         addToList={handleQuickSearchAddCart}
@@ -342,6 +371,7 @@ export default function QuickOrderPad(props: QuickOrderPadProps) {
         type="quickOrder"
         addButtonText={b3Lang('purchasedProducts.quickOrderPad.addToCart')}
         isB2BUser={isB2BUser}
+        disableCart={disableCart}
       />
 
       {/* <Card
