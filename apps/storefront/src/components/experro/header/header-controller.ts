@@ -300,7 +300,7 @@ const HeaderController = () => {
     setIsLoading(false);
   };
 
-  const openCartSlider = async() => {
+  const openCartSlider = async () => {
     // eslint-disable-next-line no-restricted-globals
     const userCartObj = await ExpGetCart();
     await checkCartExpiry(userCartObj);
@@ -398,16 +398,32 @@ const HeaderController = () => {
       if (data?.Status === 'success') {
         if (data?.Data?.data?.length) {
           const date = data?.Data?.data[0]?.value;
-          const expiryDate = date || null; // Will be like "2025-07-07T12:44:38+00:00"
+          const expiryDate = date || null; // Will be like "2025-07-15"
           if (!expiryDate) {
             return false;
           }
 
           try {
             const currentDate = new Date();
-            const cartExpiryDate = new Date(expiryDate);
 
-            if (currentDate > cartExpiryDate) {
+            // Parse the expiry date (format: "2025-07-15") and add 1 day
+            // Cart expires on the NEXT day after the expiry date
+            const cartExpiryDate = new Date(expiryDate);
+            cartExpiryDate.setDate(cartExpiryDate.getDate() + 1); // Add 1 day
+
+            // Set time to start of day for accurate comparison
+            const currentDateOnly = new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth(),
+              currentDate.getDate(),
+            );
+            const expiryDateOnly = new Date(
+              cartExpiryDate.getFullYear(),
+              cartExpiryDate.getMonth(),
+              cartExpiryDate.getDate(),
+            );
+
+            if (currentDateOnly >= expiryDateOnly) {
               if (cartId) {
                 const deleteQuery: any = deleteCartData(cartId);
                 await deleteCart(deleteQuery);
