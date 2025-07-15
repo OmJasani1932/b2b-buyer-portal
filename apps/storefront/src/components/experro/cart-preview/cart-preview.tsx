@@ -30,26 +30,44 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
           <ul className="previewCartList hidden-x p-5 space-y-4 [&_li+li]:pt-4 [&_li+li]:border-t [&_li+li]:border-gray-50">
             {cartItems?.map((item: any, index: number) => {
               const itemUrl = item?.url?.replace('https://', '')?.split('/')?.splice(1)?.join('/');
-
+              const newUrl = item.options?.find((option: any) =>
+                option.name?.toLowerCase().includes('image_url'),
+              )?.value;
               return (
                 <li key={index} className="previewCartItem">
                   <div className="row flex">
                     <div className="col col-4 w-20">
                       <div className="previewCartItem-image">
-                        {itemUrl ? (
-                          <ExpLinkParser to={`/${itemUrl}`}>
-                            <img src={item.image_url} alt="" />
-                          </ExpLinkParser>
+                        {item?.sku === 'MASTERPRODUCT' ? (
+                          <>
+                            <p>
+                              <img
+                                className="max-h-[80px] object-contain"
+                                src={item.sku === 'MASTERPRODUCT' ? newUrl : item.image_url}
+                                alt={item.name}
+                                width={80}
+                                height={80}
+                              />
+                            </p>
+                          </>
                         ) : (
-                          <p>
-                            <img
-                              className="max-h-[80px] object-contain"
-                              src={item.image_url}
-                              alt={item.name}
-                              width={80}
-                              height={80}
-                            />
-                          </p>
+                          <>
+                            {itemUrl ? (
+                              <ExpLinkParser to={`/${itemUrl}`}>
+                                <img src={item.image_url} alt="" />
+                              </ExpLinkParser>
+                            ) : (
+                              <p>
+                                <img
+                                  className="max-h-[80px] object-contain"
+                                  src={item.image_url}
+                                  alt={item.name}
+                                  width={80}
+                                  height={80}
+                                />
+                              </p>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>
@@ -58,12 +76,18 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
                         <span className="previewCartItem-brand block">{item.brand}</span>
 
                         <h6 className="previewCartItem-name text-gray-200 mb-1 leading-5 hover:text-primary">
-                          {itemUrl ? (
-                            <ExpLinkParser className="hover:text-primary" to={`/${itemUrl}`}>
-                              {item.name}
-                            </ExpLinkParser>
+                          {item?.sku === 'MASTERPRODUCT' ? (
+                            <>{item.name}</>
                           ) : (
-                            <p className="hover:text-primary">{item.name}</p>
+                            <>
+                              {itemUrl ? (
+                                <ExpLinkParser className="hover:text-primary" to={`/${itemUrl}`}>
+                                  {item.name}
+                                </ExpLinkParser>
+                              ) : (
+                                <p className="hover:text-primary">{item.name}</p>
+                              )}
+                            </>
                           )}
                         </h6>
 
