@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Box, TextField, Typography, Skeleton } from '@mui/material';
+import { TextField, Typography, Skeleton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import CustomButton from '@/components/button/CustomButton';
@@ -385,7 +385,7 @@ function CustomQuote() {
           </div>
         </div>
       )}
-      <div className="[&_.quote-items+.quote-items]:mt-8">
+      <div className="[&_.quote-items+.quote-items]:mt-8 [&_.quote-items+.quote-items]:pt-8 [&_.quote-items+.quote-items]:border-t [&_.quote-items+.quote-items]:border-[#ccc4c1]">
         <Typography variant="h4" sx={{ marginBottom: '20px' }}>
           Custom Quote
         </Typography>
@@ -406,24 +406,31 @@ function CustomQuote() {
               </div>
 
               <div className="w-full">
-                <div className="flex gap-4">
-                  <div className="flex md:flex-nowrap flex-wrap gap-4 md:w-[calc(100%_-_60px)]">
-                    <div className="md:w-[calc(50%_-_60px)] w-full relative">
-                      <TextField
-                        label={
-                          <span>
-                            Name/sku <span style={{ color: '#d32f2f' }}>*</span>
-                          </span>
-                        }
-                        variant="filled"
-                        autoComplete="off"
-                        size="small"
-                        fullWidth
-                        value={item.name}
-                        onChange={(e: any) => handleNameChange(index, e)}
-                        error={!!item.errors?.name}
-                        className="w-full [&_.Mui-error]:border-[#d32f2f]"
-                      />
+                <div className="flex items-start flex-wrap">
+                  <div className="flex flex-wrap lg:w-[calc(100%_-_300px)] md:w-[calc(100%_-_200px)] w-full md:pr-6">
+                    <div className="md:w-[calc(100%_-_120px)] md:pr-6 w-full md:order-1 order-1">
+                      <div className="relative [&_.MuiFormLabel-root]:max-w-full">
+                        <TextField
+                          label={
+                            <span className="flex justify-between">
+                              <span>
+                                Name/sku <span style={{ color: '#d32f2f' }}>*</span>
+                              </span>
+                              <span>{item.name.replace(/\s/g, '').length}/255</span>
+                            </span>
+                          }
+                          variant="filled"
+                          autoComplete="off"
+                          size="small"
+                          fullWidth
+                          value={item.name}
+                          onChange={(e: any) => handleNameChange(index, e)}
+                          error={!!item.errors?.name}
+                          className="w-full [&_.Mui-error]:border-[#d32f2f]"
+                          inputProps={{ maxLength: 255 }}
+                        />
+                        <span className="absolute right-0 top-0"></span>
+                      </div>
                       {/* {item.errors?.name && (
                         <Typography
                           className="absolute top-full bottom-auto left-0"
@@ -435,38 +442,7 @@ function CustomQuote() {
                         </Typography>
                       )} */}
                     </div>
-
-                    <div className="md:w-[calc(50%_-_60px)] w-full relative">
-                      <TextField
-                        label={
-                          <span>
-                            Description <span style={{ color: '#d32f2f' }}>*</span>
-                          </span>
-                        }
-                        variant="filled"
-                        autoComplete="off"
-                        size="small"
-                        fullWidth
-                        multiline
-                        rows={1}
-                        value={item.description}
-                        onChange={(e: any) => handleDescriptionChange(index, e)}
-                        error={!!item.errors?.description}
-                        className="w-full [&_textarea]:!h-5 [&_.Mui-error]:border-[#d32f2f]"
-                      />
-                      {/* {item.errors?.description && (
-                        <Typography
-                          className="absolute top-full bottom-auto left-0"
-                          color="error"
-                          variant="caption"
-                          sx={{ display: 'block', mt: 0.5 }}
-                        >
-                          {item.errors.description}
-                        </Typography>
-                      )} */}
-                    </div>
-
-                    <div className="relative w-[120px]">
+                    <div className="relative md:w-[120px] w-[calc(100%_-_60px)] md:order-2 order-3 md:pt-0 pt-4">
                       <TextField
                         label={
                           <span>
@@ -505,7 +481,45 @@ function CustomQuote() {
                         </Typography>
                       )} */}
                     </div>
-                    <div className="w-11 relative md:hidden flex items-end">
+                    <div className="w-full relative md:pt-6 pt-4 [&_.MuiFormLabel-root]:max-w-full md:order-3 order-2">
+                      <TextField
+                        label={
+                          <span className="flex justify-between">
+                            <span>
+                              Description <span style={{ color: '#d32f2f' }}>*</span>
+                            </span>
+                            <span>{item.description.replace(/\s/g, '').length}/2000</span>
+                          </span>
+                        }
+                        variant="filled"
+                        autoComplete="off"
+                        size="small"
+                        fullWidth
+                        multiline
+                        minRows={5}
+                        value={item.description}
+                        onChange={(e: any) => handleDescriptionChange(index, e)}
+                        error={!!item.errors?.description}
+                        className={`w-full [&_.Mui-error]:border-[#d32f2f] [&_.MuiInputBase-multiline]:h-[148px] [&_.MuiInputBase-multiline]:flex [&_.MuiInputBase-multiline]:items-start ${
+                          item.description.replace(/\s/g, '').length > 410
+                            ? '[&_.MuiInputBase-multiline]:overflow-y-auto'
+                            : ''
+                        }`}
+                        inputProps={{ maxLength: 2000 }}
+                      />
+                      {/* {item.errors?.description && (
+                        <Typography
+                          className="absolute top-full bottom-auto left-0"
+                          color="error"
+                          variant="caption"
+                          sx={{ display: 'block', mt: 0.5 }}
+                        >
+                          {item.errors.description}
+                        </Typography>
+                      )} */}
+                    </div>
+
+                    <div className="w-11 relative md:hidden flex items-end md:order-1 order-4 pl-4">
                       <input
                         type="file"
                         accept="image/*"
@@ -536,7 +550,7 @@ function CustomQuote() {
                     </div>
                   </div>
 
-                  <div className="w-11 relative md:flex hidden items-end">
+                  <div className="lg:w-[300px] md:w-[200px] w-full relative md:pt-[31px]">
                     <input
                       type="file"
                       accept="image/*"
@@ -545,12 +559,18 @@ function CustomQuote() {
                       onChange={(e: any) => handleImageChange(index, e)}
                       style={{ display: 'none' }}
                     />
-                    <label className="relative" htmlFor={`image-upload-${index}`}>
+                    <label
+                      className="relative w-full flex justify-center md:flex block hidden"
+                      htmlFor={`image-upload-${index}`}
+                    >
                       <span
-                        className={`p-0 line-clamp-1 text-center w-[44px] h-[44px] flex items-center justify-center border cursor-pointer hover:bg-primary hover:border-primary hover:text-white ${
+                        className={`p-0 text-center w-[140px] h-[44px] flex items-center justify-center border cursor-pointer hover:bg-primary hover:border-primary hover:text-white relative group/tooltip ${
                           item.errors?.images ? 'border-[#d32f2f]' : ''
                         }`}
                       >
+                        <span className="absolute top-auto bottom-full left-1/2 -translate-x-1/2 bg-black text-white text-sm py-2 px-4 w-[200px] group-hover/tooltip:opacity-100 opacity-0 transition-opacity mb-3 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-r-[6px] after:border-t-[6px] after:border-l-transparent after:border-r-transparent after:border-t-black">
+                          You can upload multiple image here
+                        </span>
                         {item.images.some((img) => img.uploading) ? (
                           <Skeleton
                             variant="circular"
@@ -573,68 +593,69 @@ function CustomQuote() {
                         </Typography>
                       )} */}
                     </label>
+
+                    {/* Display uploaded images */}
+                    {item.images.length > 0 && (
+                      <div className="mt-6">
+                        <label
+                          className="text-base text-gray-200 mb-2 block"
+                          htmlFor="image-upload-{index}"
+                        >
+                          Uploaded Images ({item.images.length}):
+                        </label>
+                        <div className="flex flex-wrap -mx-2 -mt-4">
+                          {item.images.map((image, imageIndex) => (
+                            <div className=" lg:w-4/12 md:w-6/12 w-4/12 px-2 pt-4">
+                              <div
+                                // key={imageIndex}
+                                className="relative border border-[#dddddd] p-1 h-full"
+                              >
+                                {image.uploading ? (
+                                  <div className="flex flex-col gap-2">
+                                    <Skeleton
+                                      variant="rectangular"
+                                      width="100%"
+                                      height={80}
+                                      className="aspect-[1/0.7]"
+                                    />
+                                    <Skeleton variant="text" width="80%" height={16} />
+                                  </div>
+                                ) : (
+                                  <>
+                                    <div
+                                      className="flex flex-col gap-2 overflow-hidden"
+                                      title={image.name}
+                                    >
+                                      <span>
+                                        <img
+                                          className="w-full h-full object-cover max-h-[80px] aspect-[1/0.7]"
+                                          width={80}
+                                          height={80}
+                                          alt=""
+                                          src={image.url}
+                                        />
+                                      </span>
+                                      <span>
+                                        {image.name?.substring(0, 15)}
+                                        {image.name && image.name.length > 15 ? '...' : ''}
+                                      </span>
+                                    </div>
+                                    <span
+                                      className="w-5 h-5 p-1 bg-primary rounded-full flex items-center justify-center absolute -top-2 -right-2 cursor-pointer text-white hover:opacity-70"
+                                      onClick={() => handleRemoveImage(index, imageIndex)}
+                                    >
+                                      <IconCross />
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-                {/* Display uploaded images */}
-                {item.images.length > 0 && (
-                  <Box sx={{ mt: 2 }}>
-                    <label
-                      className="text-base text-gray-200 mb-2 block"
-                      htmlFor="image-upload-{index}"
-                    >
-                      Uploaded Images ({item.images.length}):
-                    </label>
-                    <div className="flex flex-wrap -mx-2 -mt-4">
-                      {item.images.map((image, imageIndex) => (
-                        <div className=" w-4/12 md:w-[117px] px-2 pt-4">
-                          <div
-                            // key={imageIndex}
-                            className="relative border border-[#dddddd] p-1 h-full"
-                          >
-                            {image.uploading ? (
-                              <div className="flex flex-col gap-2">
-                                <Skeleton
-                                  variant="rectangular"
-                                  width="100%"
-                                  height={80}
-                                  className="aspect-[1/0.7]"
-                                />
-                                <Skeleton variant="text" width="80%" height={16} />
-                              </div>
-                            ) : (
-                              <>
-                                <div
-                                  className="flex flex-col gap-2 overflow-hidden"
-                                  title={image.name}
-                                >
-                                  <span>
-                                    <img
-                                      className="w-full h-full object-cover max-h-[80px] aspect-[1/0.7]"
-                                      width={80}
-                                      height={80}
-                                      alt=""
-                                      src={image.url}
-                                    />
-                                  </span>
-                                  <span>
-                                    {image.name?.substring(0, 15)}
-                                    {image.name && image.name.length > 15 ? '...' : ''}
-                                  </span>
-                                </div>
-                                <span
-                                  className="w-5 h-5 p-1 bg-primary rounded-full flex items-center justify-center absolute -top-2 -right-2 cursor-pointer text-white hover:opacity-70"
-                                  onClick={() => handleRemoveImage(index, imageIndex)}
-                                >
-                                  <IconCross />
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </Box>
-                )}
               </div>
             </div>
           ))}
