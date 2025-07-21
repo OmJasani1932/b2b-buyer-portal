@@ -31,6 +31,12 @@ const ButtonContainer = styled('div')({
   justifyContent: 'space-between',
 });
 
+const InfoText = styled('p')({
+  marginBottom: '20px',
+  fontSize: '16px',
+  color: '#808285',
+});
+
 interface ImageItem {
   file: File;
   url?: string;
@@ -87,6 +93,16 @@ function CustomQuote() {
     if (e.target.files && e.target.files.length > 0) {
       const updatedItems = [...items];
       const files = Array.from(e.target.files);
+      const maxFileSize = 10 * 1024 * 1024; // 10MB in bytes
+
+      // Check file sizes
+      const oversizedFiles = files.filter((file) => file.size > maxFileSize);
+      if (oversizedFiles.length > 0) {
+        const fileNames = oversizedFiles.map((file) => file.name).join(', ');
+        snackbar.error(`File(s) too large: ${fileNames}. Maximum file size is 10MB.`);
+        e.target.value = ''; // Reset input
+        return;
+      }
 
       // Clear error when user uploads
       if (updatedItems[index].errors?.images) {
@@ -386,9 +402,15 @@ function CustomQuote() {
         </div>
       )}
       <div className="[&_.quote-items+.quote-items]:mt-8 [&_.quote-items+.quote-items]:pt-8 [&_.quote-items+.quote-items]:border-t [&_.quote-items+.quote-items]:border-[#ccc4c1]">
-        <Typography variant="h4" sx={{ marginBottom: '20px' }}>
+        <Typography variant="h4" sx={{ marginBottom: '10px' }}>
           Custom Quote
         </Typography>
+        <InfoText>
+          Use the fields below to thoroughly detail the product(s) for which you are requesting a
+          quote. <br /> Files can be uploaded in the following formats: .png, .jpg, .jpeg, .webp.
+          File size max 10MB. <br />
+          *** needs to be replaced with file size we are supporting.
+        </InfoText>
 
         <div>
           {items.map((item, index) => (
@@ -522,7 +544,7 @@ function CustomQuote() {
                     <div className="w-11 relative md:hidden flex items-end md:order-1 order-4 pl-4">
                       <input
                         type="file"
-                        accept="image/*"
+                        accept=".png,.jpg,.webp,.jpeg"
                         multiple
                         id={`image-upload-${index}`}
                         onChange={(e: any) => handleImageChange(index, e)}
@@ -553,7 +575,7 @@ function CustomQuote() {
                   <div className="lg:w-[300px] md:w-[200px] w-full relative md:pt-[31px]">
                     <input
                       type="file"
-                      accept="image/*"
+                      accept=".png,.jpg,.webp,.jpeg"
                       multiple
                       id={`image-upload-${index}`}
                       onChange={(e: any) => handleImageChange(index, e)}
