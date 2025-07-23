@@ -47,6 +47,7 @@ function ExpSearchPreview(props: ExpSearchPreviewProps) {
   if (
     productData?.items?.length === 1 &&
     (productData?.items[0]?.name_eti === searchText ||
+      productData?.items[0]?.name_esi === searchText ||
       productData?.items[0]?.sku_esi === searchText) &&
     window.location.pathname !== productData?.items[0]?.page_slug_esi
   ) {
@@ -102,7 +103,7 @@ function ExpSearchPreview(props: ExpSearchPreviewProps) {
                                   )}&width=160`
                                 : 'https://via.placeholder.com/736x450.png?text=Image+coming+soon'
                             }
-                            alt={product?.name_eti}
+                            alt={product?.name_eti || product?.name_esi}
                             loading="lazy"
                             width={56}
                             height={56}
@@ -126,7 +127,7 @@ function ExpSearchPreview(props: ExpSearchPreviewProps) {
                             onClick={() => onSearchProduct(product)}
                             to={`${product?.page_slug_esi}?m=search&st=${searchText}&aq=true`}
                           >
-                            {product?.name_eti}
+                            {product?.name_eti || product?.name_esi}
                           </ExpLinkParser>
                         </p>
 

@@ -109,7 +109,7 @@ const Header = ({
             {windowWidth >= 1024 && (
               <ExpPencilMenu
                 menuLinkObj={globalsettings?.header_com}
-                ulClasses={`flex absolute -right-5 top-0 [&_span]:cursor-pointer [&_span]:relative [&_strong]:text-white [&_span]:flex [&_span]:leading-4 [&_span]:font-normal [&_span]:py-3 4xl:[&_span]:px-9 [&_span]:px-5 lg:[&_span:before]:absolute lg:[&_span:before]:-left-0.5 lg:[&_span:before]:top-0 lg:[&_span:before]:bottom-0 lg:[&_span:before]:right-0 lg:[&_span:before]:content-[''] lg:[&_span:before]:skew-x-[40deg] lg:[&_span_strong]:relative [&_span_strong]:z-10 lg:[&_li:first-child_span:before]:bg-yellow lg:[&_li:nth-child(2)_span_strong]:text-primary lg:[&_li:nth-child(2)_span:before]:bg-cnbltblue lg:[&_li:last-child_span:before]:bg-primary 3xl:[&_li:last-child_span]:pr-[95px] 2xl:[&_li:last-child_span]:pr-[60px] [&_li:last-child_span]:pr-[40px] [&_li:first-child_span:hover_.fill-svg]:fill-white`}
+                ulClasses={`flex absolute -right-5 top-0 [&_span]:cursor-pointer [&_span]:relative [&_strong]:text-white [&_span]:flex [&_span]:leading-4 [&_span]:font-normal [&_span]:py-3 4xl:[&_span]:px-9 [&_span]:px-5 lg:[&_span:before]:absolute lg:[&_span:before]:-left-0.5 lg:[&_span:before]:top-0 lg:[&_span:before]:bottom-0 lg:[&_span:before]:right-0 lg:[&_span:before]:content-[''] lg:[&_span:before]:skew-x-[40deg] lg:[&_span_strong]:relative [&_span_strong]:z-10 lg:[&_li:first-child_span:before]:bg-pantongray lg:[&_li:nth-child(2)_span_strong]:text-primary lg:[&_li:nth-child(2)_span:before]:bg-cnbltblue lg:[&_li:last-child_span:before]:bg-primary 3xl:[&_li:last-child_span]:pr-[95px] 2xl:[&_li:last-child_span]:pr-[60px] [&_li:last-child_span]:pr-[40px] [&_li:first-child_span:hover_.fill-svg]:fill-white`}
                 linkNameClasses={`group/pencilLink1 [&_.fill-svg]:transition-all [&_.fill-svg]:duration-500 [&_.stroke-brown-color]:stroke-primary [&:hover_.fill-svg]:fill-primary [&:hover_.stroke-brown-color]:stroke-cnbltblue [&:hover_.fill-primary]:fill-primary [&:hover_.fill-primary]:stroke-primary [&:hover_.main-icon]:animate-zoomout [&:hover_.hover-icon]:animate-zoomout [&:hover_.hover-icon]:opacity-100 [&:hover_.hover-icon]:visible items-center text-xs xl:[&_.menu-name]:block [&_.menu-name]:hidden xl:[&_.menu-icon-block]:mr-1.5 [&_.menu-icon-block]:mr-0`}
                 keyValueForMenu={'pencil_menu_navigation_id_et'}
                 index={0}
@@ -127,7 +127,7 @@ const Header = ({
             <div className="logo-block flex items-center justify-start w-[80%] 3xl:w-[315px] lg:w-[200px] lg:mr-auto mr-0 xl:order-none order-0">
               <ExpLinkParser to="">
                 <img
-                  className="max-h-[36px] lg:h-[36px] max-w-[fit-content] mx-auto sm:w-full w-[230px] object-contain"
+                  className="max-h-[36px] lg:max-h-[46px] max-w-[fit-content] mx-auto sm:w-full w-[230px] object-contain"
                   src={
                     ExpImageParser(
                       globalsettings.site_com?.length && globalsettings.site_com[0]?.logo_emd
@@ -294,36 +294,36 @@ const Header = ({
                     My Account
                   </ExpLinkParser>
                   <ul className=" invisible group-hover/account:visible bg-white absolute top-full w-[8.75rem] shadow-[0_6px_17px_-4px_rgba(0,0,0,0.24)] p-[0.938rem] space-y-3 md:left-1/2 md:right-auto right-0 md:-translate-x-1/2">
-                    <li
-                      id="60155edc-1e2e-4cca-ac4f-f8054999f31c"
-                      className="text-quartzGray hover:text-primaryHover nav-item-about "
-                    >
-                      <div className="link-wrap">
-                        <ExpLinkParser
-                          className="flex items-center text-xs"
-                          to="https://cus.bectran.com/customer/regis/login.jsf;jsessionid=4344308E1871F1F88BC5839D6E275E6A?linkCode=2dYFU1456ZXggF1957ctTKM&gId=1957&dswid=2996"
-                          target=""
-                          ariaLabel="Credit Request"
-                        >
-                          Credit Request
-                        </ExpLinkParser>
-                      </div>
-                    </li>
-                    <li
-                      id="60155edc-1e2e-4cca-ac4f-f8054999f31c"
-                      className="text-quartzGray hover:text-primaryHover nav-item-about "
-                    >
-                      <div className="link-wrap">
-                        <ExpLinkParser
-                          className="flex items-center text-xs"
-                          to="/faqs/"
-                          target=""
-                          ariaLabel="Shop FAQs"
-                        >
-                          Shop FAQs
-                        </ExpLinkParser>
-                      </div>
-                    </li>
+                    {!!globalsettings?.header_com?.length &&
+                      !!globalsettings?.header_com[0]?.my_account_com?.length &&
+                      globalsettings?.header_com[0]?.my_account_com?.map(
+                        (item: any, index: any) => {
+                          return (
+                            <Fragment key={index.toString()}>
+                              {item?.menu_title && (
+                                <li className="text-quartzGray hover:text-primaryHover nav-item-about ">
+                                  <div className="link-wrap">
+                                    <ExpLinkParser
+                                      className="flex items-center text-xs"
+                                      to={item?.menu_link}
+                                      target={
+                                        item?.open_link_in_new_page === true ||
+                                        item?.open_link_in_new_page === 'true'
+                                          ? '_blank'
+                                          : '_self'
+                                      }
+                                      ariaLabel={item?.menu_title}
+                                    >
+                                      {item?.menu_title}
+                                    </ExpLinkParser>
+                                  </div>
+                                </li>
+                              )}
+                            </Fragment>
+                          );
+                        },
+                      )}
+
                     <li
                       id="60155edc-1e2e-4cca-ac4f-f8054999f31c"
                       className="text-quartzGray hover:text-primaryHover nav-item-about "

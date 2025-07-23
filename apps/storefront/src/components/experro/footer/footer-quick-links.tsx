@@ -22,7 +22,7 @@ const FooterQuickLinks = ({ pageData }: any) => {
   };
   return (
     <>
-      <div className="footer-col xl:basis-[35%] lg:basis-1/2 basis-[100%] group">
+      <div className="footer-col xl:basis-[29%] lg:basis-1/4 basis-[100%] group">
         <div className="footer-list-wrap">
           {pageData.globalSettings?.footer_com &&
             pageData.globalSettings?.footer_com[0]?.column_1_title_et && (
@@ -55,7 +55,7 @@ const FooterQuickLinks = ({ pageData }: any) => {
         </div>
       </div>
 
-      <div className="footer-col xl:basis-1/5 lg:basis-1/2 basis-[100%] group">
+      <div className="footer-col xl:basis-[33%] lg:basis-1/4 basis-[100%] group">
         <div className="footer-list-wrap">
           {pageData.globalSettings?.footer_com &&
             pageData.globalSettings?.footer_com[0]?.column_2_title_et && (
@@ -74,8 +74,12 @@ const FooterQuickLinks = ({ pageData }: any) => {
           <ExpMenu
             menuLinkObj={pageData.globalSettings?.footer_com}
             keyValueForMenu={'column_2_navigation_id_et'}
-            ulClasses={'footer-info-list lg:mt-3 mt-2'}
-            liClasses={''}
+            ulClasses={
+              'footer-info-list lg:mt-3 mt-2 xl:columns-2 lg:columns-1 columns-2 max-w-[524px]'
+            }
+            liClasses={
+              '[&.white-btn]:mt-2.5 [&.white-btn_span]:py-[5px] [&.white-btn_span]:px-4 [&.white-btn_span]:bg-white [&.white-btn_span]:text-primary [&.white-btn_span]:rounded [&.white-btn_span:hover]:bg-[#e9e9e9]'
+            }
             linkNameClasses={
               'text-white hover:text-white/80 py-1 leading-5 inline-block lg:text-base text-sm font-medium'
             }
@@ -101,7 +105,7 @@ const FooterQuickLinks = ({ pageData }: any) => {
         </div>
       </div>
 
-      <div className="footer-col xl:basis-1/6 lg:basis-1/2 basis-[100%] group">
+      <div className="footer-col xl:basis-[16%] lg:basis-1/4 basis-[100%] group">
         <div className="footer-list-wrap">
           {pageData.globalSettings?.footer_com &&
             pageData.globalSettings?.footer_com[0]?.column_3_title_et && (

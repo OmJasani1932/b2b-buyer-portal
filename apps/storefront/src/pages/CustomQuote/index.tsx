@@ -408,8 +408,7 @@ function CustomQuote() {
         <InfoText>
           Use the fields below to thoroughly detail the product(s) for which you are requesting a
           quote. <br /> Files can be uploaded in the following formats: .png, .jpg, .jpeg, .webp.
-          File size max 10MB. <br />
-          *** needs to be replaced with file size we are supporting.
+          File size max 10MB.
         </InfoText>
 
         <div>

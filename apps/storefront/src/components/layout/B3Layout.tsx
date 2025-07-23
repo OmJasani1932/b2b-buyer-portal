@@ -102,6 +102,7 @@ export default function B3Layout({
       },
     });
   };
+  const itemsRoutes = routes.find((item) => item.path === location.pathname);
 
   return (
     <>
@@ -121,6 +122,25 @@ export default function B3Layout({
           }}
         ></Box> */}
         <div className="bg-white">
+          {itemsRoutes?.name && (
+            <div className="breadcrumb-section bg-primary py-[13px] md:mb-10 mb-6">
+              <div className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto">
+                <ul className="breadcrumb flex *:text-white *:text-xs *:font-normal *:uppercase [&amp;&gt;li:first-child]:before:hidden [&amp;&gt;li]:before:border-r [&amp;&gt;li]:before:h-[0.625rem] [&amp;&gt;li]:before:inline-block [&amp;&gt;li]:before:mx-2 [&amp;&gt;li]:before:border-white [&amp;&gt;li]:before:rotate-12 leading-6 whitespace-nowrap overflow-auto">
+                  <li>
+                    <span
+                      className="hover:opacity-[0.7] cursor-pointer"
+                      onClick={() => (window.location.href = '/')}
+                    >
+                      Home
+                    </span>
+                  </li>
+                  <li>
+                    <span className="font-medium">{itemsRoutes?.name}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
           <Box
             className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto"
             id="app-mainPage-layout"
