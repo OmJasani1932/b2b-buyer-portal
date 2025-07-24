@@ -521,8 +521,8 @@ function CustomQuote() {
                         value={item.description}
                         onChange={(e: any) => handleDescriptionChange(index, e)}
                         error={!!item.errors?.description}
-                        className={`w-full [&_.Mui-error]:border-[#d32f2f] [&_.MuiInputBase-multiline]:h-[148px] [&_.MuiInputBase-multiline]:flex [&_.MuiInputBase-multiline]:items-start ${
-                          item.description.replace(/\s/g, '').length > 410
+                        className={`w-full [&_.Mui-error]:border-[#d32f2f] [&_.MuiInputBase-multiline]:h-[80px] [&_.MuiInputBase-multiline]:flex [&_.MuiInputBase-multiline]:items-start ${
+                          item.description.replace(/\s/g, '').length > 206
                             ? '[&_.MuiInputBase-multiline]:overflow-y-auto'
                             : ''
                         }`}
@@ -581,7 +581,7 @@ function CustomQuote() {
                       style={{ display: 'none' }}
                     />
                     <label
-                      className="relative w-full flex justify-center md:flex block hidden"
+                      className="relative w-full flex justify-start md:flex block hidden"
                       htmlFor={`image-upload-${index}`}
                     >
                       <span
@@ -626,7 +626,7 @@ function CustomQuote() {
                         </label>
                         <div className="flex flex-wrap -mx-2 -mt-4">
                           {item.images.map((image, imageIndex) => (
-                            <div className=" lg:w-4/12 md:w-6/12 w-4/12 px-2 pt-4">
+                            <div className=" lg:w-4/12 md:w-6/12 w-4/12 px-2 pt-[15px]">
                               <div
                                 // key={imageIndex}
                                 className="relative border border-[#dddddd] p-1 h-full"
@@ -636,7 +636,7 @@ function CustomQuote() {
                                     <Skeleton
                                       variant="rectangular"
                                       width="100%"
-                                      height={80}
+                                      height={44}
                                       className="aspect-[1/0.7]"
                                     />
                                     <Skeleton variant="text" width="80%" height={16} />
@@ -649,14 +649,14 @@ function CustomQuote() {
                                     >
                                       <span>
                                         <img
-                                          className="w-full h-full object-cover max-h-[80px] aspect-[1/0.7]"
+                                          className="w-full h-full object-cover max-h-[44px] aspect-[1/0.7]"
                                           width={80}
-                                          height={80}
+                                          height={44}
                                           alt=""
                                           src={image.url}
                                         />
                                       </span>
-                                      <span>
+                                      <span className='text-xs'>
                                         {image.name?.substring(0, 15)}
                                         {image.name && image.name.length > 15 ? '...' : ''}
                                       </span>
@@ -682,19 +682,23 @@ function CustomQuote() {
           ))}
         </div>
 
-        <ButtonContainer>
-          <CustomButton
-            onClick={handleSubmit}
-            type="button"
-            variant="contained"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Submitting...' : 'Submit Quote'}
-          </CustomButton>
-          <CustomButton onClick={handleAddRow} type="button" variant="outlined">
-            + Add Row
-          </CustomButton>
-        </ButtonContainer>
+        <div className="pl-[54px] mt-6 flex">
+          <div className="flex flex-wrap lg:w-[calc(100%_-_300px)] md:w-[calc(100%_-_200px)] w-full md:pr-6">
+            <CustomButton
+              onClick={handleSubmit}
+              type="button"
+              variant="contained"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Quote'}
+            </CustomButton>
+          </div>
+          <div className="lg:w-[300px] md:w-[200px] w-full relative flex md:justify-start justify-end">
+            <CustomButton onClick={handleAddRow} type="button" variant="outlined" className='w-[140px]'>
+              + Add Row
+            </CustomButton>
+          </div>
+        </div>
       </div>
     </>
   );
