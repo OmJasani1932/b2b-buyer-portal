@@ -341,19 +341,6 @@ const Header = ({
                         </ExpLinkParser>
                       </div>
                     </li>
-                    <li
-                      id="60155edc-1e2e-4cca-ac4f-f8054999f31c"
-                      className="text-quartzGray hover:text-primaryHover nav-item-about "
-                    >
-                      <div className="link-wrap">
-                        <span
-                          onClick={handleLogout}
-                          className="flex items-center cursor-pointer text-xs"
-                        >
-                          Logout
-                        </span>
-                      </div>
-                    </li>
                     {showQuote && (
                       <li
                         id="60155edc-1e2e-4cca-ac4f-f8054999f31c"
@@ -370,6 +357,20 @@ const Header = ({
                         </div>
                       </li>
                     )}
+                    <li
+                      id="60155edc-1e2e-4cca-ac4f-f8054999f31c"
+                      className="text-quartzGray hover:text-primaryHover nav-item-about "
+                    >
+                      <div className="link-wrap">
+                        <span
+                          onClick={handleLogout}
+                          className="flex items-center cursor-pointer text-xs"
+                        >
+                          Logout
+                        </span>
+                      </div>
+                    </li>
+                    
                   </ul>
                 </li>
                 <li className="nav-item md:px-2.5 px-1.5 relative flex">
