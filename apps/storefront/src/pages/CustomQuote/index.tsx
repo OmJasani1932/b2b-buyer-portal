@@ -24,12 +24,12 @@ const RemoveIconBlock = styled('div')({
 //   width: '120px',
 // });
 
-const ButtonContainer = styled('div')({
-  display: 'flex',
-  gap: '15px',
-  marginTop: '20px',
-  justifyContent: 'space-between',
-});
+// const ButtonContainer = styled('div')({
+//   display: 'flex',
+//   gap: '15px',
+//   marginTop: '20px',
+//   justifyContent: 'space-between',
+// });
 
 const InfoText = styled('p')({
   marginBottom: '20px',
