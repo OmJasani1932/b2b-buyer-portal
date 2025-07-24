@@ -51,6 +51,7 @@ const Header = ({
     windowWidth,
     clickedMenuItem,
     setClickedMenuItem,
+    areAllAccessibleCategoryData
   } = HeaderController();
 
   const showQuote = sessionStorage.getItem('showQuote') === 'true';
@@ -113,6 +114,7 @@ const Header = ({
                 linkNameClasses={`group/pencilLink1 [&_.fill-svg]:transition-all [&_.fill-svg]:duration-500 [&_.stroke-brown-color]:stroke-primary [&:hover_.fill-svg]:fill-primary [&:hover_.stroke-brown-color]:stroke-cnbltblue [&:hover_.fill-primary]:fill-primary [&:hover_.fill-primary]:stroke-primary [&:hover_.main-icon]:animate-zoomout [&:hover_.hover-icon]:animate-zoomout [&:hover_.hover-icon]:opacity-100 [&:hover_.hover-icon]:visible items-center text-xs xl:[&_.menu-name]:block [&_.menu-name]:hidden xl:[&_.menu-icon-block]:mr-1.5 [&_.menu-icon-block]:mr-0`}
                 keyValueForMenu={'pencil_menu_navigation_id_et'}
                 index={0}
+                areAllAccessibleCategoryData={areAllAccessibleCategoryData}
               />
             )}
           </div>
@@ -166,6 +168,7 @@ const Header = ({
                     }
                     keyValueForMenu={'pencil_menu_navigation_id_et'}
                     index={0}
+                    areAllAccessibleCategoryData={areAllAccessibleCategoryData}
                   />
                 )}
                 {/* 

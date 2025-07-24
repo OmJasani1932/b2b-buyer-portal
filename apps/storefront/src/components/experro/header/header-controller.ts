@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ExpGetCart, ExpSearch, ExpSearchAutoSuggest, ExpSearchCount } from '../api';
+import {
+  ExpGetCart,
+  ExpGetCategoryList,
+  ExpSearch,
+  ExpSearchAutoSuggest,
+  ExpSearchCount,
+} from '../api';
 import { ExpNavigate } from '../utils/link-parser';
 import { getFilteredAccessibleCategoryQuery } from '../utils/customer-group';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -28,6 +34,13 @@ const HeaderController = () => {
   const [cartDetails, setCartDetails] = useState<any>({});
   const [windowWidth, setWindowWidth] = useState<any>(window.innerWidth);
   const [clickedMenuItem, setClickedMenuItem] = useState<number | null>(null);
+  const [areAllAccessibleCategoryData, setAreAllAccessibleCategoryData] = useState<{
+    areAllAccessible: any;
+    pageSlug: any;
+  }>({
+    areAllAccessible: false,
+    pageSlug: '',
+  });
   const settingsForSlids: EmblaOptionsType = {
     active: true,
     loop: true,
@@ -484,6 +497,7 @@ const HeaderController = () => {
     localStorage.removeItem('categories');
     localStorage.removeItem('user-group');
     document.dispatchEvent(new Event('CART_REFRESH'));
+    setAreAllAccessibleCategoryData({ areAllAccessible: false, pageSlug: '' });
     window.location.href = `${window.location.origin}/login/?logoutFromB2b=true/`;
   };
 
@@ -509,6 +523,84 @@ const HeaderController = () => {
         }
       });
   };
+  const checkAccessibleCategory = () => {
+    const userDetails = window['__USER_DETAILS__'];
+    if (!userDetails?.userInfo?.id) return { isAvailabel: false };
+    const type = userDetails?.userInfo.customerGroupDetails?.category_access?.type;
+
+    if (type === 'all') {
+      return { isAvailabel: false, userDetails: userDetails, type: 'all' };
+    } else {
+      if (
+        userDetails?.userInfo?.customerGroupDetails &&
+        userDetails?.userInfo.customerGroupDetails?.category_access?.categories?.length
+      ) {
+        return { isAvailabel: true, userDetails: userDetails };
+      } else {
+        return { isAvailabel: false };
+      }
+    }
+  };
+  const getAccessibleCategoryArray = () => {
+    const category = checkAccessibleCategory();
+    if (category?.type === 'all') return 'all';
+    if (!category.isAvailabel) return [];
+
+    if (category.isAvailabel) {
+      const accessibleCategories =
+        category.userDetails.userInfo.customerGroupDetails.category_access.categories;
+
+      return accessibleCategories;
+    }
+  };
+  const checkAccessibleCategories = async () => {
+    const accessibleCategoryArray = getAccessibleCategoryArray();
+
+    if (accessibleCategoryArray === 'all') return { areAllAccessible: false, pageSlug: '' };
+    localStorage.setItem('categories', JSON.stringify(accessibleCategoryArray));
+    const accessibleCategorySet = new Set(accessibleCategoryArray);
+
+    const subCategoryResponse = await ExpGetCategoryList(
+      `CA-a157d458-879d-4681-8557-1cecaad386ae-${accessibleCategoryArray[0]}-1`,
+    );
+
+    let areAllAccessible;
+    let pageSlug = null;
+    if (subCategoryResponse.Data) {
+      const categories = subCategoryResponse.Data.categories;
+      areAllAccessible = isAllEntitiesAvailable(categories, accessibleCategorySet);
+      pageSlug = categories[0]?.page_slug_esi;
+    }
+    return { areAllAccessible, pageSlug };
+  };
+
+  const isAllEntitiesAvailable = (categoryTree: any[], entityIdSet: any): boolean => {
+    const foundEntities = new Set<number>();
+
+    const traverseTree = (tree: any[]) => {
+      for (const category of tree) {
+        if (entityIdSet.has(Number(category.provider_id_esi))) {
+          foundEntities.add(Number(category.provider_id_esi));
+        }
+
+        if (category.child && category.child.length > 0) {
+          traverseTree(category.child);
+        }
+      }
+    };
+
+    traverseTree(categoryTree);
+
+    return Array.from(entityIdSet).every((id: any) => foundEntities.has(id));
+  };
+
+  const navigateToSlug = async () => {
+    const userDetails = window['__USER_DETAILS__'];
+    if (userDetails?.userInfo?.id) {
+      const { areAllAccessible, pageSlug } = await checkAccessibleCategories();
+      setAreAllAccessibleCategoryData({ areAllAccessible, pageSlug });
+    }
+  };
 
   useEffect(() => {
     setIsLoading(false);
@@ -518,6 +610,7 @@ const HeaderController = () => {
 
   useEffect(() => {
     initiateEventListeners();
+    navigateToSlug();
     // checkUserLoggedInStatus();
 
     getCart();
@@ -568,6 +661,7 @@ const HeaderController = () => {
     windowWidth,
     clickedMenuItem,
     setClickedMenuItem,
+    areAllAccessibleCategoryData,
   };
 };
 

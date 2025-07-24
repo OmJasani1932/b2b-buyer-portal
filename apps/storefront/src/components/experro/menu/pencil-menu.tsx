@@ -13,6 +13,7 @@ interface ExpPencilMenuInterface {
   iconForNavChild?: any;
   index?: number;
   ulId?: any;
+  areAllAccessibleCategoryData?: any;
 }
 const ExpPencilMenu = (props: ExpPencilMenuInterface) => {
   const {
@@ -23,6 +24,7 @@ const ExpPencilMenu = (props: ExpPencilMenuInterface) => {
     childMenuItem,
     keyValueForMenu,
     ulId,
+    areAllAccessibleCategoryData,
   } = props;
 
   const { menuData, filterNavStringForClass, getMenuNameToShow } = ExpMenuController({
@@ -76,8 +78,16 @@ const ExpPencilMenu = (props: ExpPencilMenuInterface) => {
                 {!menuItem.isExternalLink || !menuItem?.children?.length ? (
                   <ExpLinkParser
                     to={
-                      menuItem?.redirectLink === `/xp5agt0qcq/wood-doors/` ||
-                      menuItem?.redirectLink === '/wood-doors/'
+                      getMenuNameToShow(menuItem)?.toLowerCase()?.includes('shop')
+                        ? areAllAccessibleCategoryData.areAllAccessible &&
+                          areAllAccessibleCategoryData?.pageSlug?.length
+                          ? areAllAccessibleCategoryData.pageSlug
+                          : menuItem?.redirectLink === `/xp5agt0qcq/wood-doors/` ||
+                            menuItem?.redirectLink === '/wood-doors/'
+                          ? '/commercial-wood-doors/'
+                          : menuItem?.redirectLink
+                        : menuItem?.redirectLink === `/xp5agt0qcq/wood-doors/` ||
+                          menuItem?.redirectLink === '/wood-doors/'
                         ? '/commercial-wood-doors/'
                         : menuItem?.redirectLink
                     }
