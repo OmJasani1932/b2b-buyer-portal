@@ -37,9 +37,11 @@ const HeaderController = () => {
   const [areAllAccessibleCategoryData, setAreAllAccessibleCategoryData] = useState<{
     areAllAccessible: any;
     pageSlug: any;
+    isLoading: boolean;
   }>({
     areAllAccessible: false,
     pageSlug: '',
+    isLoading: false,
   });
   const settingsForSlids: EmblaOptionsType = {
     active: true,
@@ -497,7 +499,11 @@ const HeaderController = () => {
     localStorage.removeItem('categories');
     localStorage.removeItem('user-group');
     document.dispatchEvent(new Event('CART_REFRESH'));
-    setAreAllAccessibleCategoryData({ areAllAccessible: false, pageSlug: '' });
+    setAreAllAccessibleCategoryData({
+      areAllAccessible: false,
+      pageSlug: '',
+      isLoading: false,
+    });
     window.location.href = `${window.location.origin}/login/?logoutFromB2b=true/`;
   };
 
@@ -553,16 +559,92 @@ const HeaderController = () => {
       return accessibleCategories;
     }
   };
+
+  // const checkAccessibleCategories = async () => {
+  //   const accessibleCategoryArray = getAccessibleCategoryArray();
+
+  //   if (accessibleCategoryArray === 'all') return { areAllAccessible: false, pageSlug: '' };
+  //   localStorage.setItem('categories', JSON.stringify(accessibleCategoryArray));
+  //   const accessibleCategorySet = new Set(accessibleCategoryArray);
+
+  //   const subCategoryResponse = await ExpGetCategoryList(
+  //     `CA-a157d458-879d-4681-8557-1cecaad386ae-${accessibleCategoryArray[0]}-1`,
+  //   );
+
+  //   let areAllAccessible;
+  //   let pageSlug = null;
+  //   if (subCategoryResponse.Data) {
+  //     const categories = subCategoryResponse.Data.categories;
+  //     areAllAccessible = isAllEntitiesAvailable(categories, accessibleCategorySet);
+  //     pageSlug = categories[0]?.page_slug_esi;
+  //   }
+  //   return { areAllAccessible, pageSlug };
+  // };
+
   const checkAccessibleCategories = async () => {
+    setAreAllAccessibleCategoryData({
+      areAllAccessible: false,
+      pageSlug: '',
+      isLoading: true,
+    });
     const accessibleCategoryArray = getAccessibleCategoryArray();
 
     if (accessibleCategoryArray === 'all') return { areAllAccessible: false, pageSlug: '' };
     localStorage.setItem('categories', JSON.stringify(accessibleCategoryArray));
-    const accessibleCategorySet = new Set(accessibleCategoryArray);
+    // Smart category ID detection strategy
+    let subCategoryResponse = null;
+    let workingCategoryId = null;
+    let accessibleCategorySet = new Set(accessibleCategoryArray);
+    const DEFAULT_CATEGORY_ID = 'CA-a157d458-879d-4681-8557-1cecaad386ae';
+    // Helper function to test a category ID
+    const testCategoryId = async (categoryId: number) => {
+      try {
+        const response = await ExpGetCategoryList(`${DEFAULT_CATEGORY_ID}-${categoryId}-1`);
+        if (response?.Status === 'success' && response?.Data?.categories?.length > 0) {
+          return { success: true, response, categoryId };
+        }
+        return { success: false, response: null, categoryId };
+      } catch (error) {
+        return { success: false, response: null, categoryId };
+      }
+    };
 
-    const subCategoryResponse = await ExpGetCategoryList(
-      `CA-a157d458-879d-4681-8557-1cecaad386ae-${accessibleCategoryArray[0]}-1`,
-    );
+    // Step 1: Check first ID (index 0)
+    const firstIdResult = await testCategoryId(accessibleCategoryArray[0]);
+
+    if (firstIdResult.success) {
+      // First ID works, use it directly
+      subCategoryResponse = firstIdResult.response;
+      workingCategoryId = firstIdResult.categoryId;
+    } else {
+      // Step 2: First ID doesn't work, use split strategy
+      const totalIds = accessibleCategoryArray.length;
+      const midPoint = Math.floor(totalIds / 2);
+
+      // Get test IDs: last 2 from first half + first 2 from second half
+      const testIds = [
+        ...accessibleCategoryArray.slice(Math.max(0, midPoint - 2), midPoint), // Last 2 from first half
+        ...accessibleCategoryArray.slice(midPoint, midPoint + 2), // First 2 from second half
+      ];
+      for (const categoryId of testIds) {
+        const result = await testCategoryId(categoryId);
+        if (result.success) {
+          subCategoryResponse = result.response;
+          workingCategoryId = result.categoryId;
+          break;
+        }
+      }
+    }
+    if (!subCategoryResponse || !workingCategoryId) {
+      return { areAllAccessible: false, pageSlug: '' };
+    }
+
+    // Slice array from working category ID onwards
+    const workingCategoryIndex = accessibleCategoryArray.indexOf(workingCategoryId);
+    const slicedCategoryArray = accessibleCategoryArray.slice(workingCategoryIndex);
+
+    // Update accessibleCategorySet with sliced array
+    accessibleCategorySet = new Set(slicedCategoryArray);
 
     let areAllAccessible;
     let pageSlug = null;
@@ -598,7 +680,7 @@ const HeaderController = () => {
     const userDetails = window['__USER_DETAILS__'];
     if (userDetails?.userInfo?.id) {
       const { areAllAccessible, pageSlug } = await checkAccessibleCategories();
-      setAreAllAccessibleCategoryData({ areAllAccessible, pageSlug });
+      setAreAllAccessibleCategoryData({ areAllAccessible, pageSlug, isLoading: false });
     }
   };
 

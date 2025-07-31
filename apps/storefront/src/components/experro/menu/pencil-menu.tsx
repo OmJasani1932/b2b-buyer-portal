@@ -91,7 +91,9 @@ const ExpPencilMenu = (props: ExpPencilMenuInterface) => {
                         ? '/commercial-wood-doors/'
                         : menuItem?.redirectLink
                     }
-                    className={`${linkNameClasses} item-link`}
+                    className={`${linkNameClasses} item-link ${
+                      areAllAccessibleCategoryData.isLoading ? 'pointer-events-none' : ''
+                    }`}
                     // id={menuItem?.id}
                     target={menuItem?.link_target === 'New Tab' ? '_blank' : ''}
                   >
