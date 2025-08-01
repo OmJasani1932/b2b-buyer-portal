@@ -29,7 +29,8 @@ interface StyledCardActionsProps {
 
 const StyledCardActions = styled('div')<StyledCardActionsProps>((props) => ({
   flexWrap: 'wrap',
-  padding: props.isShowButtons ? '0 1rem 1rem 1rem' : 0,
+  padding: props.isShowButtons ? '' : 0,
+  marginTop: '20px',
 
   '& button': {
     marginLeft: '0',
@@ -195,7 +196,9 @@ function OrderCard(props: OrderCardProps) {
         )}
 
         <ItemContainer key={key} nameKey={symbol[key]}>
-          <p id="item-name-key">{key}</p>
+          <p id="item-name-key" className="text-[#808285] font-medium">
+            {key}
+          </p>
           {symbol[key] === 'coupon' ? (
             <p>
               {infos?.money
@@ -222,11 +225,13 @@ function OrderCard(props: OrderCardProps) {
     >
       <Box
         sx={{
-          padding: '1rem 1rem 0 1rem',
+          marginBottom: '1rem',
         }}
       >
-        <Typography variant="h5">{header}</Typography>
-        {subtitle && <div>{subtitle}</div>}
+        <Typography variant="h5" className="mb-1">
+          {header}
+        </Typography>
+        {subtitle && <p className="text-[#808285] text-sm">{subtitle}</p>}
       </Box>
       <CardContent>
         <Box
@@ -246,6 +251,7 @@ function OrderCard(props: OrderCardProps) {
             <Fragment key={button.key}>
               {button.isCanShow && (
                 <CustomButton
+                  className="text-sm"
                   value={button.value}
                   key={button.key}
                   name={button.name}

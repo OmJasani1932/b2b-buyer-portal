@@ -15,9 +15,14 @@ import { OrderDetailsContext } from '../context/OrderDetailsContext';
 const HistoryListContainer = styled('div')(() => ({
   '& > .MuiPaper-root': {
     boxShadow: 'none',
+    border: 'none',
+    padding: '0',
   },
 
   '& table': {
+    '& th': {
+      paddingTop: '0',
+    },
     '& td, & th': {
       '&:first-of-type': {
         paddingLeft: 0,

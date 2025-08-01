@@ -90,11 +90,11 @@ const defaultItemStyle = {
 const mobileItemStyle = {
   default: {
     width: '100%',
-    padding: '0 0 0 128px',
+    padding: '0 0 0 76px',
   },
   qty: {
     width: '100%',
-    padding: '0 0 0 128px',
+    padding: '0 0 0 76px',
   },
 };
 

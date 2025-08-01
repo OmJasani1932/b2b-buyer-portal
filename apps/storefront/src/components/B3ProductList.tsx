@@ -36,7 +36,7 @@ const Flex = styled('div')<FlexProps>(({ isHeader, isMobile }) => {
 
   const mobileStyle = isMobile
     ? {
-        borderTop: '1px solid #D9DCE9',
+        borderTop: '1px solid #ebebeb',
         padding: '12px 0 12px',
         '&:first-of-type': {
           marginTop: '12px',
@@ -50,7 +50,7 @@ const Flex = styled('div')<FlexProps>(({ isHeader, isMobile }) => {
     color: '#808285',
     display: 'flex',
     padding: '16px 0',
-    borderBottom: '1px solid #939597',
+    borderBottom: '1px solid #ebebeb',
     gap: '8px',
     flexWrap,
     alignItems: ' flex-start',
@@ -73,9 +73,11 @@ const FlexItem = styled('div')(
 );
 
 const ProductHead = styled('div')(() => ({
-  fontSize: '0.875rem',
+  fontSize: '14px',
   lineHeight: '1.5',
-  color: '#263238',
+  color: '#808285',
+  textTransform: 'uppercase' as const,
+  fontWeight: '600',
 }));
 
 const ProductImage = styled('img')(() => ({
@@ -85,9 +87,9 @@ const ProductImage = styled('img')(() => ({
 }));
 
 const ProductOptionText = styled('div')(() => ({
-  fontSize: '0.75rem',
+  fontSize: '14px',
   lineHeight: '1.5',
-  color: '#455A64',
+  color: '#808285',
 }));
 
 const defaultItemStyle = {
@@ -95,18 +97,18 @@ const defaultItemStyle = {
     width: '15%',
   },
   qty: {
-    width: '12%',
+    width: '10%',
   },
 };
 
 const mobileItemStyle = {
   default: {
     width: '100%',
-    padding: '0 0 0 76px',
+    padding: '0 0 0 0px',
   },
   qty: {
     width: '100%',
-    padding: '0 0 0 76px',
+    padding: '0 0 0 0px',
   },
 };
 
@@ -245,7 +247,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
           {showCheckbox && (
             <Checkbox checked={list.length === products.length} onChange={handleSelectAllChange} />
           )}
-          <FlexItem padding={isMobile ? '0' : '0 6% 0 0'}>
+          <FlexItem padding={isMobile ? '0' : '0 20px 0 0'}>
             <ProductHead>{b3Lang('global.searchProduct.product')}</ProductHead>
           </FlexItem>
           <FlexItem textAlignLocation={textAlign} {...itemStyle.default}>
@@ -326,11 +328,13 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
               <Box
                 sx={{
                   marginLeft: '16px',
+                  width: 'calc(100% - 76px)',
                 }}
               >
                 <Typography
                   variant="body1"
-                  color="#212121"
+                  color="#808285"
+                  className="mb-1"
                   onClick={() => {
                     if (canToProduct) {
                       const {
@@ -347,7 +351,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
                 >
                   {product.name}
                 </Typography>
-                <Typography variant="body1" color="#616161">
+                <Typography variant="body1" className="text-base text-primary mb-1">
                   {product.sku}
                 </Typography>
                 {(product.product_options || []).map((option) => (
@@ -359,6 +363,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
             </FlexItem>
 
             <FlexItem
+              className="demo"
               textAlignLocation={textAlign}
               padding={quantityEditable ? '10px 0 0' : ''}
               {...itemStyle.default}
@@ -366,11 +371,12 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
                 isMobile
                   ? {
                       fontSize: '14px',
+                      marginTop: '10px',
                     }
                   : {}
               }
             >
-              {isMobile && <span>Price:</span>}
+              {isMobile && <span className="font-semibold w-[76px]">Price:</span>}
 
               {getPrice()}
             </FlexItem>
@@ -409,7 +415,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
                 />
               ) : (
                 <>
-                  {isMobile && <span>Qty:</span>}
+                  {isMobile && <span className="font-semibold w-[76px]">Qty:</span>}
                   {getQuantity(product)}
                 </>
               )}
@@ -427,7 +433,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
                   : {}
               }
             >
-              {isMobile && <span>{totalText}:</span>}
+              {isMobile && <span className="font-semibold w-[76px]">{totalText}:</span>}
               {getTotalPrice()}
             </FlexItem>
 

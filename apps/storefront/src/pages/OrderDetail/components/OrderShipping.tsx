@@ -105,30 +105,24 @@ export default function OrderShipping() {
               sx={{
                 wordBreak: 'break-word',
                 color: 'rgba(0, 0, 0, 0.87)',
+                borderBottom: '1px solid #e0e0e0',
+                paddingBottom: '20px',
               }}
             >
               <Typography
                 variant="h6"
                 sx={{
-                  fontSize: '24px',
-                  fontWeight: '400',
+                  fontSize: '20px',
+                  fontWeight: '500',
+                  marginBottom: '0px',
                 }}
               >
                 {getFullName(shipping)}
                 {' – '}
                 {getCompanyName(shipping.company || '')}
               </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontSize: '24px',
-                  fontWeight: '400',
-                }}
-              >
-                {getFullAddress(shipping)}
-              </Typography>
+              <p>{getFullAddress(shipping)}</p>
             </Box>
-
             {(shipping.shipmentItems || []).map((shipment: OrderShippedItem) =>
               shipment.itemsInfo.length > 0 ? (
                 <Fragment key={`shipment-${shipment.id}`}>
@@ -164,7 +158,6 @@ export default function OrderShipping() {
                 </Fragment>
               ) : null,
             )}
-
             {shipping.notShip.itemsInfo.length > 0 ? (
               <Fragment key={`shipment-notShip-${shipping.id}`}>
                 <Box

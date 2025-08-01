@@ -215,33 +215,52 @@ function OrderDetail() {
             width: 'fit-content',
           }}
         >
-          <Box
-            sx={{
-              color: 'primary.main',
-              cursor: 'pointer',
-              fontSize: '14px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
+          <div
+            className="flex text-sm items-center cursor-pointer hover:text-primary"
             onClick={goToOrders}
           >
             {localtion.state !== null ? (
               <>
                 <ArrowBackIosNew
                   sx={{
-                    fontSize: '13px',
-                    margin: '0 8px',
+                    fontSize: '16px',
+                    marginRight: '8px',
+                    fontWeight: 'bold',
                   }}
                 />
-                <span>{b3Lang('orderDetail.backToOrders')}</span>
+                <span className="font-semibold">{b3Lang('orderDetail.backToOrders')}</span>
               </>
             ) : (
               ''
             )}
-          </Box>
+          </div>
         </Box>
-
-        <Grid container spacing={2}>
+        <div className="flex mt-4 mb-2 justify-between">
+          <div className="flex gap-4 items-center">
+            <Typography
+              variant="h4"
+              sx={{
+                color: b3HexToRgb(customColor, 0.87) || '#263238',
+                marginBottom: '0',
+              }}
+            >
+              {b3Lang('orderDetail.orderId', { orderId })}
+              {b3Lang('orderDetail.purchaseOrderNumber', {
+                purchaseOrderNumber: poNumber ?? '',
+              })}
+            </Typography>
+            <OrderStatus code={status} text={getOrderStatusLabel(status)} />
+          </div>
+          <div>
+            {localtion?.state && (
+              <DetailPagination
+                onChange={(orderId) => handlePageChange(orderId)}
+                color={customColor}
+              />
+            )}
+          </div>
+        </div>
+        {/* <Grid container spacing={2}>
           <Grid
             item
             xs={isMobile ? 12 : 8}
@@ -251,20 +270,7 @@ function OrderDetail() {
               gap: '15px',
               order: isMobile ? 1 : 0,
             }}
-          >
-            <Typography
-              variant="h4"
-              sx={{
-                color: b3HexToRgb(customColor, 0.87) || '#263238',
-              }}
-            >
-              {b3Lang('orderDetail.orderId', { orderId })}
-              {b3Lang('orderDetail.purchaseOrderNumber', {
-                purchaseOrderNumber: poNumber ?? '',
-              })}
-            </Typography>
-            <OrderStatus code={status} text={getOrderStatusLabel(status)} />
-          </Grid>
+          ></Grid>
           <Grid
             container
             item
@@ -274,15 +280,8 @@ function OrderDetail() {
               alignItems: 'center',
               justifyContent: 'flex-end',
             }}
-          >
-            {localtion?.state && (
-              <DetailPagination
-                onChange={(orderId) => handlePageChange(orderId)}
-                color={customColor}
-              />
-            )}
-          </Grid>
-        </Grid>
+          ></Grid>
+        </Grid> */}
 
         <Grid
           container

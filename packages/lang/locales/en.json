@@ -333,7 +333,7 @@
   "orderDetail.reorder.qty": "Qty",
   "orderDetail.reorder.total": "Total",
   "orderDetail.return": "Return",
-  "orderDetail.addToShoppingList": "ADD TO SHOPPING LIST",
+  "orderDetail.addToShoppingList": "Add to shopping list",
   "orderDetail.purchaseDetails": "Purchased by {name} on {updatedAt}.",
   "orderDetail.summary": "Summary",
   "orderDetail.paidInFull": "Paid in full on {paidDate}",

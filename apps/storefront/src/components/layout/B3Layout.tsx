@@ -122,7 +122,7 @@ export default function B3Layout({
           }}
         ></Box> */}
         <div className="bg-white">
-          {itemsRoutes?.name && (
+          {(itemsRoutes?.name || location.pathname.includes('/orderDetail')) && (
             <div className="breadcrumb-section bg-primary py-[13px] md:mb-10 mb-6">
               <div className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto">
                 <ul className="breadcrumb flex *:text-white *:text-xs *:font-normal *:uppercase [&amp;&gt;li:first-child]:before:hidden [&amp;&gt;li]:before:border-r [&amp;&gt;li]:before:h-[0.625rem] [&amp;&gt;li]:before:inline-block [&amp;&gt;li]:before:mx-2 [&amp;&gt;li]:before:border-white [&amp;&gt;li]:before:rotate-12 leading-6 whitespace-nowrap overflow-auto">
@@ -135,7 +135,13 @@ export default function B3Layout({
                     </span>
                   </li>
                   <li>
-                    <span className="font-medium">{itemsRoutes?.name}</span>
+                    <span className="font-medium">
+                      {itemsRoutes?.name
+                        ? itemsRoutes?.name
+                        : location.pathname.includes('/orderDetail')
+                        ? 'Order Detail'
+                        : ''}
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -171,7 +177,7 @@ export default function B3Layout({
                 <Box
                   component="main"
                   sx={{
-                    mt: !isMobile && !title ? '24px' : '0',
+                    mt: !isMobile && !title ? '0px' : '0',
                   }}
                 >
                   {children}
