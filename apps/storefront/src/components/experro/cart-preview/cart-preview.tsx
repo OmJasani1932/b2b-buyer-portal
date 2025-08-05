@@ -1,4 +1,5 @@
 import { CurrencyFormat, ExpLinkParser } from '../utils';
+import { PaypalCheckout } from '../utils/paypal-checkout';
 import ExpCartPreviewController from './cart-preview-controller';
 
 export interface ExpCartPreviewProps {
@@ -140,6 +141,9 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
                   View Cart
                 </ExpLinkParser>
               </div>
+            </div>
+            <div className="w-full mt-6">
+              <PaypalCheckout />
             </div>
           </div>
         ) : (
