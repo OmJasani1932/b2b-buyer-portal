@@ -38,7 +38,7 @@ const Footer = ({ globalSettings }: any) => {
       <div className="fixed z-50 md:left-4 left-0 md:w-auto w-full md:bottom-auto bottom-0 md:top-1/2 md:-translate-y-1/2 md:block hidden md:group-[.sticky-header]/body:block group-[.sticky-header]/body:flex">
         <ExpLinkParser
           to="https://info.cookandboardman.com/event/lunch-and-learn-request/general"
-          className="md:mt-4 bg-primary md:hover:bg-primary hover:bg-[#B3E1E7] md:w-11 w-1/3 md:h-11 p-[9px_14px_9px_11px] cursor-pointer flex md:flex-row flex-col overflow-hidden items-center z-[99] group-[.mobile-menu-open]:z-10 md:group-[&.sticky-header]/body:flex group-[&.sticky-header]/body:flex whitespace-nowrap md:rounded-[23px] group/quote md:hover:w-full transition-all duration-400 ease-in-out md:shadow-[0_0_20px_0_rgba(255,255,255,0.19)]"
+          className="md:mt-4 bg-primary md:hover:bg-primary hover:bg-[#B3E1E7] md:w-11 w-1/2 md:h-11 p-[9px_14px_9px_11px] cursor-pointer flex md:flex-row flex-col overflow-hidden items-center z-[99] group-[.mobile-menu-open]:z-10 md:group-[&.sticky-header]/body:flex group-[&.sticky-header]/body:flex whitespace-nowrap md:rounded-[23px] group/quote md:hover:w-full transition-all duration-400 ease-in-out md:shadow-[0_0_20px_0_rgba(255,255,255,0.19)]"
         >
           <i className="icon md:w-8 w-full md:h-[34px] h-7 flex items-center group-hover/quote:hidden transition-all duration-300 flex-[0_0_auto] md:[&_svg]:w-[23px] [&_svg]:w-[20px] md:[&_svg]:h-[28px] [&_svg]:h-[22px] md:justify-normal justify-center">
             <LunchIcon />
@@ -56,7 +56,7 @@ const Footer = ({ globalSettings }: any) => {
 
         {/* Chat button with loading state */}
         {!liveChatLoaded ? (
-          <span className="md:mt-4 bg-primary md:hover:bg-primary hover:bg-[#B3E1E7] md:w-11 w-1/3 md:h-11 p-[9px_14px_9px_11px] cursor-pointer flex md:flex-row flex-col overflow-hidden items-center z-[99] group-[.mobile-menu-open]:z-10 md:group-[&.sticky-header]/body:flex group-[&.sticky-header]/body:flex whitespace-nowrap md:rounded-[23px] group/quote md:hover:w-full transition-all duration-400 ease-in-out md:shadow-[0_0_20px_0_rgba(255,255,255,0.19)]">
+          <span className="md:mt-4 bg-primary md:hover:bg-primary hover:bg-[#B3E1E7] md:w-11 w-1/2 md:h-11 p-[9px_14px_9px_11px] cursor-pointer flex md:flex-row flex-col overflow-hidden items-center z-[99] group-[.mobile-menu-open]:z-10 md:group-[&.sticky-header]/body:flex group-[&.sticky-header]/body:flex whitespace-nowrap md:rounded-[23px] group/quote md:hover:w-full transition-all duration-400 ease-in-out md:shadow-[0_0_20px_0_rgba(255,255,255,0.19)]">
             <div className="flex items-center justify-center w-full h-full">
               <div className="flex space-x-0.5">
                 <div
@@ -81,7 +81,7 @@ const Footer = ({ globalSettings }: any) => {
                 window.LiveChatWidget.call('maximize');
               }
             }}
-            className="md:mt-4 bg-primary md:hover:bg-primary hover:bg-[#B3E1E7] md:w-11 w-1/3 md:h-11 p-[9px_14px_9px_11px] cursor-pointer flex md:flex-row flex-col overflow-hidden items-center z-[99] group-[.mobile-menu-open]:z-10 md:group-[&.sticky-header]/body:flex group-[&.sticky-header]/body:flex whitespace-nowrap md:rounded-[23px] group/quote md:hover:w-full transition-all duration-400 ease-in-out md:shadow-[0_0_20px_0_rgba(255,255,255,0.19)]"
+            className="md:mt-4 bg-primary md:hover:bg-primary hover:bg-[#B3E1E7] md:w-11 w-1/2 md:h-11 p-[9px_14px_9px_11px] cursor-pointer flex md:flex-row flex-col overflow-hidden items-center z-[99] group-[.mobile-menu-open]:z-10 md:group-[&.sticky-header]/body:flex group-[&.sticky-header]/body:flex whitespace-nowrap md:rounded-[23px] group/quote md:hover:w-full transition-all duration-400 ease-in-out md:shadow-[0_0_20px_0_rgba(255,255,255,0.19)]"
           >
             <i className="icon md:w-8 w-full md:h-[34px] h-7 flex items-center group-hover/quote:hidden transition-all duration-300 flex-[0_0_auto] md:[&_svg]:w-[23px] [&_svg]:w-[20px] md:[&_svg]:h-[28px] [&_svg]:h-[22px] md:justify-normal justify-center">
               <ChatFloatIcon />

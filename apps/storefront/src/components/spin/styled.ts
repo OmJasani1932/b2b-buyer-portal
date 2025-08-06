@@ -30,11 +30,14 @@ interface SpinContextProps {
   isFlex?: boolean;
 }
 
-const SpinContext = styled('div')<SpinContextProps>(({ height, isFlex = true }) => ({
-  position: 'relative',
-  height: height || '100%',
-  width: '100%',
-  display: isFlex ? 'flex' : 'block',
-}));
+const SpinContext = styled('div')<SpinContextProps>(
+  ({ height, isFlex = true, className = '' }) => ({
+    position: 'relative',
+    height: height || '100%',
+    width: '100%',
+    display: isFlex ? 'flex' : 'block',
+    className: className,
+  }),
+);
 
 export { SpinCenter, SpinContext, SpinTip };

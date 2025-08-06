@@ -327,6 +327,13 @@ export function B3Table<T>({
                 '& svg': {
                   color: isMobile ? b3HexToRgb(customColor, 0.87) : 'rgba(0, 0, 0, 0.87)',
                 },
+                '& .MuiTablePagination-input': {
+                  padding: '8px 16px 8px 12px',
+                  marginRight: isMobile ? '16px' : '24px',
+                },
+                '& .MuiTablePagination-toolbar': {
+                  paddingLeft: '0px !important',
+                },
               }}
               count={count}
               rowsPerPage={first}
@@ -363,6 +370,13 @@ export function B3Table<T>({
                 },
                 '& svg': {
                   color: customColor,
+                },
+                '& .MuiTablePagination-input': {
+                  padding: '8px 16px 8px 12px',
+                  marginRight: isMobile ? '16px' : '24px',
+                },
+                '& .MuiTablePagination-toolbar': {
+                  paddingLeft: '0px !important',
                 },
               }}
               count={count}
@@ -473,6 +487,13 @@ export function B3Table<T>({
                 marginTop: '1.5rem',
                 '::-webkit-scrollbar': {
                   display: 'none',
+                },
+                '& .MuiTablePagination-input': {
+                  padding: '8px 16px 8px 12px',
+                  marginRight: isMobile ? '16px' : '24px',
+                },
+                '& .MuiTablePagination-toolbar': {
+                  paddingLeft: '0px !important',
                 },
               }}
               count={count}

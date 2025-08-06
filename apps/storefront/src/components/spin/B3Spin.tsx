@@ -17,6 +17,7 @@ interface B3SpinProps {
   spinningHeight?: number | string;
   isFlex?: boolean;
   transparency?: string;
+  clasName?: any;
 }
 
 export default function B3Spin(props: B3SpinProps) {
@@ -31,6 +32,7 @@ export default function B3Spin(props: B3SpinProps) {
     spinningHeight,
     isFlex,
     transparency = '1',
+    clasName,
   } = props;
 
   const theme = useTheme();
@@ -41,7 +43,7 @@ export default function B3Spin(props: B3SpinProps) {
   const b3Lang = useB3Lang();
 
   return (
-    <SpinContext isFlex={isFlex} height={spinningHeight}>
+    <SpinContext isFlex={isFlex} height={spinningHeight} className={clasName}>
       {isSpinning && (
         <SpinCenter background={background} isMobile={isMobile} transparency={transparency}>
           {!isCloseLoading && (

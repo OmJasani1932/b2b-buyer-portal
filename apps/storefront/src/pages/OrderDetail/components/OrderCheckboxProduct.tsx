@@ -183,67 +183,89 @@ export default function OrderCheckboxProduct(props: OrderCheckboxProductProps) {
           }}
         />
       )}
-
-      {products.map((product: EditableProductItem) => (
-        <Flex isMobile={isMobile} key={product.sku}>
-          <Checkbox
-            checked={isChecked(product.variant_id)}
-            onChange={() =>
-              handleSelectChange(product.variant_id, product.id, +product.editQuantity)
-            }
-          />
-          <FlexItem>
-            <ProductImage src={product.imageUrl || PRODUCT_DEFAULT_IMAGE} />
-            <Box
-              sx={{
-                marginLeft: '16px',
-              }}
-            >
-              <Typography variant="body1" color="#212121">
-                {product.name}
-              </Typography>
-              <Typography variant="body1" color="#616161">
-                {product.sku}
-              </Typography>
-              {(product.product_options || []).map((option: OrderProductOption) => (
-                <ProductOptionText key={option.display_name}>
-                  {`${option.display_name}: ${option.display_value}`}
-                </ProductOptionText>
-              ))}
-            </Box>
-          </FlexItem>
-          <FlexItem textAlignLocation={textAlign} padding="10px 0 0" {...itemStyle.default}>
-            {isMobile && <span>{b3Lang('orderDetail.reorder.price')} </span>}
-            {`${currencyFormat(product.base_price)}`}
-          </FlexItem>
-          <FlexItem textAlignLocation={textAlign} {...itemStyle.default}>
-            <TextField
-              type="number"
-              variant="filled"
-              hiddenLabel={!isMobile}
-              label={isMobile ? b3Lang('orderDetail.reorder.qty') : ''}
-              value={getProductQuantity(product)}
-              onChange={handleProductQuantityChange(product)}
-              onKeyDown={handleNumberInputKeyDown}
-              onBlur={handleNumberInputBlur(product)}
-              size="small"
-              sx={{
-                width: isMobile ? '60%' : '80px',
-                '& .MuiFormHelperText-root': {
-                  marginLeft: '0',
-                  marginRight: '0',
-                },
-              }}
-              error={!!product.helperText}
-              helperText={product.helperText}
+      <div className="[&_.product-list+.product-list]:border-t [&_.product-list+.product-list]:border-gray-400 [&_.product-list+.product-list]:pt-5 [&_.product-list+.product-list]:mt-5">
+        {products.map((product: EditableProductItem) => (
+          <Flex className="pt-5 product-list" isMobile={isMobile} key={product.sku}>
+            <Checkbox
+              checked={isChecked(product.variant_id)}
+              onChange={() =>
+                handleSelectChange(product.variant_id, product.id, +product.editQuantity)
+              }
             />
-          </FlexItem>
-          <FlexItem textAlignLocation={textAlign} padding="10px 0 0" {...itemStyle.default}>
-            {isMobile && <span>{b3Lang('orderDetail.reorder.total')} </span>}
-            {`${currencyFormat(getProductTotals(getProductQuantity(product), product.base_price))}`}
-          </FlexItem>
-        </Flex>
-      ))}
+            <FlexItem>
+              <ProductImage src={product.imageUrl || PRODUCT_DEFAULT_IMAGE} />
+              <Box
+                sx={{
+                  marginLeft: '16px',
+                }}
+              >
+                <Typography variant="body1" className="text-base text-primary mb-1">
+                  {product.name}
+                </Typography>
+                <Typography variant="body1" className="text-[#808285] text-sm">
+                  {product.sku}
+                </Typography>
+                {(product.product_options || []).map((option: OrderProductOption) => (
+                  <ProductOptionText key={option.display_name}>
+                    {`${option.display_name}: ${option.display_value}`}
+                  </ProductOptionText>
+                ))}
+              </Box>
+            </FlexItem>
+            <FlexItem
+              className="text-[#808285]"
+              textAlignLocation={textAlign}
+              padding="10px 0 0"
+              {...itemStyle.default}
+            >
+              {isMobile && <span>{b3Lang('orderDetail.reorder.price')} </span>}
+              {`${currencyFormat(product.base_price)}`}
+            </FlexItem>
+            <FlexItem textAlignLocation={textAlign} {...itemStyle.default}>
+              <TextField
+                type="number"
+                variant="filled"
+                hiddenLabel={!isMobile}
+                label={isMobile ? b3Lang('orderDetail.reorder.qty') : ''}
+                value={getProductQuantity(product)}
+                onChange={handleProductQuantityChange(product)}
+                onKeyDown={handleNumberInputKeyDown}
+                onBlur={handleNumberInputBlur(product)}
+                size="small"
+                sx={{
+                  width: isMobile ? '60%' : '80px',
+                  '& .MuiFormHelperText-root': {
+                    marginLeft: '0',
+                    marginRight: '0',
+                  },
+                  '& .MuiFilledInput-root': {
+                    paddingTop: '8px',
+                    paddingBottom: '8px',
+                    paddingLeft: '12px',
+                    paddingRight: '8px',
+                  },
+                  '& input': {
+                    fontSize: '14px',
+                  },
+                }}
+                error={!!product.helperText}
+                helperText={product.helperText}
+              />
+            </FlexItem>
+            <FlexItem
+              className="text-[#808285]"
+              textAlignLocation={textAlign}
+              padding="10px 0 0"
+              {...itemStyle.default}
+            >
+              {isMobile && <span>{b3Lang('orderDetail.reorder.total')} </span>}
+              {`${currencyFormat(
+                getProductTotals(getProductQuantity(product), product.base_price),
+              )}`}
+            </FlexItem>
+          </Flex>
+        ))}
+      </div>
     </Box>
   ) : null;
 }

@@ -386,7 +386,7 @@ function ShoppingListDetails({ setOpenPage }: PageProps) {
             overflow: 'auto',
             flexWrap: isMobile ? 'wrap' : 'nowrap',
             paddingBottom: '20px',
-            marginBottom: isMobile ? '6rem' : 0,
+            marginBottom: isMobile ? '0' : 0,
           }}
         >
           <Box
@@ -404,7 +404,10 @@ function ShoppingListDetails({ setOpenPage }: PageProps) {
                   }
             }
           >
-            <B3Spin isSpinning={isRequestLoading} spinningHeight="auto">
+            <B3Spin
+              isSpinning={isRequestLoading}
+              clasName={`bg-primary ${isRequestLoading ? 'h-[300px] overflow-hidden' : 'h-auto'}`}
+            >
               <Grid
                 item
                 sx={

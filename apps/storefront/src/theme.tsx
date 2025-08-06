@@ -302,7 +302,7 @@ function B3ThemeProvider({ children }: Props) {
               },
               sizeSmall: {
                 fontSize: '1rem', // Smaller font size for the input
-                padding: '11px 20px', // Adjust padding for smaller size
+                padding: '11px 20px 11px 16px', // Adjust padding for smaller size
                 borderRadius: '0px', // Rounded corners
                 lineHeight: '16px',
                 backgroundColor: '#ffffff', // Background color for small input
@@ -312,6 +312,15 @@ function B3ThemeProvider({ children }: Props) {
                 '&.Mui-focused': {
                   borderColor: '#808285', // Border color when focused
                   boxShadow: 'none', // Focus shadow
+                },
+                '.MuiInputAdornment-root': {
+                  marginRight: '10px',
+                  width: '20px',
+                  height: '20px',
+                  svg: {
+                    width: '100%',
+                    height: '100%',
+                  },
                 },
               },
               underline: {
@@ -423,15 +432,16 @@ function B3ThemeProvider({ children }: Props) {
             styleOverrides: {
               root: {
                 backgroundColor: '#ebebeb', // Background color for pagination
-                padding: '6px 16px', // Custom padding
+                padding: '8px 16px !important', // Custom padding
               },
               toolbar: {
                 justifyContent: 'space-between', // Space items evenly
+                minHeight: 'auto !important',
               },
               selectLabel: {
                 fontWeight: 'bold', // Bold font for select label
                 color: '#004270', // Text color
-                marginRight: '10px',
+                marginRight: '8px',
               },
               displayedRows: {
                 fontSize: '1rem', // Adjust font size for row info
@@ -450,6 +460,7 @@ function B3ThemeProvider({ children }: Props) {
               },
               actions: {
                 '& button': {
+                  padding: '4px',
                   color: '#004270', // Custom color for pagination buttons
                   svg: {
                     color: '#004270',

@@ -6,7 +6,7 @@ import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
 
 import { B3Upload } from '@/components';
 import CustomButton from '@/components/button/CustomButton';
-import { useBlockPendingAccountViewPrice } from '@/hooks';
+import { useBlockPendingAccountViewPrice, useMobile } from '@/hooks';
 import { addProductToBcShoppingList, addProductToShoppingList } from '@/shared/service/b2b';
 import { useAppSelector } from '@/store';
 import { snackbar } from '@/utils';
@@ -35,7 +35,7 @@ export default function AddToShoppingList(props: AddToListProps) {
 
   const [isOpenBulkLoadCSV, setIsOpenBulkLoadCSV] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isMobile] = useMobile();
   const [blockPendingAccountViewPrice] = useBlockPendingAccountViewPrice();
 
   const addItemsToShoppingList = isB2BUser ? addProductToShoppingList : addProductToBcShoppingList;
@@ -222,7 +222,7 @@ export default function AddToShoppingList(props: AddToListProps) {
   return (
     <Card
       sx={{
-        marginBottom: '50px',
+        marginBottom: isMobile ? '0px' : '50px',
       }}
     >
       <CardContent className="!p-0">

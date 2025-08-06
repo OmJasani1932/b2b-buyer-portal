@@ -83,7 +83,7 @@ function QuickOrderCard(props: QuickOrderCardProps) {
                     sx={{
                       fontSize: '0.75rem',
                       lineHeight: '1.5',
-                      color: '#455A64',
+                      color: '#808285',
                     }}
                     key={option.display_name}
                   >

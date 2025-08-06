@@ -30,8 +30,8 @@ interface ShoppingDetailCardProps {
 
 const StyledImage = styled('img')(() => ({
   maxWidth: '60px',
-  height: 'auto',
-  marginRight: '0.5rem',
+  height: '60px',
+  objectFit: 'contain',
 }));
 
 function ShoppingDetailCard(props: ShoppingDetailCardProps) {
@@ -100,27 +100,28 @@ function ShoppingDetailCard(props: ShoppingDetailCardProps) {
     >
       <CardContent
         sx={{
-          color: '#313440',
+          color: '#808285',
           display: 'flex',
           pl: 0,
         }}
       >
         <Box>{checkBox && checkBox()}</Box>
-        <Box>
+        <div className="w-16 h-16 flex-shrink-0 flex items-center justify-center">
           <StyledImage
             src={currentImage || PRODUCT_DEFAULT_IMAGE}
             alt="Product-img"
             loading="lazy"
           />
-        </Box>
+        </div>
         <Box
           sx={{
             flex: 1,
+            paddingLeft: '1rem',
           }}
         >
           <Typography
             variant="body1"
-            color="#212121"
+            className=" text-sm text-primary mb-1"
             onClick={() => {
               const {
                 location: { origin },
@@ -134,7 +135,7 @@ function ShoppingDetailCard(props: ShoppingDetailCardProps) {
           >
             {productName}
           </Typography>
-          <Typography variant="body1" color="#616161">
+          <Typography variant="body1" color="#808285" className="text-sm mb-1">
             {variantSku}
           </Typography>
           <Box
@@ -149,7 +150,7 @@ function ShoppingDetailCard(props: ShoppingDetailCardProps) {
                     sx={{
                       fontSize: '0.75rem',
                       lineHeight: '1.5',
-                      color: '#455A64',
+                      color: '#808285',
                     }}
                     key={option.valueLabel}
                   >
@@ -167,18 +168,16 @@ function ShoppingDetailCard(props: ShoppingDetailCardProps) {
                 color: '#ED6C02',
                 marginTop: '0.3rem',
                 marginBottom: '0.3rem',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+                whiteSpace: 'normal',
               }}
             >
               {productNote}
             </Typography>
           )}
 
-          <Typography
-            sx={{
-              color: '#212121',
-              fontSize: '14px',
-            }}
-          >
+          <Typography className="text-[#808285] text-sm">
             {b3Lang('shoppingList.shoppingDetailCard.price', {
               price: showPrice(currencyFormat(price), shoppingDetail),
             })}
@@ -202,6 +201,13 @@ function ShoppingDetailCard(props: ShoppingDetailCardProps) {
               '& label': {
                 zIndex: 0,
                 fontSize: '14px',
+                textTransform: 'uppercase',
+              },
+              '& .MuiFilledInput-root': {
+                paddingTop: '8px',
+                paddingBottom: '8px',
+                paddingLeft: '12px',
+                paddingRight: '8px',
               },
               '& input': {
                 fontSize: '14px',
@@ -216,8 +222,9 @@ function ShoppingDetailCard(props: ShoppingDetailCardProps) {
           />
           <Typography
             sx={{
-              color: '#212121',
+              color: '#808285',
               fontSize: '14px',
+              marginTop: '10px',
             }}
           >
             {b3Lang('shoppingList.shoppingDetailCard.total', {

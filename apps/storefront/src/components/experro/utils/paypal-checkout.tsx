@@ -84,7 +84,7 @@ export const PaypalCheckout = () => {
   }, []);
   return (
     <>
-      <p className="or-use-label w-full text-right">-- or use --</p>
+      <p className="or-use-label w-full text-right mb-5">-- or use --</p>
       <div
         ref={paypalRef}
         className="w-full min-h-[40px] sm:max-w-[250px] flex items-center justify-center ml-auto relative z-10"

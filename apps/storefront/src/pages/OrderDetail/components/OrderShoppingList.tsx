@@ -136,14 +136,19 @@ export default function OrderShoppingList(props: OrderShoppingListProps) {
             {list.map((item: ListItem) => (
               <MenuItem
                 key={item.node.id}
-                className={activeId === item.node.id ? 'active' : ''}
+                className={`${
+                  activeId === item.node.id ? 'active' : ''
+                } mb-3 border border-primary border-solid`}
                 onClick={handleListItemClicked(item)}
                 sx={{
                   '&:hover': {
                     backgroundColor: b3HexToRgb(primaryColor, 0.12),
                   },
                   '&.active': {
-                    backgroundColor: b3HexToRgb(primaryColor, 0.12),
+                    backgroundColor: '#004270',
+                    '& .MuiTypography-root': {
+                      color: '#ffffff',
+                    },
                   },
                 }}
               >
@@ -162,7 +167,8 @@ export default function OrderShoppingList(props: OrderShoppingListProps) {
         >
           <AddIcon
             sx={{
-              fontSize: '17px',
+              fontSize: '16px',
+              marginRight: '10px',
             }}
           />
           {` ${b3Lang('global.orderShoppingList.createNew')}`}

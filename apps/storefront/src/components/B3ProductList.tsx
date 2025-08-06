@@ -333,8 +333,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
               >
                 <Typography
                   variant="body1"
-                  color="#808285"
-                  className="mb-1"
+                  className="mb-1 text-base text-primary mb-1"
                   onClick={() => {
                     if (canToProduct) {
                       const {
@@ -351,7 +350,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
                 >
                   {product.name}
                 </Typography>
-                <Typography variant="body1" className="text-base text-primary mb-1">
+                <Typography variant="body1" className="text-sm text-[#808285] mb-1">
                   {product.sku}
                 </Typography>
                 {(product.product_options || []).map((option) => (
@@ -408,6 +407,15 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
                     '& .MuiFormHelperText-root': {
                       marginLeft: '0',
                       marginRight: '0',
+                    },
+                    '& .MuiFilledInput-root': {
+                      paddingTop: '8px',
+                      paddingBottom: '8px',
+                      paddingLeft: '12px',
+                      paddingRight: '8px',
+                    },
+                    '& input': {
+                      fontSize: '14px',
                     },
                   }}
                   error={!!product.helperText}

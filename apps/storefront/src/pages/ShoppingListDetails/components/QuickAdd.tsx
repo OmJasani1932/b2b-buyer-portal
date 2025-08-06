@@ -438,6 +438,9 @@ export default function QuickAdd(props: AddToListContentProps) {
             '& label': {
               zIndex: 0,
             },
+            '& .MuiFilledInput-root': {
+              padding: '8px 16px',
+            },
           }}
         >
           <B3CustomForm

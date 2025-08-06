@@ -122,7 +122,9 @@ export default function B3Layout({
           }}
         ></Box> */}
         <div className="bg-white">
-          {(itemsRoutes?.name || location.pathname.includes('/orderDetail')) && (
+          {(itemsRoutes?.name ||
+            location.pathname.includes('/orderDetail') ||
+            location.pathname.includes('/shoppingList')) && (
             <div className="breadcrumb-section bg-primary py-[13px] md:mb-10 mb-6">
               <div className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto">
                 <ul className="breadcrumb flex *:text-white *:text-xs *:font-normal *:uppercase [&amp;&gt;li:first-child]:before:hidden [&amp;&gt;li]:before:border-r [&amp;&gt;li]:before:h-[0.625rem] [&amp;&gt;li]:before:inline-block [&amp;&gt;li]:before:mx-2 [&amp;&gt;li]:before:border-white [&amp;&gt;li]:before:rotate-12 leading-6 whitespace-nowrap overflow-auto">
@@ -140,6 +142,8 @@ export default function B3Layout({
                         ? itemsRoutes?.name
                         : location.pathname.includes('/orderDetail')
                         ? 'Order Detail'
+                        : location.pathname.includes('/shoppingList')
+                        ? 'Shopping List'
                         : ''}
                     </span>
                   </li>
@@ -151,7 +155,7 @@ export default function B3Layout({
             className="max-w-[1310px] 2xl:px-[1.875rem] md:px-5 px-4 mx-auto"
             id="app-mainPage-layout"
           >
-            <div className="xl:flex pt-10">
+            <div className="xl:flex lg:pt-8 pt-0">
               <Box className="xl:w-[200px] w-full">
                 <div className="xl:border-0 border border-gray-40">
                   <Typography

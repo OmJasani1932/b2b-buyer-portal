@@ -434,10 +434,10 @@ export default function ReAddToCart(props: ShoppingProductsProps) {
                           marginLeft: '16px',
                         }}
                       >
-                        <Typography variant="body1" color="#212121">
+                        <Typography variant="body1" className="text-primary text-base mb-1">
                           {productName}
                         </Typography>
-                        <Typography variant="body1" color="#616161">
+                        <Typography variant="body1" className="text-[#808285] text-sm mb-1">
                           {variantSku}
                         </Typography>
                         {newOptionList.length > 0 &&
@@ -447,7 +447,7 @@ export default function ReAddToCart(props: ShoppingProductsProps) {
                               sx={{
                                 fontSize: '0.75rem',
                                 lineHeight: '1.5',
-                                color: '#455A64',
+                                color: '#808285',
                               }}
                               key={option.valueLabel}
                             >

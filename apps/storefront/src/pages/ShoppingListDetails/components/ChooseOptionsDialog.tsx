@@ -41,7 +41,6 @@ const Flex = styled('div')({
   wordBreak: 'break-word',
   gap: '8px',
   flexWrap: 'wrap',
-  padding: '12px 0 12px',
   '&:first-of-type': {
     marginTop: '12px',
   },
@@ -57,7 +56,7 @@ const FlexItem = styled('div')(({ padding }: FlexItemProps) => ({
   flexShrink: 1,
   alignItems: 'flex-start',
   width: '100%',
-  padding: padding || '0 0 0 16px',
+  padding: padding || '0 0 0 0px',
 }));
 
 const ProductImage = styled('img')(() => ({
@@ -71,14 +70,11 @@ const ProductImage = styled('img')(() => ({
 const ProductOptionText = styled('div')(() => ({
   fontSize: '0.75rem',
   lineHeight: '1.5',
-  color: '#455A64',
+  color: '#808285',
 }));
 
 const StyleTextField = styled(TextField)(() => ({
-  '& input::-webkit-outer-spin-button, input::-webkit-inner-spin-button': {
-    marginTop: '-8px',
-    marginBottom: '8px',
-  },
+  '& input::-webkit-outer-spin-button, input::-webkit-inner-spin-button': {},
 }));
 
 interface ChooseOptionsDialogProps {
@@ -547,52 +543,61 @@ export default function ChooseOptionsDialog(props: ChooseOptionsDialogProps) {
                   display: 'flex',
                 }}
               >
-                <ProductImage src={currentImage || product.imageUrl || PRODUCT_DEFAULT_IMAGE} />
-                <Flex>
-                  <FlexItem padding="0">
-                    <Box
-                      sx={{
-                        marginLeft: '16px',
-                      }}
-                    >
-                      <Typography variant="body1" color="#212121">
-                        {product.name}
-                      </Typography>
-                      <Typography variant="body1" color="#616161">
-                        {variantSku || product.sku}
-                      </Typography>
-                      {(product.product_options || []).map((option) => (
-                        <ProductOptionText
-                          key={`${option.option_id}`}
-                        >{`${option.display_name}: ${option.display_value}`}</ProductOptionText>
-                      ))}
-                    </Box>
-                  </FlexItem>
+                <div className="w-16 h-16 flex-shrink-0 flex items-center justify-center">
+                  <ProductImage src={currentImage || product.imageUrl || PRODUCT_DEFAULT_IMAGE} />
+                </div>
+                <div className="w-[calc(100%_-_64px)] pl-5">
+                  <Flex>
+                    <Typography variant="body1" className="text-primary">
+                      {product.name}
+                    </Typography>
+                    <Typography variant="body1" color="#808285">
+                      {variantSku || product.sku}
+                    </Typography>
+                    {(product.product_options || []).map((option) => (
+                      <ProductOptionText
+                        key={`${option.option_id}`}
+                      >{`${option.display_name}: ${option.display_value}`}</ProductOptionText>
+                    ))}
 
-                  <FlexItem>
-                    <span>{b3Lang('shoppingList.chooseOptionsDialog.price')}</span>
-                    {!isShowPrice
-                      ? ''
-                      : currencyFormat(newPrice * +quantity || getProductPrice(product))}
-                  </FlexItem>
+                    <FlexItem>
+                      <span className="text-[#808285] pr-2">
+                        {b3Lang('shoppingList.chooseOptionsDialog.price')}
+                      </span>
+                      <span className="text-[#808285]">
+                        {!isShowPrice
+                          ? ''
+                          : currencyFormat(newPrice * +quantity || getProductPrice(product))}
+                      </span>
+                    </FlexItem>
 
-                  <FlexItem>
-                    <StyleTextField
-                      type="number"
-                      variant="filled"
-                      label={b3Lang('shoppingList.chooseOptionsDialog.quantity')}
-                      value={quantity}
-                      onChange={handleProductQuantityChange}
-                      onKeyDown={handleNumberInputKeyDown}
-                      onBlur={handleNumberInputBlur}
-                      size="small"
-                      sx={{
-                        width: '60%',
-                        maxWidth: '100px',
-                      }}
-                    />
-                  </FlexItem>
-                </Flex>
+                    <FlexItem>
+                      <StyleTextField
+                        type="number"
+                        variant="filled"
+                        label={b3Lang('shoppingList.chooseOptionsDialog.quantity')}
+                        value={quantity}
+                        onChange={handleProductQuantityChange}
+                        onKeyDown={handleNumberInputKeyDown}
+                        onBlur={handleNumberInputBlur}
+                        size="small"
+                        sx={{
+                          width: '60%',
+                          maxWidth: '100px',
+                          '& .MuiFilledInput-root': {
+                            paddingTop: '8px',
+                            paddingBottom: '8px',
+                            paddingLeft: '12px',
+                            paddingRight: '8px',
+                          },
+                          '& input': {
+                            fontSize: '14px',
+                          },
+                        }}
+                      />
+                    </FlexItem>
+                  </Flex>
+                </div>
               </Box>
 
               <Divider

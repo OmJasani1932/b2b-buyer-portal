@@ -28,7 +28,7 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
     >
       <div className="previewCart border">
         {cartItems.length > 0 ? (
-          <ul className="previewCartList hidden-x p-5 space-y-4 [&_li+li]:pt-4 [&_li+li]:border-t [&_li+li]:border-gray-50">
+          <ul className="previewCartList hidden-x p-5 space-y-4 [&_li+li]:pt-4 [&_li+li]:border-t [&_li+li]:border-gray-50 h-[400px] overflow-auto">
             {cartItems?.map((item: any, index: number) => {
               const itemUrl = item?.url?.replace('https://', '')?.split('/')?.splice(1)?.join('/');
               const newUrl = item.options?.find((option: any) =>
@@ -38,7 +38,7 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
                 <li key={index} className="previewCartItem">
                   <div className="row flex">
                     <div className="col col-4 w-20">
-                      <div className="previewCartItem-image">
+                      <div className="previewCartItem-image [&_span]:flex [&_span]:items-center [&_span]:justify-center">
                         {item?.sku === 'MASTERPRODUCT' ? (
                           <>
                             <p>
@@ -55,7 +55,11 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
                           <>
                             {itemUrl ? (
                               <ExpLinkParser to={`/${itemUrl}`}>
-                                <img src={item.image_url} alt="" />
+                                <img
+                                  className="max-h-[80px] object-contain"
+                                  src={item.image_url}
+                                  alt=""
+                                />
                               </ExpLinkParser>
                             ) : (
                               <p>

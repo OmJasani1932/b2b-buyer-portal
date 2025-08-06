@@ -73,13 +73,8 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
           width: 'fit-content',
         }}
       >
-        <Box
-          className="text-primary hover:text-primaryHover underline"
-          sx={{
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-          }}
+        <div
+          className="flex text-sm items-center cursor-pointer hover:text-primary"
           onClick={() => {
             if (openAPPParams.shoppingListBtn !== 'add') {
               goToShoppingLists();
@@ -93,23 +88,18 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
           }}
         >
           <ArrowBackIosNew
-            fontSize="small"
             sx={{
-              fontSize: '14px',
-              marginRight: '0.5rem',
+              fontSize: '16px',
+              marginRight: '8px',
+              fontWeight: 'bold',
             }}
           />
-          <Box
-            sx={{
-              margin: 0,
-              m: '0',
-            }}
-          >
+          <span className="font-semibold">
             {openAPPParams.shoppingListBtn !== 'add'
               ? b3Lang('shoppingList.header.backToShoppingLists')
               : b3Lang('shoppingList.header.backToProduct')}
-          </Box>
-        </Box>
+          </span>
+        </div>
       </Box>
       <Grid
         container
@@ -118,7 +108,7 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
           display: 'flex',
           justifyContent: 'space-between',
           flexDirection: `${isMobile ? 'column' : 'row'}`,
-          mb: `${isMobile ? '16px' : ''}`,
+          mb: `${isMobile ? '32px' : '16px'}`,
         }}
       >
         <Grid
@@ -162,6 +152,7 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
               sx={{
                 width: '100%',
                 wordBreak: 'break-all',
+                marginTop: '10px',
               }}
             >
               {shoppingListInfo?.description}
@@ -172,6 +163,7 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
                   variant="subtitle2"
                   sx={{
                     marginRight: '0.5rem',
+                    marginTop: '10px',
                   }}
                 >
                   {b3Lang('shoppingList.header.createdBy')}
@@ -181,51 +173,60 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
             )}
           </Box>
         </Grid>
-
-        <Grid
-          item
-          sx={{
-            textAlign: `${isMobile ? 'none' : 'end'}`,
-          }}
-          {...gridOptions(4)}
-        >
-          {submitShoppingListPermission && shoppingListInfo?.status === 30 && (
-            <CustomButton
-              variant="outlined"
-              disabled={isDisabledBtn}
-              onClick={() => {
-                handleUpdateShoppingList(40);
-              }}
-            >
-              {b3Lang('shoppingList.header.submitForApproval')}
-            </CustomButton>
-          )}
-          {approveShoppingListPermission && shoppingListInfo?.status === 40 && (
-            <Box>
+        {((approveShoppingListPermission && shoppingListInfo?.status === 40) ||
+          (submitShoppingListPermission && shoppingListInfo?.status === 30)) && (
+          <Grid
+            item
+            sx={{
+              textAlign: `${isMobile ? 'none' : 'end'}`,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              pl: isMobile ? '16px !important' : '24px !important',
+            }}
+            {...gridOptions(4)}
+          >
+            {submitShoppingListPermission && shoppingListInfo?.status === 30 && (
               <CustomButton
                 variant="outlined"
-                sx={{
-                  marginRight: '1rem',
-                }}
+                disabled={isDisabledBtn}
                 onClick={() => {
-                  handleUpdateShoppingList(20);
+                  handleUpdateShoppingList(40);
                 }}
               >
-                {b3Lang('shoppingList.header.reject')}
+                {b3Lang('shoppingList.header.submitForApproval')}
               </CustomButton>
-              {approveShoppingListPermission && (
+            )}
+            {approveShoppingListPermission && shoppingListInfo?.status === 40 && (
+              <Box>
                 <CustomButton
                   variant="outlined"
+                  sx={{
+                    width: '100%',
+                  }}
                   onClick={() => {
-                    handleUpdateShoppingList(0);
+                    handleUpdateShoppingList(20);
                   }}
                 >
-                  {b3Lang('shoppingList.header.approve')}
+                  {b3Lang('shoppingList.header.reject')}
                 </CustomButton>
-              )}
-            </Box>
-          )}
-        </Grid>
+                {approveShoppingListPermission && (
+                  <CustomButton
+                    variant="outlined"
+                    sx={{
+                      width: '100%',
+                    }}
+                    onClick={() => {
+                      handleUpdateShoppingList(0);
+                    }}
+                  >
+                    {b3Lang('shoppingList.header.approve')}
+                  </CustomButton>
+                )}
+              </Box>
+            )}
+          </Grid>
+        )}
       </Grid>
     </>
   );

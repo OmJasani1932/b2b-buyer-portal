@@ -19,7 +19,6 @@ import BulkUploadTable from '@/components/upload/BulkUploadTable';
 import { parseEmptyData, ParseEmptyDataProps, removeEmptyRow } from '@/components/upload/utils';
 import CustomButton from '@/components/button/CustomButton';
 
-
 interface B3UploadProps {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -30,7 +29,7 @@ interface B3UploadProps {
   isLoading?: boolean;
   isToCart?: boolean;
   withModifiers?: boolean;
-  disableCart?:any
+  disableCart?: any;
 }
 
 interface BulkUploadCSVProps {
@@ -44,7 +43,6 @@ interface BulkUploadCSVProps {
 const FileUploadContainer = styled(Box)({
   position: 'relative',
   '& .file-upload-area': {
-    height: '200px',
     '& .MuiSvgIcon-root': {
       display: 'none',
     },
@@ -58,7 +56,7 @@ export default function QuickOrderUpload(props: B3UploadProps) {
     setProductData = () => {},
     isToCart = false,
     withModifiers = false,
-    disableCart
+    disableCart,
   } = props;
 
   const [isMobile] = useMobile();
@@ -324,28 +322,26 @@ export default function QuickOrderUpload(props: B3UploadProps) {
             }}
           ></Box>
         </Grid>
-
-        <Grid display="flex" justifyContent="center" alignItems="center" xs={12}>
+        <div className="flex justify-center items-center flex-wrap px-5 mt-4">
           <CustomButton
             variant="outlined"
             onClick={openFile}
-            className="test-buttomn bg-yellow border-yellow text-white"
+            className="test-buttomn bg-yellow border-yellow text-white sm:w-auto w-full"
           >
             Upload file
           </CustomButton>
           <Link
             href="https://silk-demo-store45.mybigcommerce.com/content/sample_template.csv"
             underline="none"
-            className="flex pt-1.5 pb-2 px-6 border border-primary text-primary hover:bg-primary hover:border-primary hover:text-white"
+            className="flex justify-center items-center pt-1.5 pb-2 px-6 border border-primary text-primary hover:bg-primary hover:border-primary hover:text-white sm:ml-4 sm:mt-0 mt-4 sm:w-auto w-full"
             sx={{
               color: primaryColor,
               pointerEvents: 'auto',
-              marginLeft: '16px',
             }}
           >
             Download sample
           </Link>
-        </Grid>
+        </div>
       </Grid>
     </Box>
   );
@@ -356,14 +352,11 @@ export default function QuickOrderUpload(props: B3UploadProps) {
   }, [isOpen]);
   const FileUploadMain = styled.div`
     display: block;
-    padding: 20px;
-    padding-bottom: 30px;
-    margin-bottom: 20px;
     border-bottom: 1px solid #cccccc;
   `;
 
   return (
-    <FileUploadMain>
+    <FileUploadMain className="sm:px-5 py-5 pb-8 mb-8">
       {fileErrorText.length > 0 && (
         <Box
           sx={{
@@ -392,7 +385,7 @@ export default function QuickOrderUpload(props: B3UploadProps) {
           >
             {content}
             <DropzoneArea
-              dropzoneClass="file-upload-area"
+              dropzoneClass="file-upload-area sm:h-[200px] h-[246px]"
               filesLimit={1}
               onChange={handleChange}
               showPreviews={false}

@@ -98,9 +98,29 @@ const StyledShoppingListTableContainer = styled('div')(() => ({
   backgroundColor: '#FFFFFF',
   borderRadius: '0px',
   boxShadow: 'none',
-
+  '& thead': {
+    '& th': {
+      padding: '0 10px 10px 10px',
+      '&:first-of-type': {
+        paddingLeft: '0',
+      },
+      '.MuiCheckbox-root': {
+        padding: '0',
+      },
+    },
+  },
   '& tbody': {
+    '& td': {
+      padding: '20px 10px',
+      '&:first-of-type': {
+        paddingLeft: '0',
+      },
+      '.MuiCheckbox-root': {
+        padding: '0',
+      },
+    },
     '& tr': {
+      borderTop: '1px solid #E0E0E0',
       '& td': {
         verticalAlign: 'top',
       },
@@ -118,11 +138,17 @@ const StyledShoppingListTableContainer = styled('div')(() => ({
 
 const StyledImage = styled('img')(() => ({
   maxWidth: '60px',
-  height: 'auto',
-  marginRight: '0.5rem',
+  height: '60px',
+  objectFit: 'contain',
 }));
 
 const StyledTextField = styled(TextField)(() => ({
+  '& .MuiFilledInput-root': {
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    paddingLeft: '12px',
+    paddingRight: '8px',
+  },
   '& input': {
     paddingTop: '12px',
     paddingRight: '6px',
@@ -440,21 +466,18 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
           }) || row.primaryImage;
 
         return (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'flex-start',
-            }}
-          >
-            <StyledImage
-              src={currentImage || PRODUCT_DEFAULT_IMAGE}
-              alt="Product-img"
-              loading="lazy"
-            />
-            <Box>
+          <div className="flex items-start">
+            <div className="w-16 h-16 flex-shrink-0 flex items-center justify-center">
+              <StyledImage
+                src={currentImage || PRODUCT_DEFAULT_IMAGE}
+                alt="Product-img"
+                loading="lazy"
+              />
+            </div>
+            <div className="w-[calc(100%_-_64px)] pl-5">
               <Typography
                 variant="body1"
-                color="#212121"
+                className=" text-sm text-primary mb-1"
                 onClick={() => {
                   const {
                     location: { origin },
@@ -468,7 +491,7 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
               >
                 {row.productName}
               </Typography>
-              <Typography variant="body1" color="#616161">
+              <Typography variant="body1" color="#808285" className="text-sm mb-1">
                 {row.variantSku}
               </Typography>
               {optionList.length > 0 && optionsValue.length > 0 && (
@@ -478,7 +501,7 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
                       sx={{
                         fontSize: '0.75rem',
                         lineHeight: '1.5',
-                        color: '#455A64',
+                        color: '#808285',
                       }}
                       key={option.valueLabel}
                     >
@@ -494,13 +517,16 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
                     fontSize: '0.75rem',
                     color: '#ED6C02',
                     marginTop: '0.3rem',
+                    wordBreak: 'break-word',
+                    overflowWrap: 'break-word',
+                    whiteSpace: 'normal',
                   }}
                 >
                   {row.productNote}
                 </Typography>
               )}
-            </Box>
-          </Box>
+            </div>
+          </div>
         );
       },
       width: '45%',
@@ -516,7 +542,7 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
         return (
           <Typography
             sx={{
-              padding: '12px 0',
+              padding: '6px 0',
             }}
           >
             {showPrice(currencyFormat(inTaxPrice), row)}
@@ -699,17 +725,17 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          margin: '0 0 1rem 0',
+          margin: '0 0 10px 0',
         }}
       >
-        <Typography variant="h3" className="mb-0">
+        <Typography variant="h3" className="mb-0 text-black text-xl">
           {b3Lang('shoppingList.table.totalProductCount', {
             quantity: shoppingListInfo?.products?.totalCount || 0,
           })}
         </Typography>
         <Typography
           sx={{
-            fontSize: '24px',
+            fontSize: '20px',
           }}
         >
           {priceHidden ? '' : `${currencyFormat(shoppingListTotalPrice || 0.0)}`}

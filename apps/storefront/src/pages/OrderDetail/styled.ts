@@ -68,14 +68,14 @@ const ProductHead = styled('div')(() => ({
 
 const ProductImage = styled('img')(() => ({
   width: '60px',
-  borderRadius: '4px',
+  height: '60px',
   flexShrink: 0,
 }));
 
 const ProductOptionText = styled('div')(() => ({
   fontSize: '0.75rem',
   lineHeight: '1.5',
-  color: '#455A64',
+  color: '#808285',
 }));
 
 const defaultItemStyle = {

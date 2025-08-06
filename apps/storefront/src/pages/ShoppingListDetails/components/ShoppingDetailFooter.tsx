@@ -507,17 +507,18 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
   return (
     <Grid
       sx={{
-        position: 'fixed',
+        position: isMobile ? 'static' : 'fixed',
         bottom: isMobile && isAgenting ? '52px' : 0,
         left: 0,
         backgroundColor: '#ebebeb',
         width: '100%',
         padding: isMobile ? '0 0 1rem 0' : '0 40px 1rem 40px',
-        height: isMobile ? '8rem' : 'auto',
+        height: isMobile ? '9rem' : 'auto',
         marginLeft: 0,
         display: 'flex',
         flexWrap: 'nowrap',
         zIndex: '999',
+        marginTop: isMobile ? '10px' : '0',
       }}
       container
       spacing={2}
@@ -563,6 +564,8 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
               display: 'flex',
               alignItems: 'center',
               flexWrap: isMobile ? 'wrap' : 'nowrap',
+              marginTop: isMobile ? '0.5rem' : 0,
+              width: isMobile ? '100%' : 'auto',
             }}
           >
             <Typography
@@ -607,9 +610,10 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    marginTop: isMobile ? '0.5rem' : 0,
+                    marginTop: isMobile ? '0' : 0,
                     marginLeft: isMobile ? 0 : '1rem',
                     width: isMobile ? '100%' : 'auto',
+                    justifyContent: 'flex-end',
                   }}
                 >
                   {buttonList.length === 1 && buttonList[0] && (
@@ -631,8 +635,8 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
                         onClick={handleOpenBtnList}
                         ref={ref}
                         sx={{
-                          marginRight: isMobile ? '1rem' : 0,
-                          width: isMobile ? '100%' : 'auto',
+                          marginRight: isMobile ? '0' : 0,
+                          width: isMobile ? 'auto' : 'auto',
                         }}
                         endIcon={<ArrowDropDown />}
                       >
