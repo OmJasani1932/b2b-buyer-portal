@@ -2,7 +2,7 @@ import _ from 'lodash-es';
 
 export const convertObjectToGraphql = (data: CustomFieldItems) => {
   if (typeof data === 'string') {
-    return `"${data}"`;
+    return JSON.stringify(data);
   }
   if (typeof data === 'number') {
     return `${data},`;
