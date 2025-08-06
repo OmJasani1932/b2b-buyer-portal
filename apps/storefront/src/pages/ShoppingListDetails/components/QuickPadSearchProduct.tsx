@@ -40,7 +40,7 @@ interface SearchProductProps {
   addButtonText?: string;
   isB2BUser: boolean;
   type?: string;
-  disableCart?:any
+  disableCart?: any;
 }
 const VariantSkuBlock = styled.div`
   display: flex;
@@ -89,7 +89,7 @@ export default function QuickPadSearchProduct({
   addButtonText,
   isB2BUser,
   type,
-  disableCart
+  disableCart,
 }: SearchProductProps) {
   const b3Lang = useB3Lang();
   const initialState = [
@@ -151,7 +151,6 @@ export default function QuickPadSearchProduct({
 
     setSearchFields([...updatedFields]);
   };
-
 
   const handleQuantityChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     const updatedFields: any = [...searchFields];
@@ -264,7 +263,7 @@ export default function QuickPadSearchProduct({
     const skuValue: SimpleObject = {};
     let isValid = true;
     searchFields.forEach((element: any, index: any) => {
-      const sku = element.variantSku ? element.variantSku : '';
+      const sku = element.variantSku ? element.variantSku : element?.searchText;
       const qty = element.quantity;
       if (sku.length) {
         isValid = validateSkuInput(index, sku, qty) === false ? false : isValid;
@@ -281,7 +280,7 @@ export default function QuickPadSearchProduct({
       skus: Object.keys(skuValue),
     };
   };
-  const getVariantList = async (skus: string[]) => {
+  const getVariantList = async (skus: string[], skuValue?: any) => {
     const searchObj = {
       skip: 0,
       limit: 1000,
@@ -302,13 +301,34 @@ export default function QuickPadSearchProduct({
     const allvaildSku: any = [];
 
     data.Data?.items.forEach((product: any) => {
+      const defaultSku = product?.variants_ej?.length ? product?.variants_ej[0]?.sku : '';
       const iSDefaultSku = skus?.filter(
         (sku: any) => product?.sku_esi.toLowerCase() == sku.toLowerCase(),
       );
 
-      if (iSDefaultSku.length) {
+      if (iSDefaultSku?.length) {
         iSDefaultSku?.forEach((ele: any) => {
-          allvaildSku.push(ele);
+          const skuToPush = defaultSku ? defaultSku : ele;
+
+          // Only push if not already in allvaildSku to avoid duplicates
+          if (!allvaildSku.includes(skuToPush)) {
+            allvaildSku.push(skuToPush);
+          }
+
+          // Replace the entered SKU with defaultSku in the skus array
+          if (defaultSku) {
+            const eleIndex = skus.findIndex((sku: any) => sku.toLowerCase() === ele.toLowerCase());
+            if (eleIndex !== -1) {
+              skus[eleIndex] = defaultSku;
+            }
+
+            // Update skuValue to use defaultSku as key instead of original entered SKU
+            if (skuValue && skuValue[ele]) {
+              const quantity = skuValue[ele];
+              delete skuValue[ele]; // Remove old key
+              skuValue[defaultSku] = (skuValue[defaultSku] || 0) + quantity; // Add with new key
+            }
+          }
         });
       }
 
@@ -318,7 +338,7 @@ export default function QuickPadSearchProduct({
         );
         if (filterdValidSku.length) {
           filterdValidSku?.forEach((element: any) => {
-            if (element.sku) {
+            if (element.sku && !allvaildSku.includes(element.sku)) {
               allvaildSku.push(element.sku);
             }
           });
@@ -411,6 +431,7 @@ export default function QuickPadSearchProduct({
       });
       setSearchFields(updatedFields1);
     });
+
     const getVariantInfoBySku = isB2BUser ? getB2BVariantInfoBySkus : getBcVariantInfoBySkus;
     try {
       // setIsLoading(true);
@@ -419,10 +440,16 @@ export default function QuickPadSearchProduct({
         true,
       );
 
-      return variantInfoList;
+      return {
+        variantInfoList,
+        updatedSkuValue: skuValue,
+      };
     } catch (error) {
       setIsLoading(false);
-      return [];
+      return {
+        variantInfoList: [],
+        updatedSkuValue: skuValue,
+      };
     } finally {
       // setIsLoading(false);
     }
@@ -585,10 +612,10 @@ export default function QuickPadSearchProduct({
         return;
       }
       setIsLoading(true);
-      const variantInfoList: any = await getVariantList(skus);
+      const { variantInfoList, updatedSkuValue }: any = await getVariantList(skus, skuValue);
 
       const { notFoundSku, notPurchaseSku, productItems, passSku, notStockSku, orderLimitSku } =
-        await getProductItems(variantInfoList, skuValue, skus);
+        await getProductItems(variantInfoList, updatedSkuValue, skus);
 
       setLineItemCount(passSku.length ? passSku.length : 0);
       if (notFoundSku.length > 0) {

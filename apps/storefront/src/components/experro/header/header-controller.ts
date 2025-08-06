@@ -22,6 +22,8 @@ const HeaderController = () => {
   const searchController = useRef<any>(null);
   const searchCountController = useRef<any>(null);
   const autoSuggestController = useRef<any>(null);
+  const searchProductsTimeoutRef = useRef<any>(null);
+  const autoSuggesterTimeoutRef = useRef<any>(null);
 
   const [searchResult, setSearchResult] = useState<any>([]);
   const [showPreview, setShowPreview] = useState<boolean>(false);
@@ -468,20 +470,43 @@ const HeaderController = () => {
   };
 
   useEffect(() => {
+    // Clear previous timeouts
+    if (searchProductsTimeoutRef.current) {
+      clearTimeout(searchProductsTimeoutRef.current);
+    }
+    if (autoSuggesterTimeoutRef.current) {
+      clearTimeout(autoSuggesterTimeoutRef.current);
+    }
     if (searchText && searchText.length > 1) {
       setIsLoading(true);
-      getSearchedProducts();
+      // Debounce getSearchedProducts with 300ms delay
+      searchProductsTimeoutRef.current = setTimeout(() => {
+        getSearchedProducts();
+      }, 300);
+
+      // Debounce getAutoSuggesterData with 300ms delay
+      autoSuggesterTimeoutRef.current = setTimeout(() => {
+        getAutoSuggesterData();
+      }, 300);
     }
     if (searchText.length === 0) {
       setShowPreview(false);
       setSearchResult([]);
     }
-    if (searchText?.length > 1) {
-      getAutoSuggesterData();
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText]);
+
+  // Cleanup timeouts on component unmount
+  useEffect(() => {
+    return () => {
+      if (searchProductsTimeoutRef.current) {
+        clearTimeout(searchProductsTimeoutRef.current);
+      }
+      if (autoSuggesterTimeoutRef.current) {
+        clearTimeout(autoSuggesterTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleLanguageChange = (language: string) => {
     document.dispatchEvent(

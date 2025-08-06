@@ -201,7 +201,7 @@ const addProductsToDraftQuote = async (
   if (isSuccess) {
     addQuoteDraftProducts(productsList);
   }
-  if (window.location.hash?.includes('#/')) {
+  // if (window.location.hash?.includes('#/')) {
     if (isSuccess) {
       // Save the shopping cart id, used to clear the shopping cart after submitting the quote
       if (cartId) B3LStorage.set('cartToQuoteId', cartId);
@@ -224,7 +224,7 @@ const addProductsToDraftQuote = async (
         }),
       isClose: true,
     });
-  }
+  // }
 };
 
 const addProductsFromCartToQuote = (setOpenPage: SetOpenPage) => {
