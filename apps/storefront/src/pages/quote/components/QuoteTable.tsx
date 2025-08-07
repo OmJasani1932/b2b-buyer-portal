@@ -73,9 +73,10 @@ const StyledTextField = styled(TextField)(() => ({
   },
 }));
 const QUOTE_PRODUCT_QTY_MAX = 1000000;
-
+declare const window: any;
 function QuoteTable(props: ShoppingDetailTableProps) {
   const { total, items, idEdit = true, isB2BUser, updateSummary } = props;
+  const userDetails = window.__PING_DETAILS__;
   const b3Lang = useB3Lang();
   const dispatch = useAppDispatch();
   const [isRequestLoading, setIsRequestLoading] = useState(false);
@@ -254,7 +255,11 @@ function QuoteTable(props: ShoppingDetailTableProps) {
                   } = window;
 
                   if (product?.productUrl) {
-                    window.location.href = `${origin}/xp5agt0qcq${product?.productUrl}`;
+                    window.location.href = userDetails?.environmentType
+                      .toLowerCase()
+                      .includes('dev')
+                      ? `${origin}/xp5agt0qcq${product?.productUrl}`
+                      : `${origin}${product?.productUrl}`;
                   }
                 }}
                 sx={{

@@ -8,7 +8,7 @@ interface ExpCartPreviewControllerProps {
   basketRef: any;
   cartDetails: any;
 }
-
+declare const window: any;
 const ExpCartPreviewController = (props: ExpCartPreviewControllerProps) => {
   const { isCartPreview, setIsCartPreview, basketRef, cartDetails } = props;
   let b2bIframe: any = document.getElementById('b2b-iframe');
@@ -106,6 +106,7 @@ const ExpCartPreviewController = (props: ExpCartPreviewControllerProps) => {
   };
   const handelCheckOut = async () => {
     try {
+      const userDetails = window.__PING_DETAILS__;
       const body: any = { data: { customer_group: '', line_items: [] } };
       const userGroup = localStorage.getItem('user-group');
       const products: any = {};
@@ -148,17 +149,19 @@ const ExpCartPreviewController = (props: ExpCartPreviewControllerProps) => {
           category: item?.categories_esai,
         });
       });
-      await fetch(
-        'https://dev-bigcom-order-service.cookandboardman.io/apis/order-service/v1/surcharge',
-        {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json',
-            clientid: 'order-56aaf9ef-770e-46b1-aeae-d72f62d9b279',
-          },
-          body: JSON.stringify(body),
+
+      const URL = userDetails?.environmentType.toLowerCase().includes('dev')
+        ? 'https://dev-bigcom-order-service.cookandboardman.io/apis/order-service/v1/surcharge'
+        : 'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/surcharge';
+
+      await fetch(URL, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          clientid: 'order-56aaf9ef-770e-46b1-aeae-d72f62d9b279',
         },
-      );
+        body: JSON.stringify(body),
+      });
       const redirectUrls = await ExpGetCartRedirectUrls();
       setIsCartPreview(false);
       if (redirectUrls?.redirect_urls?.checkout_url) {

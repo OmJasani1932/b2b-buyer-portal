@@ -8,6 +8,7 @@ import { useAppSelector } from '@/store';
 import { snackbar } from '@/utils';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import { IconCross } from '@/components/experro/assets/icons/icon-cross';
+declare const window: any;
 const RemoveIconBlock = styled('div')({
   cursor: 'pointer',
   display: 'flex',
@@ -269,8 +270,11 @@ function CustomQuote() {
       customerId: parseInt(customerId?.toString() || '0', 10),
       products,
     };
+    const userDetails = window.__PING_DETAILS__;
 
-    const apiUrl = `${CUSTOM_QUOTE_API.URL}`;
+    const URL = userDetails?.environmentType.toLowerCase().includes('dev')
+      ? 'https://dev-ProductAddRequest.cookandboardman.io/api/v1/add-quote'
+      : 'https://ProductAddRequest.cookandboardman.io/api/v1/add-quote';
     const requestOptions = {
       method: 'POST',
       headers: {
@@ -280,7 +284,7 @@ function CustomQuote() {
       body: JSON.stringify(requestBody),
     };
     try {
-      const response = await fetch(apiUrl, requestOptions);
+      const response = await fetch(URL, requestOptions);
       if (response?.status === 200) {
         snackbar.success('Custom quote submitted successfully');
         setIsSubmitting(false);
@@ -657,7 +661,7 @@ function CustomQuote() {
                                           src={image.url}
                                         />
                                       </span>
-                                      <span className='text-xs'>
+                                      <span className="text-xs">
                                         {image.name?.substring(0, 15)}
                                         {image.name && image.name.length > 15 ? '...' : ''}
                                       </span>
@@ -695,7 +699,12 @@ function CustomQuote() {
             </CustomButton>
           </div>
           <div className="lg:w-[300px] md:w-[200px] w-full relative flex md:justify-start justify-end">
-            <CustomButton onClick={handleAddRow} type="button" variant="outlined" className='w-[140px]'>
+            <CustomButton
+              onClick={handleAddRow}
+              type="button"
+              variant="outlined"
+              className="w-[140px]"
+            >
               + Add Row
             </CustomButton>
           </div>

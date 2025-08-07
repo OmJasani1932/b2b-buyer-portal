@@ -162,11 +162,11 @@ const sortKeys = {
   updatedAt: 'updatedAt',
   Qty: 'quantity',
 };
-
+declare const window: any;
 function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>) {
   const [isMobile] = useMobile();
   const b3Lang = useB3Lang();
-
+  const userDetails = window.__PING_DETAILS__;
   const {
     shoppingListInfo,
     isRequestLoading,
@@ -483,7 +483,9 @@ function ShoppingDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>)
                     location: { origin },
                   } = window;
 
-                  window.location.href = `${origin}/xp5agt0qcq${row.productUrl}`;
+                  window.location.href = userDetails?.environmentType.toLowerCase().includes('dev')
+                    ? `${origin}/xp5agt0qcq${row.productUrl}`
+                    : `${origin}${row.productUrl}`;
                 }}
                 sx={{
                   cursor: 'pointer',

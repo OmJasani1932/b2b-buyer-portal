@@ -21,7 +21,7 @@ const StyledImage = styled('img')(() => ({
   height: 'auto',
   marginRight: '0.5rem',
 }));
-
+declare const window: any;
 function QuoteDetailTableCard(props: QuoteTableCardProps) {
   const {
     item: quoteTableItem,
@@ -32,6 +32,7 @@ function QuoteDetailTableCard(props: QuoteTableCardProps) {
     currency,
     displayDiscount,
   } = props;
+  const userDetails = window.__PING_DETAILS__;
   const b3Lang = useB3Lang();
   const enteredInclusiveTax = useAppSelector(
     ({ storeConfigs }) => storeConfigs.currencies.enteredInclusiveTax,
@@ -98,7 +99,9 @@ function QuoteDetailTableCard(props: QuoteTableCardProps) {
               } = window;
 
               if (productUrl) {
-                window.location.href = `${origin}/xp5agt0qcq${productUrl}`;
+                window.location.href = userDetails?.environmentType.toLowerCase().includes('dev')
+                  ? `${origin}/xp5agt0qcq${productUrl}`
+                  : `${origin}${productUrl}`;
               }
             }}
             sx={{

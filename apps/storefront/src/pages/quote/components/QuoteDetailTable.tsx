@@ -102,9 +102,10 @@ const StyledImage = styled('img')(() => ({
   height: 'auto',
   marginRight: '0.5rem',
 }));
-
+declare const window: any;
 function QuoteDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>) {
   const b3Lang = useB3Lang();
+  const userDetails = window.__PING_DETAILS__;
   const { total, getQuoteTableDetails, getTaxRate, isHandleApprove, displayDiscount, currency } =
     props;
 
@@ -171,7 +172,11 @@ function QuoteDetailTable(props: ShoppingDetailTableProps, ref: Ref<unknown>) {
                     location: { origin },
                   } = window;
                   if (productUrl) {
-                    window.location.href = `${origin}/xp5agt0qcq${productUrl}`;
+                    window.location.href = userDetails?.environmentType
+                      .toLowerCase()
+                      .includes('dev')
+                      ? `${origin}/xp5agt0qcq${productUrl}`
+                      : `${origin}${productUrl}`;
                   }
                 }}
                 sx={{

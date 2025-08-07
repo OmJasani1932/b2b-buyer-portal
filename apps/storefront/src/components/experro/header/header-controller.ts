@@ -398,19 +398,20 @@ const HeaderController = () => {
   };
   const checkCartExpiry = async (userCartObj: any) => {
     const cartId: any = userCartObj?.id;
+    const userDetails = window.__PING_DETAILS__;
     try {
       if (!cartId) {
         return;
       }
-      const response = await fetch(
-        `https://dev-productaddrequest.cookandboardman.io/api/v1/cart/metafields/${cartId}`,
-        {
-          headers: {
-            'content-type': 'application/json',
-            appaccesskey: '11afb7c2-7381-4a74-ac55-9728ad6205b6',
-          },
+      const URL = userDetails?.environmentType.toLowerCase().includes('dev')
+        ? `https://dev-productaddrequest.cookandboardman.io/api/v1/cart/metafields/${cartId}`
+        : `https://productaddrequest.cookandboardman.io/api/v1/cart/metafields/${cartId}`;
+      const response = await fetch(URL, {
+        headers: {
+          'content-type': 'application/json',
+          appaccesskey: '11afb7c2-7381-4a74-ac55-9728ad6205b6',
         },
-      );
+      });
       const data = await response.json();
       if (data?.Status === 'success') {
         if (data?.Data?.data?.length) {

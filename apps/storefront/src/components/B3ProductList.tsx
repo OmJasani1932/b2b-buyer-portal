@@ -128,7 +128,7 @@ interface ProductProps<T> {
   textAlign?: string;
   type?: string;
 }
-
+declare const window: any;
 export default function B3ProductList<T>(props: ProductProps<T>) {
   const {
     products,
@@ -146,6 +146,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
     money,
     type,
   } = props;
+  const userDetails = window.__PING_DETAILS__;
 
   const [list, setList] = useState<ProductItem[]>([]);
   const [isMobile] = useMobile();
@@ -341,7 +342,11 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
                       } = window;
 
                       if (product?.productUrl)
-                        window.location.href = `${origin}/xp5agt0qcq${product?.productUrl}`;
+                        window.location.href = userDetails?.environmentType
+                          .toLowerCase()
+                          .includes('dev')
+                          ? `${origin}/xp5agt0qcq${product?.productUrl}`
+                          : `${origin}${product?.productUrl}`;
                     }
                   }}
                   sx={{

@@ -33,7 +33,7 @@ const StyledImage = styled('img')(() => ({
   height: '60px',
   objectFit: 'contain',
 }));
-
+declare const window: any;
 function ShoppingDetailCard(props: ShoppingDetailCardProps) {
   const b3Lang = useB3Lang();
   const {
@@ -67,6 +67,8 @@ function ShoppingDetailCard(props: ShoppingDetailCardProps) {
     taxPrice = 0,
     productNote,
   } = shoppingDetail;
+
+  const userDetails = window.__PING_DETAILS__;
 
   const price = getBCPrice(+basePrice, +taxPrice);
 
@@ -127,7 +129,9 @@ function ShoppingDetailCard(props: ShoppingDetailCardProps) {
                 location: { origin },
               } = window;
 
-              window.location.href = `${origin}/xp5agt0qcq${productUrl}`;
+              window.location.href = userDetails?.environmentType.toLowerCase().includes('dev')
+                ? `${origin}/xp5agt0qcq${productUrl}`
+                : `${origin}${productUrl}`;
             }}
             sx={{
               cursor: 'pointer',

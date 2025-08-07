@@ -180,12 +180,20 @@ function QuickPadChooseOptions(props: any) {
       setChooseOptionsForm(product);
       setChooseOptionsProduct([]);
       setNewPrice(0);
+      setCurrentImage(product?.imageUrl || ''); // Update current image when product changes
+      setVariantSku(''); // Reset variant SKU when product changes
+      setVariantInfo(null); // Reset variant info when product changes
+      setProductPriceChangeOptions([]); // Reset price change options when product changes
       if (product?.allOptions?.length) {
         getProductPriceOptions(product);
       }
     } else {
       setQuantity(1);
       setFormFields([]);
+      setCurrentImage(''); // Clear image when no product
+      setVariantSku(''); // Clear variant SKU when no product
+      setVariantInfo(null); // Clear variant info when no product
+      setProductPriceChangeOptions([]); // Clear price change options when no product
     }
     // disabling as we don't need dispatchers here
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -463,7 +471,10 @@ function QuickPadChooseOptions(props: any) {
               }}
             >
               <Box sx={{ width: '80px' }}>
-                <ProductImage src={currentImage || product.imageUrl || PRODUCT_DEFAULT_IMAGE} />
+                <ProductImage
+                  style={{ objectFit: 'contain' }}
+                  src={currentImage || product.imageUrl || PRODUCT_DEFAULT_IMAGE}
+                />
               </Box>
               <Box sx={{ width: 'calc(100% - 80px)', paddingLeft: '20px' }}>
                 <Typography
