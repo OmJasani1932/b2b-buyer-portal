@@ -84,6 +84,7 @@ const ProductImage = styled('img')(() => ({
   width: '60px',
   borderRadius: '4px',
   flexShrink: 0,
+  height:'60px'
 }));
 
 const ProductOptionText = styled('div')(() => ({
@@ -325,7 +326,7 @@ export default function B3ProductList<T>(props: ProductProps<T>) {
               <Checkbox checked={isChecked(product)} onChange={() => handleSelectChange(product)} />
             )}
             <FlexItem padding={isMobile ? '0' : '0 6% 0 0'}>
-              <ProductImage src={product.imageUrl || PRODUCT_DEFAULT_IMAGE} />
+              <ProductImage style={{objectFit:'contain'}} src={product.imageUrl || PRODUCT_DEFAULT_IMAGE} />
               <Box
                 sx={{
                   marginLeft: '16px',
