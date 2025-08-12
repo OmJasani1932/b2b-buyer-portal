@@ -110,7 +110,7 @@ const Header = ({
             {windowWidth >= 1024 && (
               <ExpPencilMenu
                 menuLinkObj={globalsettings?.header_com}
-                ulClasses={`flex absolute -right-5 top-0 [&_span]:cursor-pointer [&_span]:relative [&_strong]:text-white [&_span]:flex [&_span]:leading-4 [&_span]:font-normal [&_span]:py-3 4xl:[&_span]:px-9 [&_span]:px-5 lg:[&_span:before]:absolute lg:[&_span:before]:-left-0.5 lg:[&_span:before]:top-0 lg:[&_span:before]:bottom-0 lg:[&_span:before]:right-0 lg:[&_span:before]:content-[''] lg:[&_span:before]:skew-x-[40deg] lg:[&_span_strong]:relative [&_span_strong]:z-10 lg:[&_li:first-child_span:before]:bg-pantongray lg:[&_li:nth-child(2)_span_strong]:text-primary lg:[&_li:nth-child(2)_span:before]:bg-cnbltblue lg:[&_li:last-child_span:before]:bg-primary 3xl:[&_li:last-child_span]:pr-[95px] 2xl:[&_li:last-child_span]:pr-[60px] [&_li:last-child_span]:pr-[40px] [&_li:first-child_span:hover_.fill-svg]:fill-white`}
+                ulClasses={`flex absolute -right-5 top-0 [&_span]:cursor-pointer [&_span]:relative [&_strong]:text-white [&_span]:flex [&_span]:leading-4 [&_span]:font-normal [&_span]:py-3 4xl:[&_span]:px-9 [&_span]:px-5 lg:[&_span:before]:absolute lg:[&_span:before]:-left-0.5 lg:[&_span:before]:top-0 lg:[&_span:before]:bottom-0 lg:[&_span:before]:right-0 lg:[&_span:before]:content-[''] lg:[&_span:before]:skew-x-[40deg] lg:[&_span_strong]:relative [&_span_strong]:z-10 lg:[&_li:first-child_span:before]:bg-yellow lg:[&_li:nth-child(2)_span_strong]:text-primary lg:[&_li:nth-child(2)_span:before]:bg-cnbltblue lg:[&_li:last-child_span:before]:bg-primary 3xl:[&_li:last-child_span]:pr-[95px] 2xl:[&_li:last-child_span]:pr-[60px] [&_li:last-child_span]:pr-[40px] [&_li:first-child_span:hover_.fill-svg]:fill-white`}
                 linkNameClasses={`group/pencilLink1 [&_.fill-svg]:transition-all [&_.fill-svg]:duration-500 [&_.stroke-brown-color]:stroke-primary [&:hover_.fill-svg]:fill-primary [&:hover_.stroke-brown-color]:stroke-cnbltblue [&:hover_.fill-primary]:fill-primary [&:hover_.fill-primary]:stroke-primary [&:hover_.main-icon]:animate-zoomout [&:hover_.hover-icon]:animate-zoomout [&:hover_.hover-icon]:opacity-100 [&:hover_.hover-icon]:visible items-center text-xs xl:[&_.menu-name]:block [&_.menu-name]:hidden xl:[&_.menu-icon-block]:mr-1.5 [&_.menu-icon-block]:mr-0`}
                 keyValueForMenu={'pencil_menu_navigation_id_et'}
                 index={0}
@@ -159,12 +159,12 @@ const Header = ({
                 {windowWidth < 1024 && (
                   <ExpPencilMenu
                     menuLinkObj={globalsettings?.header_com}
-                    ulClasses="demo [&_li:first-child_span]:bg-yellow [&_li:nth-child(2)_span]:bg-primary [&_li:last-child_span]:bg-magento"
+                    ulClasses="demo [&_li:first-child_span]:bg-yellow [&_li:nth-child(2)_span]:text-primary [&_li:nth-child(2)_span]:bg-cnbltblue [&_li:last-child_span]:bg-primary [&_li:nth-child(2)_span:hover_.fill-svg]:fill-primary"
                     liClasses={
                       'group/level nav-item w-full flex items-center flex-wrap lg:flex-nowrap mb-5'
                     }
                     linkNameClasses={
-                      'py-[23px] px-[30px] flex w-full text-white font-normal rounded-[10px] [&_.fill-svg]:transition-all [&:hover_.fill-svg]:fill-white [&:hover_.stroke-brown-color]:stroke-magento [&_.fill-primary]:fill-magento [&:hover_.fill-primary]:fill-magento [&:hover_.fill-primary]:stroke-magento relative'
+                      'py-[23px] px-[30px] flex w-full text-white font-normal rounded-[10px] [&_.fill-svg]:transition-all [&_.stroke-brown-color]:stroke-primary [&:hover_.fill-svg]:fill-white [&:hover_.stroke-brown-color]:stroke-white [&_.fill-primary]:fill-primary [&:hover_.fill-primary]:fill-primary [&:hover_.fill-primary]:stroke-primary relative'
                     }
                     keyValueForMenu={'pencil_menu_navigation_id_et'}
                     index={0}
