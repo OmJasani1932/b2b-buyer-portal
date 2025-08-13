@@ -21,7 +21,7 @@ import { channelId, snackbar } from '@/utils';
 import AddEditShoppingLists from './AddEditShoppingLists';
 import { getFilterMoreList, ShoppingListSearch, ShoppingListsItemsProps } from './config';
 import ShoppingListsCard from './ShoppingListsCard';
-
+declare const window: any;
 interface RefCurrntProps extends HTMLInputElement {
   handleOpenAddEditShoppingListsClick: (type: string, data?: ShoppingListsItemsProps) => void;
 }
@@ -216,17 +216,18 @@ function ShoppingLists() {
   };
 
   const fetchCustomStoreConfig = async () => {
+    const userDetails = window.__PING_DETAILS__;
     try {
-      const response = await fetch(
-        'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration',
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            clientid: 'product-3a6fc5d8-1c9c-4844-af6e-d45204f95f8b',
-          },
+      const URL = userDetails?.environmentType.toLowerCase().includes('dev')
+        ? 'https://dev-bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration'
+        : 'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration';
+      const response = await fetch(URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          clientid: 'product-3a6fc5d8-1c9c-4844-af6e-d45204f95f8b',
         },
-      );
+      });
 
       if (!response.ok) {
         console.error(`Error: Failed to fetch data. Status: ${response.status}`);

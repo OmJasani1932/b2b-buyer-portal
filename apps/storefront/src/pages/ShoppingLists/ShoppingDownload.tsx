@@ -14,7 +14,7 @@ import {
 import B3Dialog from '@/components/B3Dialog';
 import { getB2BCountries } from '@/shared/service/b2b';
 import { useAppSelector } from '@/store';
-
+declare const window: any;
 function ShoppingDownload(props: any) {
   const { shoppingListId, quoteConfigurationId } = props;
   const tempallAddressFields = [
@@ -72,6 +72,7 @@ function ShoppingDownload(props: any) {
   const customerId = useAppSelector(({ company }) => company.customer.id);
 
   const handleSubmit = async () => {
+    const userDetails = window.__PING_DETAILS__;
     if (validateForm()) {
       setIsloading(true);
       const requestData = {
@@ -97,17 +98,17 @@ function ShoppingDownload(props: any) {
       };
 
       try {
-        const response = await fetch(
-          'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/shopping-list-quote',
-          {
-            method: 'POST',
-            headers: {
-              clientid: 'order-56aaf9ef-770e-46b1-aeae-d72f62d9b279',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestData),
+        const URL = userDetails?.environmentType.toLowerCase().includes('dev')
+          ? 'https://dev-bigcom-order-service.cookandboardman.io/apis/order-service/v1/shopping-list-quote'
+          : 'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/shopping-list-quote';
+        const response = await fetch(URL, {
+          method: 'POST',
+          headers: {
+            clientid: 'order-56aaf9ef-770e-46b1-aeae-d72f62d9b279',
+            'Content-Type': 'application/json',
           },
-        );
+          body: JSON.stringify(requestData),
+        });
 
         if (response.ok) {
           const blob = await response.blob();

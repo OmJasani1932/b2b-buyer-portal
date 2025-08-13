@@ -184,16 +184,16 @@ export default function App() {
       if (normalize(customerGroupDetails?.name).includes(normalize(searchTerm))) {
         //HIDE
       } else {
-        const data = await fetch(
-          'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration',
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              clientid: 'product-3a6fc5d8-1c9c-4844-af6e-d45204f95f8b',
-            },
+        const URL = userDetails?.environmentType.toLowerCase().includes('dev')
+          ? 'https://dev-bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration'
+          : 'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration';
+        const data = await fetch(URL, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            clientid: 'product-3a6fc5d8-1c9c-4844-af6e-d45204f95f8b',
           },
-        );
+        });
         const response = await data.json();
         console.log(response);
         if (response?.Data?.length) {
@@ -354,7 +354,6 @@ export default function App() {
 
         return a?.name_esi.toLowerCase().localeCompare(b?.name_esi.toLowerCase());
       });
-
 
       let accessibleCategories: any;
 
