@@ -85,9 +85,11 @@ function DetailPagination({ onChange, color }: DetailPageProps) {
       orderBy: '-createdAt',
     };
 
-    const { edges: list, totalCount } = isB2BUser
+    const orderResponse = isB2BUser
       ? await getB2BAllOrders(searchDetailParams)
       : await getBCAllOrders(searchDetailParams);
+
+    const { edges: list, totalCount } = orderResponse as { edges: any[]; totalCount: number };
 
     let flag = '';
 

@@ -97,7 +97,7 @@ function OrderDetail() {
         try {
           const order = isB2BUser ? await getB2BOrderDetails(id) : await getBCOrderDetails(id);
 
-          if (order) {
+          if (order && 'products' in order) {
             const { products } = order;
 
             const newOrder = {
@@ -111,8 +111,8 @@ function OrderDetail() {
             };
 
             const data = isB2BUser
-              ? convertB2BOrderDetails(newOrder, b3Lang)
-              : convertBCOrderDetails(newOrder, b3Lang);
+              ? convertB2BOrderDetails(newOrder as any, b3Lang)
+              : convertBCOrderDetails(newOrder as any, b3Lang);
             dispatch({
               type: 'all',
               payload: data,
