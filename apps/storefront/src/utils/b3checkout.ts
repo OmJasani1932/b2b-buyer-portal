@@ -21,8 +21,7 @@ export const attemptCheckoutLoginAndRedirect = async (
     const {
       checkoutLogin: { result },
     } = resLogin;
-
-    redirect(result.redirectUrl, isReplaceCurrentUrl);
+    redirect(result?.redirectUrl?.replace("https://store-y7rgqxv8v9-1726400.mybigcommerce.com/", "https://checkout.cookandboardman.com/"), isReplaceCurrentUrl);
   } catch (e) {
     redirect(defaultCheckoutUrl, isReplaceCurrentUrl);
   }
