@@ -80,6 +80,7 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
   const {
     state: { productQuoteEnabled = false },
   } = useContext(GlobalContext);
+  const showQuote = sessionStorage.getItem('showQuote') === 'true';
   const isAgenting = useAppSelector(({ b2bFeatures }) => b2bFeatures.masqueradeCompany.isAgenting);
   const companyId = useAppSelector(({ company }) => company.companyInfo.id);
   const customerGroupId = useAppSelector(({ company }) => company.customer.customerGroupId);
@@ -116,7 +117,7 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
   const b2bShoppingListActionsPermission = isB2BUser ? shoppingListActionsPermission : true;
   const isCanAddToCart = isB2BUser ? purchasabilityPermission : true;
   const b2bSubmitShoppingListPermission = isB2BUser ? submitShoppingListPermission : +role === 2;
-
+  
   const handleOpenBtnList = () => {
     if (checkedArr.length === 0) {
       snackbar.error(b3Lang('shoppingList.footer.selectOneItem'));
@@ -482,22 +483,24 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
   const allowButtonList = () => {
     if (!(shoppingListInfo?.status === 0 || !isB2BUser)) return [];
 
+    const shouldShowQuoteButton = productQuoteEnabled && showQuote;
+
     if (!isCanAddToCart && isB2BUser)
-      return productQuoteEnabled ? [buttons.addSelectedToQuote] : [];
+      return shouldShowQuoteButton ? [buttons.addSelectedToQuote] : [];
 
     if (b2bSubmitShoppingListPermission) {
-      if (allowJuniorPlaceOrder && productQuoteEnabled) {
+      if (allowJuniorPlaceOrder && shouldShowQuoteButton) {
         return [buttons.proceedToCheckout, buttons.addSelectedToQuote];
       }
 
       if (allowJuniorPlaceOrder) return [buttons.proceedToCheckout];
-      if (productQuoteEnabled) {
+      if (shouldShowQuoteButton) {
         return [buttons.addSelectedToQuote];
       }
       return [];
     }
 
-    return productQuoteEnabled
+    return shouldShowQuoteButton
       ? [buttons.adSelectedToCart, buttons.addSelectedToQuote]
       : [buttons.adSelectedToCart];
   };

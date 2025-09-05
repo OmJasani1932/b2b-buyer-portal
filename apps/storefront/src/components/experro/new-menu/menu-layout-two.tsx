@@ -7,7 +7,7 @@ import { IconArrowNext } from '../assets/icons/arrow-next';
 
 const MenuLayoutTwo = (props: any) => {
   const { menuItem, setClickedMainMenuItem, addClassToOpenMobileMenu, isMobileView } = props;
-
+  const showQuote = sessionStorage.getItem('showQuote') === 'true';
   const [clickedSubMenuList, setClickedSubMenuList] = useState<any>('');
 
   const removeMenuActive = () => {
@@ -312,12 +312,35 @@ const MenuLayoutTwo = (props: any) => {
               )}
               {!!menuItem?.cta_banner_com[0]?.cta_button_com?.length &&
                 menuItem?.cta_banner_com[0]?.cta_button_com[0]?.button_text_et && (
-                  <ExpLinkParser
-                    className="inline-block button-primary button-hover-blue-border bg-white text-quartzGray text-xs font-bold py-[11px] px-10 hover:bg-[#e9e9e9] hover:text-quartzGray rounded-[4px]"
-                    to={menuItem?.cta_banner_com[0]?.cta_button_com[0]?.button_link_et}
+                  <button
+                    className={`inline-block button-primary button-hover-blue-border bg-white text-quartzGray text-xs font-bold py-[11px] px-10 hover:bg-[#e9e9e9] hover:text-quartzGray rounded-[4px] 
+                      ${showQuote ? '' : 'opacity-50 cursor-not-allowed'}
+                    `}
+                    disabled={!showQuote}
+                    onClick={() => {
+                      if (
+                        showQuote &&
+                        menuItem?.cta_banner_com[0]?.cta_button_com[0]?.button_text_et
+                          ?.toLowerCase()
+                          .includes('request a quote')
+                      ) {
+                        // window.location.href = menuItem?.cta_banner_com[0]?.cta_button_com[0]?.button_link_et;
+                        window.location.href = '/?request_quote=yes';
+                      } else {
+                        window.location.href =
+                          menuItem?.cta_banner_com[0]?.cta_button_com[0]?.button_link_et;
+                      }
+                    }}
+                    // to={
+                    //   menuItem?.cta_banner_com[0]?.cta_button_com[0]?.button_text_et
+                    //     ?.toLowerCase()
+                    //     .includes('request a quote')
+                    //     ? '/?request_quote=yes'
+                    //     : menuItem?.cta_banner_com[0]?.cta_button_com[0]?.button_link_et
+                    // }
                   >
                     {menuItem?.cta_banner_com[0]?.cta_button_com[0]?.button_text_et}
-                  </ExpLinkParser>
+                  </button>
                 )}
             </div>
           )}

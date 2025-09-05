@@ -40,10 +40,10 @@ function ExpLinkParser({
         <>
           {!dangerouslySetInnerHTML ? (
             <span
-              onClick={() => {
+              onClick={(e) => {
                 // if (onClick) {
-                if (onclick) {
-                  onClick();
+                if (onClick) {
+                  onClick(e);
                 }
                 removeMobileMenuClass();
                 // }
@@ -61,10 +61,10 @@ function ExpLinkParser({
             </span>
           ) : (
             <span
-              onClick={() => {
+              onClick={(e) => {
                 // if (onClick) {
-                if (onclick) {
-                  onClick();
+                if (onClick) {
+                  onClick(e);
                 }
                 removeMobileMenuClass();
                 // }
@@ -89,10 +89,10 @@ function ExpLinkParser({
         <>
           {!dangerouslySetInnerHTML ? (
             <span
-              onClick={() => {
+              onClick={(e) => {
                 // if (onClick) {
-                if (onclick) {
-                  onClick();
+                if (onClick) {
+                  onClick(e);
                 }
                 removeMobileMenuClass();
                 // }
@@ -110,10 +110,10 @@ function ExpLinkParser({
             </span>
           ) : (
             <span
-              onClick={() => {
+              onClick={(e) => {
                 // if (onClick) {
-                if (onclick) {
-                  onClick();
+                if (onClick) {
+                  onClick(e);
                 }
                 removeMobileMenuClass();
                 // }

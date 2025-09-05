@@ -10,6 +10,8 @@ const FooterQuickLinks = ({ pageData }: any) => {
       event.currentTarget.parentElement?.parentElement.classList.add('is-expanded');
     }
   };
+
+const showQuote = sessionStorage.getItem('showQuote') === 'true';
   const getDigiScript = () => {
     return `<script type="text/javascript">
   var __dcid = __dcid || [];
@@ -83,6 +85,7 @@ const FooterQuickLinks = ({ pageData }: any) => {
             linkNameClasses={
               'text-white hover:text-white/80 py-1 leading-5 inline-block lg:text-base text-sm font-medium'
             }
+            showQuote={showQuote}
           />
           <ul className="footer-info-list hidden">
             <li>

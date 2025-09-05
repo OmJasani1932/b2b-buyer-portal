@@ -16,6 +16,7 @@ interface ExpMenuInterface {
   categories?: any;
   isCategoryLoading?: any;
   handleLogout?: any;
+  showQuote?: any;
 }
 const ExpMenu = (props: ExpMenuInterface) => {
   const {
@@ -31,6 +32,7 @@ const ExpMenu = (props: ExpMenuInterface) => {
     categories,
     isCategoryLoading,
     handleLogout,
+    showQuote,
   } = props;
 
   const {
@@ -55,6 +57,13 @@ const ExpMenu = (props: ExpMenuInterface) => {
   return (
     <ul className={`${ulClasses}`} id={ulId ? ulId : ''}>
       {menuData?.map((menuItem: any, menuIndex: number) => {
+        const isQuoteMenuItem = getMenuNameToShow(menuItem)
+          ?.toLowerCase()
+          .includes('request a quote');
+        // Hide quote menu items when showQuoteButton is false
+        if (isQuoteMenuItem && !showQuote) {
+          return null;
+        }
         if (
           ((menuItem?.page_slug && menuItem.page_slug) ||
             (menuItem?.page_slug_esi && menuItem.page_slug_esi)) !== '#' ||
@@ -117,8 +126,10 @@ const ExpMenu = (props: ExpMenuInterface) => {
                   >
                     <ExpLinkParser
                       to={
-                        menuItem?.redirectLink === `/xp5agt0qcq/wood-doors/` ||
-                        menuItem?.redirectLink === '/wood-doors/'
+                        isQuoteMenuItem
+                          ? '/?request_quote=yes'
+                          : menuItem?.redirectLink === `/xp5agt0qcq/wood-doors/` ||
+                            menuItem?.redirectLink === '/wood-doors/'
                           ? '/commercial-wood-doors/'
                           : menuItem?.redirectLink
                       }
@@ -148,8 +159,10 @@ const ExpMenu = (props: ExpMenuInterface) => {
                   >
                     <ExpLinkParser
                       to={
-                        menuItem?.redirectLink === `/xp5agt0qcq/wood-doors/` ||
-                        menuItem?.redirectLink === '/wood-doors/'
+                        isQuoteMenuItem
+                          ? '/?request_quote=yes'
+                          : menuItem?.redirectLink === `/xp5agt0qcq/wood-doors/` ||
+                            menuItem?.redirectLink === '/wood-doors/'
                           ? '/commercial-wood-doors/'
                           : menuItem?.redirectLink
                       }
