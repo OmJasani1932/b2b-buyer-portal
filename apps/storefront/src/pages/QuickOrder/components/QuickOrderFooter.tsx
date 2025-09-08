@@ -679,7 +679,10 @@ function QuickOrderFooter(props: QuickOrderFooterProps) {
                       }}
                     >
                       {buttonList.length > 0 &&
-                        buttonList.map((button) => {
+                        (sessionStorage.getItem('showQuote') === 'true'
+                          ? buttonList
+                          : buttonList.filter((button) => button.key !== 'add-selected-to-quote')
+                        ).map((button) => {
                           if (button.isDisabled) return null;
 
                           return (

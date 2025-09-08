@@ -11,6 +11,9 @@ interface ExpCartPreviewControllerProps {
 declare const window: any;
 const ExpCartPreviewController = (props: ExpCartPreviewControllerProps) => {
   const { isCartPreview, setIsCartPreview, basketRef, cartDetails } = props;
+
+  const [showCheckoutButton, setShowCheckoutButton] = useState<boolean>(false);
+
   let b2bIframe: any = document.getElementById('b2b-iframe');
   let iframeDocument: any = null;
 
@@ -181,7 +184,25 @@ const ExpCartPreviewController = (props: ExpCartPreviewControllerProps) => {
     document[event]('CART_REFRESH', () => updateUserDetails());
   };
 
+  const checkToShowCheckoutButton = () => {
+    let temp = 0;
+    const b2bInterval = setInterval(() => {
+      if (window.b2b) {
+        if (window?.b2b?.utils?.user?.getProfile()?.role !== 2) {
+          setShowCheckoutButton(true);
+        }
+        clearInterval(b2bInterval);
+      }
+      temp++;
+      if (temp > 500) {
+        setShowCheckoutButton(true);
+        clearInterval(b2bInterval);
+      }
+    }, 500);
+  };
+
   useEffect(() => {
+    checkToShowCheckoutButton();
     updateUserDetails();
     initiateEventListners('addEventListener');
 
@@ -211,7 +232,7 @@ const ExpCartPreviewController = (props: ExpCartPreviewControllerProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [divRef, isCartPreview, setIsCartPreview]);
 
-  return { cartItems, divRef, handelCheckOut };
+  return { cartItems, divRef, handelCheckOut, showCheckoutButton };
 };
 
 export default ExpCartPreviewController;

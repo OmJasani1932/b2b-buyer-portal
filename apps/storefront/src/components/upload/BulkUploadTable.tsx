@@ -139,9 +139,6 @@ function BulkUploadTable(props: BulkUploadTableProps) {
   const [, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(errorProduct.length > 0 ? 'error' : 'valid');
 
-  // const handleOpenBtnList = () => {
-  //   setIsOpen(true);
-  // };
 
   const handleClose = () => {
     setIsOpen(false);

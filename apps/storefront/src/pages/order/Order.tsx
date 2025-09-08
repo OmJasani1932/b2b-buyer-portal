@@ -173,7 +173,7 @@ function Order({ isCompanyOrder = false }: OrderProps) {
       title: b3Lang('orders.poReference'),
       render: (item: ListItem) => <Box>{item.poNumber ? item.poNumber : '–'}</Box>,
       width: '10%',
-      isSortable: true,
+      isSortable: false,
     },
     {
       key: 'totalIncTax',

@@ -296,7 +296,6 @@ export default function OrderAction(props: OrderActionProps) {
   const { detailsData } = props;
   const b3Lang = useB3Lang();
   const isB2BUser = useAppSelector(isB2BUserSelector);
-  const emailAddress = useAppSelector(({ company }) => company.customer.emailAddress);
   const role = useAppSelector(({ company }) => company.customer.role);
   const b2bPermissions = useAppSelector(rolePermissionSelector);
   const {
@@ -304,7 +303,7 @@ export default function OrderAction(props: OrderActionProps) {
   } = useContext(GlobalContext);
 
   const {
-    state: { addressLabelPermission, createdEmail },
+    state: { addressLabelPermission },
   } = useContext(OrderDetailsContext);
 
   const {
@@ -340,7 +339,7 @@ export default function OrderAction(props: OrderActionProps) {
     return null;
   }
 
-  const { purchasabilityPermission, shoppingListActionsPermission, getInvoicesPermission } =
+  const { purchasabilityPermission, shoppingListActionsPermission } =
     b2bPermissions;
 
   const getCompanyName = (company: string) => {
@@ -437,7 +436,6 @@ export default function OrderAction(props: OrderActionProps) {
     },
   ];
 
-  const invoiceBtnPermissions = +ipStatus !== 0 || createdEmail === emailAddress;
   const orderData: OrderData[] = [
     {
       header: b3Lang('orderDetail.summary'),
@@ -461,15 +459,15 @@ export default function OrderAction(props: OrderActionProps) {
       key: 'payment',
       subtitle: getPaymentMessage(),
       buttons: [
-        {
-          value: isB2BUser ? b3Lang('orderDetail.viewInvoice') : b3Lang('orderDetail.printInvoice'),
-          key: 'aboutInvoice',
-          name: isB2BUser ? 'viewInvoice' : 'printInvoice',
-          variant: 'outlined',
-          isCanShow: isB2BUser
-            ? invoiceBtnPermissions && getInvoicesPermission
-            : invoiceBtnPermissions,
-        },
+        // {
+        //   value: isB2BUser ? b3Lang('orderDetail.viewInvoice') : b3Lang('orderDetail.printInvoice'),
+        //   key: 'aboutInvoice',
+        //   name: isB2BUser ? 'viewInvoice' : 'printInvoice',
+        //   variant: 'outlined',
+        //   isCanShow: isB2BUser
+        //     ? invoiceBtnPermissions && getInvoicesPermission
+        //     : invoiceBtnPermissions,
+        // },
       ],
       infos: {
         info: getFullPaymentAddress(billingAddress),

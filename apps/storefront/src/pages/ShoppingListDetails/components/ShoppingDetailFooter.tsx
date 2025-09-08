@@ -505,7 +505,9 @@ function ShoppingDetailFooter(props: ShoppingDetailFooterProps) {
       : [buttons.adSelectedToCart];
   };
 
-  const buttonList = allowButtonList();
+  const buttonList = showQuote
+    ? allowButtonList()
+    : allowButtonList().filter((button) => button.key !== 'add-selected-to-quote');
 
   return (
     <Grid

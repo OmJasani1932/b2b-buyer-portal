@@ -1,5 +1,4 @@
 import { CurrencyFormat, ExpLinkParser } from '../utils';
-import { PaypalCheckout } from '../utils/paypal-checkout';
 import ExpCartPreviewController from './cart-preview-controller';
 
 export interface ExpCartPreviewProps {
@@ -12,7 +11,7 @@ export interface ExpCartPreviewProps {
 const ExpCartPreview = (props: ExpCartPreviewProps) => {
   const { isCartPreview, setIsCartPreview, basketRef, cartDetails } = props;
 
-  const { cartItems, divRef, handelCheckOut } = ExpCartPreviewController({
+  const { cartItems, divRef, handelCheckOut, showCheckoutButton } = ExpCartPreviewController({
     isCartPreview,
     setIsCartPreview,
     basketRef,
@@ -127,13 +126,15 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
           <div className="previewCartAction p-5 border-t border-gray-50">
             <div className="row gutter-sm flex gap-4">
               <div className="col col-6 previewCartAction-checkout w-1/2">
-                <span
-                  // to="/checkout/"
-                  onClick={handelCheckOut}
-                  className="inline-block md:text-base text-sm leading-5 border bg-primary border-primary text-white md:py-3 md:px-8 py-[0.5625rem] px-5 font-normal hover:bg-white hover:text-primary transition-all duration-200 ease-linear rounded w-full text-center cursor-pointer"
-                >
-                  Checkout Now
-                </span>
+                {showCheckoutButton && (
+                  <span
+                    // to="/checkout/"
+                    onClick={handelCheckOut}
+                    className="inline-block md:text-base text-sm leading-5 border bg-primary border-primary text-white md:py-3 md:px-8 py-[0.5625rem] px-5 font-normal hover:bg-white hover:text-primary transition-all duration-200 ease-linear rounded w-full text-center cursor-pointer"
+                  >
+                    Checkout Now
+                  </span>
+                )}
               </div>
 
               <div className="col col-6 previewCartAction-viewCart w-1/2">
@@ -146,9 +147,9 @@ const ExpCartPreview = (props: ExpCartPreviewProps) => {
                 </ExpLinkParser>
               </div>
             </div>
-            <div className="w-full mt-6">
+            {/* <div className="w-full mt-6">
               <PaypalCheckout />
-            </div>
+            </div> */}
           </div>
         ) : (
           ''

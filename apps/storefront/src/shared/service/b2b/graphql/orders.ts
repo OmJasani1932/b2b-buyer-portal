@@ -306,6 +306,47 @@ const convertOrderData = async (data: any) => {
   return obj;
 };
 
+const sortOrders = (orders: any, sortKey: any) => {
+  // detect direction
+  const isDescending = sortKey.startsWith('-');
+  const key = isDescending ? sortKey.slice(1) : sortKey;
+
+  return orders.sort((a: any, b: any) => {
+    let valA, valB;
+
+    switch (key) {
+      case 'bcOrderId':
+        valA = a.id;
+        valB = b.id;
+        break;
+
+      case 'poNumber':
+        // safely handle missing values
+        valA = a.poNumber || '';
+        valB = b.poNumber || '';
+        break;
+
+      case 'totalIncTax':
+        valA = parseFloat(a.total_inc_tax);
+        valB = parseFloat(b.total_inc_tax);
+        break;
+
+      case 'createdAt':
+        valA = new Date(a.date_created).getTime();
+        valB = new Date(b.date_created).getTime();
+        break;
+
+      default:
+        return 0; // no sorting if key invalid
+    }
+
+    // handle ascending vs descending
+    if (valA < valB) return isDescending ? 1 : -1;
+    if (valA > valB) return isDescending ? -1 : 1;
+    return 0;
+  });
+};
+
 const getExpAllOrders = async (data: any) => {
   const responseToReturn = { edges: [], totalCount: 0 };
   const headers = new Headers();
@@ -324,7 +365,7 @@ const getExpAllOrders = async (data: any) => {
 
   if (typeof data !== 'number') {
     if (orders?.length) {
-      const convertedObj = orders
+      const convertedObj = sortOrders(orders, data?.orderBy)
         ?.slice(data?.offset, data?.offset + data?.first)
         ?.map((item: any) => {
           return { node: convertExpToBcResponse(item) };
@@ -338,7 +379,6 @@ const getExpAllOrders = async (data: any) => {
     const updatedProducts = await getImageUrlForProducts(orderToDisplay);
     orderToDisplay['products'] = updatedProducts;
     const finalData = await convertOrderData(orderToDisplay);
-    console.log('this is final data', finalData);
     return finalData;
   }
 };
