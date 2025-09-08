@@ -24,6 +24,14 @@ const getCreatedByUser = (companyId: number, module: number, fn: string) => `{
 const convertExpToBcResponse = (data: any) => {
   const toEpoch = (dateStr: string | null | undefined): number | null =>
     dateStr ? Math.floor(new Date(dateStr).getTime() / 1000) : null;
+  const extractPONumber = (customerMessage: string): string | null => {
+    if (!customerMessage) return null;
+
+    // Look for "PO Number: " followed by the actual number
+    const poMatch = customerMessage.match(/PO Number:\s*([^\n\r]+)/i);
+
+    return poMatch ? poMatch[1].trim() : null;
+  };
 
   return {
     orderId: String(data.id),
@@ -44,7 +52,9 @@ const convertExpToBcResponse = (data: any) => {
     items: data.items_total || 0,
     cartId: data.cart_id || null,
     userId: null, // Not available in Obj2
-    poNumber: null,
+    poNumber: extractPONumber(data?.customer_message)
+      ? extractPONumber(data?.customer_message)
+      : null,
     referenceNumber: null,
     status: data.status || null,
     customStatus: data.custom_status || null,
@@ -311,6 +321,7 @@ const getExpAllOrders = async (data: any) => {
   );
   const ordersData: any = await ordersResponse?.json();
   const orders = ordersData?.Data?.orders;
+
   if (typeof data !== 'number') {
     if (orders?.length) {
       const convertedObj = orders
