@@ -478,7 +478,7 @@ const HeaderController = () => {
     if (autoSuggesterTimeoutRef.current) {
       clearTimeout(autoSuggesterTimeoutRef.current);
     }
-    if (searchText && searchText.length > 1) {
+    if (searchText && searchText.length > 2) {
       setIsLoading(true);
       // Debounce getSearchedProducts with 300ms delay
       searchProductsTimeoutRef.current = setTimeout(() => {
