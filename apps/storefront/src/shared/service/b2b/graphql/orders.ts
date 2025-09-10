@@ -28,7 +28,9 @@ const convertExpToBcResponse = (data: any) => {
     if (!customerMessage) return null;
 
     // Look for "PO Number: " followed by the actual number
-    const poMatch = customerMessage.match(/PO Number:\s*([^\n\r]+)/i);
+    const poMatch =
+      customerMessage.match(/Purchase Order:\s*([^\n\r]+)/i) ||
+      customerMessage.match(/PO Number:\s*([^\n\r]+)/i);
 
     return poMatch ? poMatch[1].trim() : null;
   };
