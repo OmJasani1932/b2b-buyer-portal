@@ -171,7 +171,19 @@ function Order({ isCompanyOrder = false }: OrderProps) {
     {
       key: 'poNumber',
       title: b3Lang('orders.poReference'),
-      render: (item: ListItem) => <Box>{item.poNumber ? item.poNumber : '–'}</Box>,
+      render: (item: ListItem) => (
+        <Box
+          sx={{
+            maxWidth: '180px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+          title={item.poNumber || '–'}
+        >
+          {item.poNumber ? item.poNumber : '–'}
+        </Box>
+      ),
       width: '10%',
       isSortable: false,
     },

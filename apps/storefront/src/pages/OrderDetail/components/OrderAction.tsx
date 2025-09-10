@@ -56,9 +56,14 @@ const ItemContainer = styled('div')((props: ItemContainerProps) => ({
 }));
 
 const PaymentItemContainer = styled('div')(() => ({
-  display: 'flex',
-  justifyContent: 'space-between',
+  display: 'block',
   fontWeight: 400,
+  maxWidth: '100%',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  marginBottom: '8px',
+  lineHeight: '1.5',
 }));
 
 interface Infos {
@@ -176,9 +181,22 @@ function OrderCard(props: OrderCardProps) {
     }
   };
 
-  let showedInformation: ReactNode[] | string = infoValue?.map((value: string) => (
-    <PaymentItemContainer key={value}>{value}</PaymentItemContainer>
-  ));
+  let showedInformation: ReactNode[] | string = infoValue?.map((value: string) => {
+    // Check if this is a comment with original|||truncated format
+    if (value.includes('|||')) {
+      const [originalText, truncatedText] = value.split('|||');
+      return (
+        <PaymentItemContainer key={value} title={originalText}>
+          {truncatedText}
+        </PaymentItemContainer>
+      );
+    }
+    return (
+      <PaymentItemContainer key={value} title={value}>
+        {value}
+      </PaymentItemContainer>
+    );
+  });
 
   if (typeof infos === 'string') {
     showedInformation = infos;
@@ -196,17 +214,27 @@ function OrderCard(props: OrderCardProps) {
         )}
 
         <ItemContainer key={key} nameKey={symbol[key]}>
-          <p id="item-name-key" className="text-[#808285] font-medium">
+          <p id="item-name-key" className="text-[#808285] font-medium" title={key}>
             {key}
           </p>
           {symbol[key] === 'coupon' ? (
-            <p>
+            <p
+              className="item-value"
+              title={infos?.money
+                ? `-${ordersCurrencyFormat(infos.money, infoValue[index])}`
+                : `-${currencyFormat(infoValue[index])}`}
+            >
               {infos?.money
                 ? `-${ordersCurrencyFormat(infos.money, infoValue[index])}`
                 : `-${currencyFormat(infoValue[index])}`}
             </p>
           ) : (
-            <p>
+            <p
+              className="item-value"
+              title={infos?.money
+                ? `${ordersCurrencyFormat(infos.money, infoValue[index])}`
+                : currencyFormat(infoValue[index])}
+            >
               {infos?.money
                 ? `${ordersCurrencyFormat(infos.money, infoValue[index])}`
                 : currencyFormat(infoValue[index])}
@@ -239,6 +267,16 @@ function OrderCard(props: OrderCardProps) {
             '& #item-name-key': {
               maxWidth: '70%',
               wordBreak: 'break-word',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            },
+            '& .item-value': {
+              maxWidth: '30%',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              textAlign: 'right',
             },
           }}
         >
@@ -382,6 +420,11 @@ export default function OrderAction(props: OrderActionProps) {
     return paymentAddress;
   };
 
+  const truncateText = (text: string, maxLength: number = 40) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
   const handleOrderComments = (value: string) => {
     const commentsArr = value.split(/\n/g);
 
@@ -400,7 +443,10 @@ export default function OrderAction(props: OrderActionProps) {
           message = item;
         }
 
-        comments[`mes${index}`] = message;
+        // Store original message with special prefix for tooltip handling
+        const truncatedMessage = truncateText(message, 40);
+        // Store both original and truncated in a format we can parse later
+        comments[`mes${index}`] = `${message}|||${truncatedMessage}`;
       }
     });
 

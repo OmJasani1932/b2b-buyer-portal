@@ -93,8 +93,13 @@ export function OrderItemCard({
             <Typography
               sx={{
                 ml: 1,
+                maxWidth: '150px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
               variant="body2"
+              title={item.poNumber || '–'}
             >
               {item.poNumber ? item.poNumber : '–'}
             </Typography>
