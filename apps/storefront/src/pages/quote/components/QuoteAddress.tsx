@@ -88,8 +88,23 @@ function QuoteAddress(
     getValues,
     formState: { errors },
     setValue,
+    setError,
+    clearErrors,
   } = useForm({
     mode: 'onSubmit',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      country: '',
+      address: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      phoneNumber: '',
+      companyName: '',
+      apartment: '',
+      label: '',
+    },
   });
 
   const [isMobile] = useMobile();
@@ -114,15 +129,50 @@ function QuoteAddress(
   const setShippingInfoValue = (address: any) => {
     const addressKey = Object.keys(address);
 
-    addressKey.forEach((item: string) => {
+    addressKey.forEach((item: any) => {
       if (item === 'company') return;
       setValue(item, address[item]);
     });
   };
 
+  const validateRequiredFields = () => {
+    if (type !== 'shipping' && type !== 'billing') {
+      return true; // Only validate shipping and billing addresses
+    }
+
+    // Get current form values
+    const formValues:any = getValues();
+
+    // Check required fields and set errors for display
+    const requiredFields = ['firstName', 'lastName', 'country', 'address', 'city', 'state', 'zipCode'];
+    let isValid = true;
+
+    // Clear previous errors first
+    clearErrors();
+
+    requiredFields.forEach((field:any) => {
+      const value = formValues[field];
+      if (!value || value.toString().trim() === '') {
+        setError(field, {
+          type: 'required',
+          message: 'This field is required',
+        });
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  };
+
+  const clearValidationErrors = () => {
+    clearErrors();
+  };
+
   useImperativeHandle(ref, () => ({
     getContactInfoValue,
     setShippingInfoValue,
+    validateRequiredFields,
+    clearValidationErrors,
   }));
 
   const handleAddressChoose = () => {
@@ -148,7 +198,7 @@ function QuoteAddress(
       phoneNumber: address?.phoneNumber || '',
     };
 
-    Object.keys(addressItem).forEach((item: string) => {
+    Object.keys(addressItem).forEach((item: any) => {
       if (item === 'company') return;
       setValue(item, addressItem[item]);
     });
@@ -161,7 +211,7 @@ function QuoteAddress(
 
   useEffect(() => {
     if (JSON.stringify(info) !== '{}') {
-      Object.keys(info).forEach((item: string) => {
+      Object.keys(info).forEach((item: any) => {
         setValue(item, info[item as InfoKeys]);
       });
     }

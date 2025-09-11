@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { Control, FieldValues, UseFormGetValues, UseFormSetValue, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 
 import { GlobalContext } from '@/shared/global';
 import { Country, State } from '@/shared/global/context/config';
@@ -44,10 +44,10 @@ interface FormFieldsProps extends Record<string, any> {
 
 interface GetCountryProps {
   setAddress: (arr: FormFieldsProps[]) => void;
-  setValue: UseFormSetValue<FieldValues>;
-  getValues: UseFormGetValues<FieldValues>;
+  setValue: any;
+  getValues: any;
   addresses: FormFieldsProps[];
-  control: Control;
+  control: any;
 }
 
 const useGetCountry = ({

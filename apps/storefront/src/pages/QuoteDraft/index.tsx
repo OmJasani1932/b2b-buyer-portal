@@ -70,6 +70,8 @@ export interface Country {
 interface InfoRefProps extends HTMLInputElement {
   getContactInfoValue: () => any;
   setShippingInfoValue: (address: any) => void;
+  validateRequiredFields?: () => boolean;
+  clearValidationErrors?: () => void;
 }
 
 interface QuoteSummaryRef extends HTMLInputElement {
@@ -167,7 +169,7 @@ function QuoteDraft({ setOpenPage }: PageProps) {
 
   const contactInfoRef = useRef<InfoRefProps | null>(null);
   const billingRef = useRef<InfoRefProps | null>(null);
-  const shippingRef = useRef<InfoRefProps | null>(null);
+  const shippingRef: any = useRef<InfoRefProps | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -303,6 +305,7 @@ function QuoteDraft({ setOpenPage }: PageProps) {
     saveInfo.shippingAddress = shippingAddress;
     saveInfo.billingAddress = billingAddress;
 
+    // Validate contact info
     const isComplete = Object.keys(saveInfo.contactInfo).every((key: string) => {
       if (key === 'phoneNumber' || key === 'companyName' || key === 'quoteTitle') {
         return true;
@@ -310,17 +313,71 @@ function QuoteDraft({ setOpenPage }: PageProps) {
       return !!saveInfo.contactInfo[key as ContactInfoKeys];
     });
 
-    if (isComplete) {
-      dispatch(setDraftQuoteInfo(saveInfo));
-      setEdit(false);
+    // Validate shipping address
+    const requiredAddressFields = [
+      'firstName',
+      'lastName',
+      'country',
+      'address',
+      'city',
+      'state',
+      'zipCode',
+    ];
+
+    const isShippingAddressComplete = requiredAddressFields.every((field) => {
+      const value = shippingAddress[field as keyof ShippingAddress];
+      return value && value.toString().trim() !== '';
+    });
+
+    // Validate billing address
+    const isBillingAddressComplete = requiredAddressFields.every((field) => {
+      const value = billingAddress[field as keyof BillingAddress];
+      return value && value.toString().trim() !== '';
+    });
+
+    if (!isComplete) {
+      snackbar.error(b3Lang('quoteDraft.addQuoteInfo'));
+      return;
     }
+
+    if (!isShippingAddressComplete) {
+      snackbar.error('Please fill in all required shipping address fields');
+
+      // Set errors on the shipping form fields
+      if (shippingRef?.current && shippingRef.current.validateRequiredFields) {
+        shippingRef.current.validateRequiredFields();
+      }
+
+      return;
+    }
+
+    if (!isBillingAddressComplete) {
+      snackbar.error('Please fill in all required billing address fields');
+
+      // Set errors on the billing form fields
+      if (billingRef?.current && billingRef.current.validateRequiredFields) {
+        billingRef.current.validateRequiredFields();
+      }
+
+      return;
+    }
+
+    // If all validations pass, save the info
+    dispatch(setDraftQuoteInfo(saveInfo));
+    setEdit(false);
+    snackbar.success('Information saved successfully');
   };
 
   const handleEditInfoClick = () => {
     setEdit(true);
+    // Clear any previous validation errors when entering edit mode
+    if (shippingRef?.current) {
+      shippingRef.current.clearValidationErrors();
+    }
   };
 
-  const accountFormFields = getAccountFormFields(isMobile, b3Lang);
+  const shippingFormFields = getAccountFormFields(isMobile, b3Lang, true, false);
+  const billingFormFields = getAccountFormFields(isMobile, b3Lang, false, true);
 
   const updateSummary = () => {
     quoteSummaryRef.current?.refreshSummary();
@@ -372,6 +429,7 @@ function QuoteDraft({ setOpenPage }: PageProps) {
       setLoading(true);
       try {
         const info = cloneDeep(quoteinfo);
+
         const contactInfo = info?.contactInfo || {};
 
         const quoteTitle = contactInfo?.quoteTitle || '';
@@ -391,6 +449,57 @@ function QuoteDraft({ setOpenPage }: PageProps) {
           return;
         }
 
+        // Validate shipping address fields using saved data from Redux store
+        const savedShippingAddress = quoteinfo?.shippingAddress || {};
+        const savedBillingAddress = quoteinfo?.billingAddress || {};
+
+        const requiredAddressFields = [
+          'firstName',
+          'lastName',
+          'country',
+          'address',
+          'city',
+          'state',
+          'zipCode',
+        ];
+
+        const isShippingAddressComplete = requiredAddressFields.every((field) => {
+          const value = savedShippingAddress[field as keyof ShippingAddress];
+          return value && value.toString().trim() !== '';
+        });
+
+        const isBillingAddressComplete = requiredAddressFields.every((field) => {
+          const value = savedBillingAddress[field as keyof BillingAddress];
+          return value && value.toString().trim() !== '';
+        });
+
+        if (!isShippingAddressComplete) {
+          snackbar.error('Please fill in all required shipping address fields');
+          setEdit(true); // Open edit mode to show field errors
+
+          // Wait for edit mode to render, then set field errors
+          setTimeout(() => {
+            if (shippingRef?.current && shippingRef.current.validateRequiredFields) {
+              shippingRef.current.validateRequiredFields();
+            }
+          }, 100);
+
+          return;
+        }
+
+        if (!isBillingAddressComplete) {
+          snackbar.error('Please fill in all required billing address fields');
+          setEdit(true); // Open edit mode to show field errors
+
+          // Wait for edit mode to render, then set field errors
+          setTimeout(() => {
+            if (billingRef?.current && billingRef.current.validateRequiredFields) {
+              billingRef.current.validateRequiredFields();
+            }
+          }, 100);
+
+          return;
+        }
         if (!draftQuoteList || draftQuoteList.length === 0) {
           snackbar.error(b3Lang('quoteDraft.submit'));
           return;
@@ -746,7 +855,7 @@ function QuoteDraft({ setOpenPage }: PageProps) {
                   pr={isMobile ? 0 : '8px'}
                   ref={billingRef}
                   role={role}
-                  accountFormFields={accountFormFields}
+                  accountFormFields={billingFormFields}
                   shippingSameAsBilling={shippingSameAsBilling}
                   type="billing"
                   setBillingChange={setBillingChange}
@@ -758,7 +867,7 @@ function QuoteDraft({ setOpenPage }: PageProps) {
                   pl={isMobile ? 0 : '8px'}
                   ref={shippingRef}
                   role={role}
-                  accountFormFields={accountFormFields}
+                  accountFormFields={shippingFormFields}
                   shippingSameAsBilling={shippingSameAsBilling}
                   type="shipping"
                   setBillingChange={setBillingChange}
@@ -771,10 +880,10 @@ function QuoteDraft({ setOpenPage }: PageProps) {
                     checked={shippingSameAsBilling}
                     onChange={(e) => {
                       setShippingSameAsBilling(e.target.checked);
-                      if (billingRef.current) {
+                      if (billingRef.current && e.target.checked) {
                         const billingAddress = billingRef.current.getContactInfoValue();
 
-                        if (shippingRef.current && e.target.checked) {
+                        if (shippingRef.current) {
                           shippingRef.current.setShippingInfoValue(billingAddress);
                         }
                       }
