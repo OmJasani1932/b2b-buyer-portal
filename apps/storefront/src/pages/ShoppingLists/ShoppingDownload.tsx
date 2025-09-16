@@ -143,14 +143,14 @@ function ShoppingDownload(props: any) {
     <>
       <div className="text-center">
         <Button variant="contained" onClick={() => setOpen(true)}>
-          Add Shipping Address
+          Download Quote
         </Button>
       </div>
 
       <B3Dialog
         isOpen={open}
         fullWidth
-        title="Add Shipping Address"
+        title="Download Quote"
         maxWidth="sm"
         rightSizeBtn="submit"
         handleLeftClick={handleClose}
