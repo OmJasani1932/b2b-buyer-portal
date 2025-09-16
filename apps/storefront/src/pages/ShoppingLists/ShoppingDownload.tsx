@@ -16,7 +16,7 @@ import { getB2BCountries } from '@/shared/service/b2b';
 import { useAppSelector } from '@/store';
 declare const window: any;
 function ShoppingDownload(props: any) {
-  const { shoppingListId, quoteConfigurationId } = props;
+  const { shoppingListId, quoteConfigurationId, changeButton = false } = props;
   const tempallAddressFields = [
     { name: 'firstName', label: 'First Name', required: true, fieldType: 'text' },
     { name: 'lastName', label: 'Last Name', required: true, fieldType: 'text' },
@@ -142,9 +142,20 @@ function ShoppingDownload(props: any) {
   return (
     <>
       <div className="text-center">
-        <Button variant="contained" onClick={() => setOpen(true)}>
-          Download Quote
-        </Button>
+        {changeButton ? (
+          <Button
+            variant="contained"
+            style={{ paddingRight: '35px', paddingLeft: '30px' }}
+            onClick={() => setOpen(true)}
+            size="large"
+          >
+            Download Quote
+          </Button>
+        ) : (
+          <Button variant="contained" onClick={() => setOpen(true)}>
+            Download Quote
+          </Button>
+        )}
       </div>
 
       <B3Dialog
