@@ -608,6 +608,7 @@ const HeaderController = () => {
   // };
 
   const checkAccessibleCategories = async () => {
+    const userDetails = window.__PING_DETAILS__;
     setAreAllAccessibleCategoryData({
       areAllAccessible: false,
       pageSlug: '',
@@ -621,7 +622,9 @@ const HeaderController = () => {
     let subCategoryResponse = null;
     let workingCategoryId = null;
     let accessibleCategorySet = new Set(accessibleCategoryArray);
-    const DEFAULT_CATEGORY_ID = 'CA-a157d458-879d-4681-8557-1cecaad386ae';
+    const DEFAULT_CATEGORY_ID = userDetails?.environmentType.toLowerCase().includes('dev')
+      ? 'CA-a157d458-879d-4681-8557-1cecaad386ae'
+      : 'CA-4130cc43-d8f4-4e54-b6b8-2577efbc1e19';
     // Helper function to test a category ID
     const testCategoryId = async (categoryId: number) => {
       try {
