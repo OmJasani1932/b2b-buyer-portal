@@ -14,6 +14,7 @@ import {
 import B3Dialog from '@/components/B3Dialog';
 import { getB2BCountries } from '@/shared/service/b2b';
 import { useAppSelector } from '@/store';
+import CustomButton from '@/components/button/CustomButton';
 declare const window: any;
 function ShoppingDownload(props: any) {
   const { shoppingListId, quoteConfigurationId, changeButton = false } = props;
@@ -141,16 +142,19 @@ function ShoppingDownload(props: any) {
 
   return (
     <>
-      <div className="text-center">
+      <div className={`text-center ${changeButton ? 'w-full' : ''}`}>
         {changeButton ? (
-          <Button
+          <CustomButton
             variant="contained"
-            style={{ paddingRight: '35px', paddingLeft: '30px' }}
+            sx={{
+              width: '100%',
+              display: 'block',
+            }}
             onClick={() => setOpen(true)}
-            size="large"
+            // size="large"
           >
             Download Quote
-          </Button>
+          </CustomButton>
         ) : (
           <Button variant="contained" onClick={() => setOpen(true)}>
             Download Quote

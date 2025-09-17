@@ -98,7 +98,7 @@ function ShoppingListDetails({ setOpenPage }: PageProps) {
   const [customerInfo, setCustomerInfo] = useState<null | CustomerInfoProps>(null);
   const [selectedSubTotal, setSelectedSubTotal] = useState<number>(0.0);
   const [isRequestLoading, setIsRequestLoading] = useState(false);
-
+  
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [deleteItemId, setDeleteItemId] = useState<number | string>('');
 
@@ -460,6 +460,7 @@ function ShoppingListDetails({ setOpenPage }: PageProps) {
                 updateList={updateList}
                 type="shoppingList"
                 isB2BUser={isB2BUser}
+                shoppingListInfo={shoppingListInfo}
               />
             )}
           </Grid>

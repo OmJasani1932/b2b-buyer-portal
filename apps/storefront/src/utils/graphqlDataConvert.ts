@@ -45,10 +45,60 @@ import _ from 'lodash-es';
 
 //   return str;
 // };
+export const escapeGraphQLForSearchString = (str: any) => {
+  let actualValue: string;
+
+  try {
+    const parsed = JSON.parse(str);
+    actualValue = String(parsed);
+  } catch {
+    actualValue = String(str);
+  }
+
+  // Trim outer quotes if they exist
+  if (
+    (actualValue.startsWith('"') && actualValue.endsWith('"')) ||
+    (actualValue.startsWith("'") && actualValue.endsWith("'"))
+  ) {
+    actualValue = actualValue.slice(1, -1);
+  }
+
+  // Normalize trailing quotes if needed
+  actualValue = actualValue.replace(/"+$/g, '"'); // or remove all with ''
+
+  return JSON.stringify(actualValue); // GraphQL-safe
+};
+
+// Helper function to escape strings for GraphQL
+export const escapeGraphQLString = (str: any) => {
+  let actualValue: string;
+
+  try {
+    // Try parsing JSON-encoded strings
+    const parsed = JSON.parse(str);
+    actualValue = String(parsed); // force into string
+  } catch {
+    actualValue = String(str); // fallback to raw string
+  }
+
+  // Remove leading/trailing quotes if present
+  if (
+    (actualValue.startsWith('"') && actualValue.endsWith('"')) ||
+    (actualValue.startsWith("'") && actualValue.endsWith("'"))
+  ) {
+    actualValue = actualValue.slice(1, -1);
+  }
+
+  // Collapse multiple quotes at end → keep only one
+  actualValue = actualValue.replace(/"{2,}$/g, '"');
+
+  // Final escape for GraphQL
+  return JSON.stringify(actualValue);
+};
 
 export const convertObjectToGraphql = (data: CustomFieldItems) => {
   if (typeof data === 'string') {
-    return JSON.stringify(data);
+    return escapeGraphQLString(data);
   }
 
   if (typeof data === 'number') {
@@ -61,7 +111,7 @@ export const convertObjectToGraphql = (data: CustomFieldItems) => {
     const isLast = index === Object.keys(data).length - 1;
 
     if (typeof data[item] === 'string') {
-      str += `${item}: ${JSON.stringify(data[item])}${isLast ? '' : ', '} `;
+      str += `${item}: ${escapeGraphQLString(data[item])}${isLast ? '' : ', '} `;
     }
 
     if (typeof data[item] === 'number') {

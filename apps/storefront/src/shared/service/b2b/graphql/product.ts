@@ -1,6 +1,7 @@
 import { channelId, convertArrayToGraphql, getActiveCurrencyInfo, storeHash } from '@/utils';
 
 import B3Request from '../../request/b3Fetch';
+import { escapeGraphQLForSearchString } from '@/utils/graphqlDataConvert';
 
 interface ProductPurchasable {
   productId: number;
@@ -70,7 +71,7 @@ const getVariantSkuByProductId = (productId: string) => `{
 
 const searchProducts = (data: CustomFieldItems) => `{
   productsSearch (
-    search: "${data.search || ''}"
+   search: ${escapeGraphQLForSearchString(data.search || '')}
     productIds: [${data.productIds || []}]
     currencyCode: "${data.currencyCode || ''}"
     companyId: "${data.companyId || ''}"

@@ -236,7 +236,7 @@ function ShoppingListsCard(props: OrderItemCardProps) {
             </Box>
           </Flex>
 
-          {shoppingList.id && isb2bCustome && (
+          {shoppingList.products.totalCount > 0 && shoppingList.id && isb2bCustome && (
             <div className="mt-4">
               <ShoppingDownload
                 shoppingListId={shoppingList?.id}

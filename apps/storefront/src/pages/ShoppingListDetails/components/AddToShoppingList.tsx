@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { B2BEvent, useB2BCallback } from '@b3/hooks';
 import { useB3Lang } from '@b3/lang';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -12,8 +12,6 @@ import { useAppSelector } from '@/store';
 import { snackbar } from '@/utils';
 import { getValidOptionsList } from '@/utils/b3Product/b3Product';
 
-import ShoppingDownload from '../../ShoppingLists/ShoppingDownload';
-
 import { getAllModifierDefaultValue } from '../../../utils/b3Product/shared/config';
 import { ShoppingListDetailsContext } from '../context/ShoppingListDetailsContext';
 
@@ -24,6 +22,7 @@ interface AddToListProps {
   updateList: () => void;
   isB2BUser: boolean;
   type?: string;
+  shoppingListInfo?: any;
 }
 
 export default function AddToShoppingList(props: AddToListProps) {
@@ -40,9 +39,9 @@ export default function AddToShoppingList(props: AddToListProps) {
   const [isMobile] = useMobile();
   const [blockPendingAccountViewPrice] = useBlockPendingAccountViewPrice();
 
-  // Shopping Download states
-  const [isb2bCustome, setb2bCustome] = useState<boolean>(false);
-  const [quoteConfigurationId, setQuoteConfigurationId] = useState<number>(0);
+  // // Shopping Download states
+  // const [isb2bCustome, setb2bCustome] = useState<boolean>(false);
+  // const [quoteConfigurationId, setQuoteConfigurationId] = useState<number>(0);
 
   const addItemsToShoppingList = isB2BUser ? addProductToShoppingList : addProductToBcShoppingList;
 
@@ -226,53 +225,53 @@ export default function AddToShoppingList(props: AddToListProps) {
   };
 
   // Fetch custom store configuration for shopping download
-  const fetchCustomStoreConfig = async () => {
-    const userDetails = (window as any).__PING_DETAILS__;
-    try {
-      const URL = userDetails?.environmentType.toLowerCase().includes('dev')
-        ? 'https://dev-bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration'
-        : 'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration';
-      const response = await fetch(URL, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          clientid: 'product-3a6fc5d8-1c9c-4844-af6e-d45204f95f8b',
-        },
-      });
+  // const fetchCustomStoreConfig = async () => {
+  //   const userDetails = (window as any).__PING_DETAILS__;
+  //   try {
+  //     const URL = userDetails?.environmentType.toLowerCase().includes('dev')
+  //       ? 'https://dev-bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration'
+  //       : 'https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/custom-store-configuration';
+  //     const response = await fetch(URL, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         clientid: 'product-3a6fc5d8-1c9c-4844-af6e-d45204f95f8b',
+  //       },
+  //     });
 
-      if (!response.ok) {
-        console.error(`Error: Failed to fetch data. Status: ${response.status}`);
-        return null;
-      }
+  //     if (!response.ok) {
+  //       console.error(`Error: Failed to fetch data. Status: ${response.status}`);
+  //       return null;
+  //     }
 
-      const data = await response.json();
-      const userGroup = localStorage.getItem('user-group');
-      const groupName = userGroup ? JSON.parse(userGroup) : null;
+  //     const data = await response.json();
+  //     const userGroup = localStorage.getItem('user-group');
+  //     const groupName = userGroup ? JSON.parse(userGroup) : null;
 
-      if (!groupName) {
-        setb2bCustome(false);
-        return;
-      }
+  //     if (!groupName) {
+  //       setb2bCustome(false);
+  //       return;
+  //     }
 
-      const quoteType = data?.Data?.find(
-        (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
-      )?.quoteType;
+  //     const quoteType = data?.Data?.find(
+  //       (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
+  //     )?.quoteType;
 
-      const quoteConfigurationId = data?.Data?.find(
-        (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
-      )?.quoteConfiguration;
-      if (quoteConfigurationId?.toString()?.length) {
-        setQuoteConfigurationId(quoteConfigurationId);
-      }
-      setb2bCustome(quoteType === 'custom');
-    } catch (error) {
-      setb2bCustome(false);
-    }
-  };
+  //     const quoteConfigurationId = data?.Data?.find(
+  //       (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
+  //     )?.quoteConfiguration;
+  //     if (quoteConfigurationId?.toString()?.length) {
+  //       setQuoteConfigurationId(quoteConfigurationId);
+  //     }
+  //     setb2bCustome(quoteType === 'custom');
+  //   } catch (error) {
+  //     setb2bCustome(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchCustomStoreConfig();
-  }, []);
+  // useEffect(() => {
+  //   fetchCustomStoreConfig();
+  // }, []);
 
   return (
     <Card
@@ -310,11 +309,15 @@ export default function AddToShoppingList(props: AddToListProps) {
               {b3Lang('shoppingList.addToShoppingList.bulkUploadCsv')}
             </CustomButton>
 
-            {id && isb2bCustome && (
+            {/* {shoppingListInfo?.products?.totalCount > 0 && id && isb2bCustome && (
               <div className="mt-4 text-left flex">
-                <ShoppingDownload shoppingListId={id} quoteConfigurationId={quoteConfigurationId} changeButton={true}/>
+                <ShoppingDownload
+                  shoppingListId={id}
+                  quoteConfigurationId={quoteConfigurationId}
+                  changeButton={true}
+                />
               </div>
-            )}
+            )} */}
           </Box>
 
           <B3Upload
