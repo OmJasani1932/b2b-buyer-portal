@@ -30,7 +30,7 @@ export default function B3ControlSelect({ control, errors, ...rest }: Form.B3UIP
   const fieldsProps = {
     type: fieldType,
     name,
-    defaultValue,
+    defaultValue: defaultValue || '', // Ensure empty string for empty defaults
     rules: {
       required:
         required &&
@@ -42,16 +42,23 @@ export default function B3ControlSelect({ control, errors, ...rest }: Form.B3UIP
     control,
   };
 
-  const onHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onChange();
-    setValue(name, e.target.value);
-  };
+  const onHandleChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    fieldOnChange: (value: any) => void,
+  ) => {
+    // First update the form state using react-hook-form's onChange
+    fieldOnChange(e.target.value);
 
-  const onChangeProps = onChange
-    ? {
-        onChange: onHandleChange,
-      }
-    : {};
+    // Then call the custom onChange if provided
+    if (onChange) {
+      onChange(e.target.value);
+    }
+
+    // Also update using setValue for consistency
+    if (setValue) {
+      setValue(name, e.target.value);
+    }
+  };
 
   return ['dropdown'].includes(fieldType) ? (
     <FormControl
@@ -75,13 +82,13 @@ export default function B3ControlSelect({ control, errors, ...rest }: Form.B3UIP
         </InputLabel>
       )}
       <Controller
-        key={fieldsProps.name}
+        key={`${fieldsProps.name}-${defaultValue}`}
         {...fieldsProps}
         render={({ field }) => (
           <Select
             {...field}
             {...muiAttributeProps}
-            {...onChangeProps}
+            onChange={(e) => onHandleChange(e as ChangeEvent<HTMLInputElement>, field.onChange)}
             size={size}
             error={!!errors[name]}
             sx={{

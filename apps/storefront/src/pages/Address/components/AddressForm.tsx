@@ -319,9 +319,18 @@ function AddressForm(
       });
     }
 
-    reset();
     setAddressData(data);
     setType(type);
+
+    // Reset form with proper defaults based on mode
+    if (type === 'add') {
+      // For add mode, reset with empty values
+      reset({});
+    } else {
+      // For edit mode, just reset to clear previous values
+      reset();
+    }
+
     setOpen(true);
   };
 
@@ -441,9 +450,16 @@ function AddressForm(
               }
             }
           } else if (field.name === 'country') {
+            // Ensure country field has options
+            if (!field.options || field.options.length === 0) {
+              field.options = countries;
+            }
             setValue(field.name, countryCode);
+            field.default = countryCode;
           } else if (field.name === 'state') {
-            setValue(field.name, stateCode || state);
+            const stateValue = stateCode || state;
+            setValue(field.name, stateValue);
+            field.default = stateValue;
             if (currentCountry[0]) {
               const { states } = currentCountry[0];
 
@@ -468,16 +484,7 @@ function AddressForm(
     if (open && type === 'edit' && addressData) {
       handleBackFillData();
     }
-  }, [
-    addressData,
-    allAddressFields,
-    countries,
-    isB2BUser,
-    open,
-    originAddressFields,
-    setValue,
-    type,
-  ]);
+  }, [addressData, countries, isB2BUser, open, originAddressFields, setValue, type]);
 
   useEffect(() => {
     const handleCountryChange = (countryCode: string) => {
