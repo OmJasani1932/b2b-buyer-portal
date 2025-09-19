@@ -680,7 +680,11 @@ const HeaderController = () => {
     if (subCategoryResponse.Data) {
       const categories = subCategoryResponse.Data.categories;
       areAllAccessible = isAllEntitiesAvailable(categories, accessibleCategorySet);
-      if (areAllAccessible && categories.length && categories[0]?.provider_parent_id_esi == 0) {
+      if (
+        areAllAccessible &&
+        categories.length
+        // && categories[0]?.provider_parent_id_esi == 0
+      ) {
         areAllAccessible = true;
         pageSlug = categories[0]?.page_slug_esi;
       } else {
