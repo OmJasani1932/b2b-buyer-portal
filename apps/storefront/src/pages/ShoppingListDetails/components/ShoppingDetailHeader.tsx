@@ -63,6 +63,30 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
   const { submitShoppingListPermission, approveShoppingListPermission } =
     useAppSelector(rolePermissionSelector);
 
+  // Customer group to store name mapping
+  const customerGroupToStoreMapping: { [key: string]: string } = {
+    // BYU variations
+    'Brigham Young University–Hawaii': 'BYU Hawaii',
+    'Brigham Young University-Hawaii': 'BYU Hawaii',
+    'Brigham Young University Hawaii': 'BYU Hawaii',
+  };
+
+  // Function to find matching store using custom mapping with includes
+  const findStoreByMapping = (customerGroupName: string, stores: any[]) => {
+    // First try exact mapping
+    const mappedStoreName = customerGroupToStoreMapping[customerGroupName];
+    if (mappedStoreName) {
+      return stores.find((item: any) =>
+        item?.storeName?.toLowerCase().includes(mappedStoreName.toLowerCase())
+      );
+    }
+
+    // If no mapping found, try includes match with original name
+    return stores.find((item: any) =>
+      item?.storeName?.toLowerCase().includes(customerGroupName?.toLowerCase())
+    );
+  };
+
   // Fetch custom store configuration for shopping download
   const fetchCustomStoreConfig = async () => {
     const userDetails = (window as any).__PING_DETAILS__;
@@ -92,13 +116,12 @@ function ShoppingDetailHeader(props: ShoppingDetailHeaderProps) {
         return;
       }
 
-      const quoteType = data?.Data?.find(
-        (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
-      )?.quoteType;
+      // Use the mapping function to find the correct store
+      const findCurrentDetails = findStoreByMapping(groupName, data.Data || []);
 
-      const quoteConfigurationId = data?.Data?.find(
-        (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
-      )?.quoteConfiguration;
+      const quoteType = findCurrentDetails?.quoteType;
+      const quoteConfigurationId = findCurrentDetails?.quoteConfiguration;
+      
       if (quoteConfigurationId?.toString()?.length) {
         setQuoteConfigurationId(quoteConfigurationId);
       }

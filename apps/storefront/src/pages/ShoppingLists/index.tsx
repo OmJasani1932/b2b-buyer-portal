@@ -215,6 +215,30 @@ function ShoppingLists() {
     }
   };
 
+  // Customer group to store name mapping
+  const customerGroupToStoreMapping: { [key: string]: string } = {
+    // BYU variations
+    'Brigham Young University–Hawaii': 'BYU Hawaii',
+    'Brigham Young University-Hawaii': 'BYU Hawaii',
+    'Brigham Young University Hawaii': 'BYU Hawaii',
+  };
+
+  // Function to find matching store using custom mapping with includes
+  const findStoreByMapping = (customerGroupName: string, stores: any[]) => {
+    // First try exact mapping
+    const mappedStoreName = customerGroupToStoreMapping[customerGroupName];
+    if (mappedStoreName) {
+      return stores.find((item: any) =>
+        item?.storeName?.toLowerCase().includes(mappedStoreName.toLowerCase())
+      );
+    }
+
+    // If no mapping found, try includes match with original name
+    return stores.find((item: any) =>
+      item?.storeName?.toLowerCase().includes(customerGroupName?.toLowerCase())
+    );
+  };
+
   const fetchCustomStoreConfig = async () => {
     const userDetails = window.__PING_DETAILS__;
     try {
@@ -243,13 +267,12 @@ function ShoppingLists() {
         return;
       }
 
-      const quoteType = data?.Data?.find(
-        (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
-      )?.quoteType;
+      // Use the mapping function to find the correct store
+      const findCurrentDetails = findStoreByMapping(groupName, data.Data || []);
 
-      const quoteConfigurationId = data?.Data?.find(
-        (item: any) => item?.storeName?.toLowerCase() === groupName?.toLowerCase(),
-      )?.quoteConfiguration;
+      const quoteType = findCurrentDetails?.quoteType;
+      const quoteConfigurationId = findCurrentDetails?.quoteConfiguration;
+
       if (quoteConfigurationId?.toString()?.length) {
         setQuoteConfigurationId(quoteConfigurationId);
       }

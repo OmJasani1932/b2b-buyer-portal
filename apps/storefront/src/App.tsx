@@ -195,7 +195,6 @@ export default function App() {
           },
         });
         const response = await data.json();
-        console.log(response);
         if (response?.Data?.length) {
           const quoteType = response?.Data?.find(
             (item: any) =>
