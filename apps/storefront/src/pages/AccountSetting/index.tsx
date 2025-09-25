@@ -152,7 +152,11 @@ function AccountSetting() {
         const roleItem = all.find((item) => item.name === 'role');
 
         if (roleItem?.fieldType) roleItem.fieldType = 'text';
-
+        all?.map((item: any) => {
+          if (item?.label?.toLowerCase() === 'store name') {
+            item.disabled = true;
+          }
+        });
         setAccountInfoFormFields(all);
 
         setAccountSettings(accountSettings);
