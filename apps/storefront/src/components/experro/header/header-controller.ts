@@ -734,7 +734,15 @@ const HeaderController = () => {
     initiateEventListeners();
     navigateToSlug();
     // checkUserLoggedInStatus();
-
+    const route = 'login.php';
+    if (
+      window.location.href.includes(route) ||
+      window.location.hash.includes('login') ||
+      window.location.hash.includes('register') ||
+      window.location.hash.includes('forgotpassword')
+    ) {
+      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+    }
     getCart();
     const handlePushstate = () => {
       if (iframeDocument.body.classList.contains('mobile-menu-open')) {
