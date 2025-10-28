@@ -41,6 +41,7 @@ interface LocationState {
 
 function OrderDetail() {
   const isB2BUser = useAppSelector(isB2BUserSelector);
+  const companyB2BId = useAppSelector(({ company }) => company.companyInfo.id);
 
   const params = useParams();
 
@@ -95,7 +96,7 @@ function OrderDetail() {
         setIsRequestLoading(true);
 
         try {
-          const order = isB2BUser ? await getB2BOrderDetails(id) : await getBCOrderDetails(id);
+          const order = isB2BUser ? await getB2BOrderDetails(id, companyB2BId) : await getBCOrderDetails(id, companyB2BId);
 
           if (order && 'products' in order) {
             const { products } = order;

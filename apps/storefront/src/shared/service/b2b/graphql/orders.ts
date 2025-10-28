@@ -349,7 +349,7 @@ const sortOrders = (orders: any, sortKey: any) => {
   });
 };
 
-const getExpAllOrders = async (data: any) => {
+const getExpAllOrders = async (data: any, companyId: string) => {
   const responseToReturn = { edges: [], totalCount: 0 };
   const headers = new Headers();
   headers.append('content-type', 'application/json');
@@ -358,13 +358,13 @@ const getExpAllOrders = async (data: any) => {
     headers: headers,
     redirect: 'follow',
   };
-  const ordersResponse = await fetch(
-    '/exp-sf-cms/api/bc/account/orders?locale=en-us',
-    requestOptions,
-  );
+  const ordersResponse = window?.b2b?.utils?.user?.getProfile()?.companyRoleName === 'Admin'
+    ? await fetch(
+        `https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/orders/by-company-id/${companyId}`,
+      )
+    : await fetch('/exp-sf-cms/api/bc/account/orders?locale=en-us', requestOptions);
   const ordersData: any = await ordersResponse?.json();
   const orders = ordersData?.Data?.orders;
-
   if (typeof data !== 'number') {
     if (orders?.length) {
       const convertedObj = sortOrders(orders, data?.orderBy)
@@ -385,16 +385,18 @@ const getExpAllOrders = async (data: any) => {
   }
 };
 
-export const getB2BAllOrders = (data: CustomFieldItems) => getExpAllOrders(data);
+export const getB2BAllOrders = (data: CustomFieldItems, companyId: string) =>
+  getExpAllOrders(data, companyId);
 
-export const getBCAllOrders = (data: CustomFieldItems) => getExpAllOrders(data);
+export const getBCAllOrders = (data: CustomFieldItems, companyId: string) =>
+  getExpAllOrders(data, companyId);
 
-export const getB2BOrderDetails = async (id: number) => {
-  return getExpAllOrders(id);
+export const getB2BOrderDetails = async (id: number, companyB2BId: string) => {
+  return getExpAllOrders(id, companyB2BId);
 };
 
-export const getBCOrderDetails = (id: number) => {
-  return getExpAllOrders(id);
+export const getBCOrderDetails = (id: number, companyB2BId: string) => {
+  return getExpAllOrders(id, companyB2BId);
 };
 
 export const getOrderStatusType = (): Promise<OrderStatusItem[]> =>

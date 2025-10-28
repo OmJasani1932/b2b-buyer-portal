@@ -127,6 +127,7 @@ export default function RegisteredBCToB2B(props: PageProps) {
   }, [registerEnabled]);
 
   useEffect(() => {
+    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
     const getBCAdditionalFields = async () => {
       try {
         if (dispatch) {

@@ -38,6 +38,8 @@ const initListIndex = 100000000;
 function DetailPagination({ onChange, color }: DetailPageProps) {
   const b3Lang = useB3Lang();
   const isB2BUser = useAppSelector(isB2BUserSelector);
+  const companyB2BId = useAppSelector(({ company }) => company.companyInfo.id);
+  
   const [listIndex, setListIndex] = useState<number>(initListIndex);
   const [arrived, setArrived] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -86,8 +88,8 @@ function DetailPagination({ onChange, color }: DetailPageProps) {
     };
 
     const orderResponse = isB2BUser
-      ? await getB2BAllOrders(searchDetailParams)
-      : await getBCAllOrders(searchDetailParams);
+      ? await getB2BAllOrders(searchDetailParams, companyB2BId)
+      : await getBCAllOrders(searchDetailParams, companyB2BId);
 
     const { edges: list, totalCount } = orderResponse as { edges: any[]; totalCount: number };
 

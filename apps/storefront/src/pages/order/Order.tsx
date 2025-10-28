@@ -133,8 +133,8 @@ function Order({ isCompanyOrder = false }: OrderProps) {
 
   const fetchList = async (params: Partial<FilterSearchProps>) => {
     const orderResponse = isB2BUser
-      ? await getB2BAllOrders(params)
-      : await getBCAllOrders(params);
+      ? await getB2BAllOrders(params, companyB2BId)
+      : await getBCAllOrders(params, companyB2BId);
 
     const { edges = [], totalCount } = orderResponse as { edges: any[]; totalCount: number };
 

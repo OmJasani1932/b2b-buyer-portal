@@ -130,6 +130,7 @@ export default function Login(props: PageProps) {
   };
 
   useEffect(() => {
+    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
     const logout = async () => {
       try {
         const loginFlag = searchParams.get('loginFlag');
