@@ -349,6 +349,20 @@ const sortOrders = (orders: any, sortKey: any) => {
   });
 };
 
+const getOrderDetails = async (id: number) => {
+  const orderDetailsResponse = await fetch(
+    `https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/orders/${id}`,
+  );
+  const orderDetailsData: any = await orderDetailsResponse?.json();
+  if (orderDetailsData?.Status === 'success') {
+    const orderToDisplay = orderDetailsData?.Data;
+    const updatedProducts = await getImageUrlForProducts(orderToDisplay);
+    orderToDisplay['products'] = updatedProducts;
+    const finalData = await convertOrderData(orderToDisplay);
+    return finalData;
+  }
+};
+
 const getExpAllOrders = async (data: any, companyId: string) => {
   const responseToReturn = { edges: [], totalCount: 0 };
   const headers = new Headers();
@@ -358,31 +372,25 @@ const getExpAllOrders = async (data: any, companyId: string) => {
     headers: headers,
     redirect: 'follow',
   };
-  const ordersResponse = window?.b2b?.utils?.user?.getProfile()?.companyRoleName === 'Admin'
-    ? await fetch(
-        `https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/orders/by-company-id/${companyId}`,
-      )
-    : await fetch('/exp-sf-cms/api/bc/account/orders?locale=en-us', requestOptions);
+
+  const ordersResponse =
+    data?.isShowMy === 0
+      ? await fetch(
+          `https://bigcom-order-service.cookandboardman.io/apis/order-service/v1/orders/by-company-id/${companyId}`,
+        )
+      : await fetch('/exp-sf-cms/api/bc/account/orders?locale=en-us', requestOptions);
   const ordersData: any = await ordersResponse?.json();
   const orders = ordersData?.Data?.orders;
-  if (typeof data !== 'number') {
-    if (orders?.length) {
-      const convertedObj = sortOrders(orders, data?.orderBy)
-        ?.slice(data?.offset, data?.offset + data?.first)
-        ?.map((item: any) => {
-          return { node: convertExpToBcResponse(item) };
-        });
-      responseToReturn['edges'] = convertedObj;
-      responseToReturn['totalCount'] = orders?.length;
-    }
-    return responseToReturn;
-  } else {
-    const orderToDisplay = orders?.find((item: any) => item.id === data);
-    const updatedProducts = await getImageUrlForProducts(orderToDisplay);
-    orderToDisplay['products'] = updatedProducts;
-    const finalData = await convertOrderData(orderToDisplay);
-    return finalData;
+  if (orders?.length) {
+    const convertedObj = sortOrders(orders, data?.orderBy)
+      ?.slice(data?.offset, data?.offset + data?.first)
+      ?.map((item: any) => {
+        return { node: convertExpToBcResponse(item) };
+      });
+    responseToReturn['edges'] = convertedObj;
+    responseToReturn['totalCount'] = orders?.length;
   }
+  return responseToReturn;
 };
 
 export const getB2BAllOrders = (data: CustomFieldItems, companyId: string) =>
@@ -391,13 +399,9 @@ export const getB2BAllOrders = (data: CustomFieldItems, companyId: string) =>
 export const getBCAllOrders = (data: CustomFieldItems, companyId: string) =>
   getExpAllOrders(data, companyId);
 
-export const getB2BOrderDetails = async (id: number, companyB2BId: string) => {
-  return getExpAllOrders(id, companyB2BId);
-};
+export const getB2BOrderDetails = async (id: number) => getOrderDetails(id);
 
-export const getBCOrderDetails = (id: number, companyB2BId: string) => {
-  return getExpAllOrders(id, companyB2BId);
-};
+export const getBCOrderDetails = (id: number) => getOrderDetails(id);
 
 export const getOrderStatusType = (): Promise<OrderStatusItem[]> =>
   B3Request.graphqlB2B({
