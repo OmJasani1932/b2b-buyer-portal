@@ -298,6 +298,8 @@ const denyInvoiceRoles = [4, 99, 100];
 
 const invoiceTypes = ['invoice?invoiceId', 'invoice?receiptId'];
 
+declare let window: any;
+
 const getAllowedRoutes = (globalState: GlobalState): RouteItem[] => {
   const { storefrontConfig, quoteConfig } = globalState;
   const { company, b2bFeatures } = store.getState();
@@ -445,7 +447,10 @@ const gotoAllowedAppPage = async (
 
     if (!customer && isB2bTokenPage()) {
       logoutSession();
-      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+      if (window?.experro_utis?.logout) {
+        await window?.experro_utis?.logout();
+      }
+      window.location.href = `${window.location.origin}/login/`;
       return;
     }
   } catch (err: unknown) {

@@ -11,6 +11,8 @@ import b2bLogger from '@/utils/b3Logger';
 import { platform } from '@/utils/basicConfig';
 import { getSearchVal } from '@/utils/loginInfo';
 
+declare let window: any;
+
 interface QuoteCheckout {
   role: string | number;
   proceedingCheckoutFn: () => boolean;
@@ -39,7 +41,10 @@ export const handleQuoteCheckout = async ({
 
     if (hidePriceFromGuests && +role === 100 && navigate) {
       store.dispatch(setQuoteDetailToCheckoutUrl(location.pathname + location.search));
-      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+      if (window?.experro_utis?.logout) {
+        await window?.experro_utis?.logout();
+      }
+      window.location.href = `${window.location.origin}/login/`;
       return;
     }
 

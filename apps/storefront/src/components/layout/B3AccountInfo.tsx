@@ -6,6 +6,8 @@ import { useAppSelector } from '@/store';
 
 import B3DropDown from '../B3DropDown';
 
+declare let window: any;
+
 interface ListProps {
   [key: string]: string;
 }
@@ -33,7 +35,10 @@ export default function B3AccountInfo({ closeSidebar }: B3AccountInfoProps) {
 
   const handleItemClick = async (item: ListProps) => {
     if (item.key === 'logout') {
-      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+      if (window?.experro_utis?.logout) {
+        await window?.experro_utis?.logout();
+      }
+      window.location.href = `${window.location.origin}/login/`;
     } else if (item.type === 'path' && item.key) {
       navigate(item.key);
     }

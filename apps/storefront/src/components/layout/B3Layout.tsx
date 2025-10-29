@@ -16,6 +16,8 @@ import Header from '../experro/header';
 import Footer from '../experro/footer';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
+declare let window: any;
+
 const SPECIAL_PATH_TEXTS = {
   '/quick-order-pad': 'global.purchasedProducts.title',
   '/orders': 'global.orders.title',
@@ -57,7 +59,12 @@ export default function B3Layout({
 
   useEffect(() => {
     if ((!emailAddress || !customerId) && !getIsTokenGotoPage(location.pathname)) {
-      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+      (async () => {
+        if (window?.experro_utis?.logout) {
+          await window?.experro_utis?.logout();
+        }
+        window.location.href = `${window.location.origin}/login/`;
+      })();
     }
     // disabling cause navigate dispatcher is not necessary here
     // eslint-disable-next-line react-hooks/exhaustive-deps

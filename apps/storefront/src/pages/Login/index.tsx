@@ -36,6 +36,8 @@ import LoginForm from './LoginForm';
 import LoginPanel from './LoginPanel';
 import { LoginContainer, LoginImage } from './styled';
 
+declare let window: any
+
 type AlertColor = 'success' | 'info' | 'warning' | 'error';
 
 const useMasquerade = () => {
@@ -130,8 +132,11 @@ export default function Login(props: PageProps) {
   };
 
   useEffect(() => {
-    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
     const logout = async () => {
+      if (window?.experro_utis?.logout) {
+        await window?.experro_utis?.logout();
+      }
+      window.location.href = `${window.location.origin}/login/`;
       try {
         const loginFlag = searchParams.get('loginFlag');
         const showTipInfo = searchParams.get('showTip') !== 'false';

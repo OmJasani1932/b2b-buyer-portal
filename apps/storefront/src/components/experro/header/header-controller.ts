@@ -519,8 +519,10 @@ const HeaderController = () => {
     );
   };
 
-  const handleLogout = () => {
-    window.dispatchEvent(new Event('LOGOUT_FROM_B2B'));
+  const handleLogout = async () => {
+    if (window?.experro_utis?.logout) {
+      await window?.experro_utis?.logout();
+    }
     window.b2b.utils.user.logout();
     localStorage.removeItem('categories');
     localStorage.removeItem('user-group');
@@ -530,7 +532,7 @@ const HeaderController = () => {
       pageSlug: '',
       isLoading: false,
     });
-    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true/`;
+    window.location.href = `${window.location.origin}/login/`;
   };
 
   const handleResizeMenu = () => {
@@ -741,7 +743,12 @@ const HeaderController = () => {
       window.location.hash.includes('register') ||
       window.location.hash.includes('forgotpassword')
     ) {
-      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+      (async () => {
+        if (window?.experro_utis?.logout) {
+          await window?.experro_utis?.logout();
+          window.location.href = `${window.location.origin}/login/`;
+        }
+      })();
     }
     getCart();
     const handlePushstate = () => {

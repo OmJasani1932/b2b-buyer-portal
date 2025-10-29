@@ -11,6 +11,8 @@ import { snackbar } from '@/utils';
 
 import { gotoInvoiceCheckoutUrl } from '../Invoice/utils/payment';
 
+declare let window: any
+
 function Payment() {
   const platform = useAppSelector(({ global }) => global.storeInfo.platform);
   const B2BToken = useAppSelector(({ company }) => company.tokens.B2BToken);
@@ -75,8 +77,11 @@ function Payment() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [platform, params.id]);
 
-  const handleConfirm = () => {
-    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+  const handleConfirm = async () => {
+    if (window?.experro_utis?.logout) {
+      await window?.experro_utis?.logout();
+    }
+    window.location.href = `${window.location.origin}/login/`;
   };
 
   return (

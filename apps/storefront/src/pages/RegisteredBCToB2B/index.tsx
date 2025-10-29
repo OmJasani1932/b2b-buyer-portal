@@ -50,6 +50,8 @@ import {
 } from '../Registered/styled';
 import { RegisterFields } from '../Registered/types';
 
+declare let window: any;
+
 interface CustomerInfo {
   [k: string]: string;
 }
@@ -120,15 +122,23 @@ export default function RegisteredBCToB2B(props: PageProps) {
   useEffect(() => {
     showLoading(false);
     if (!registerEnabled) {
-      window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+      (async() => {
+        if(window?.experro_utis?.logout) {
+          await window?.experro_utis?.logout();
+        }
+        window.location.href = `${window.location.origin}/login/`;
+      })()
     }
     // disabling this rule as we don't need to add showLoading dispatcher and navigate fn into the dep array
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registerEnabled]);
 
   useEffect(() => {
-    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
     const getBCAdditionalFields = async () => {
+      if (window?.experro_utis?.logout) {
+        await window?.experro_utis?.logout();
+      }
+      window.location.href = `${window.location.origin}/login/`;
       try {
         if (dispatch) {
           showLoading(true);

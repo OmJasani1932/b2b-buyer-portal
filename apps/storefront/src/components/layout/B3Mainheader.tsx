@@ -14,6 +14,8 @@ import { getContrastColor } from '../outSideComponents/utils/b3CustomStyles';
 import B3AccountInfo from './B3AccountInfo';
 import B3StatusNotification from './B3StatusNotification';
 
+declare let window: any
+
 export default function B3Mainheader({ title }: { title: string }) {
   const isB2BUser = useAppSelector(isB2BUserSelector);
   const role = useAppSelector(({ company }) => company.customer.role);
@@ -90,7 +92,12 @@ export default function B3Mainheader({ title }: { title: string }) {
                   fontSize: '16px',
                 }}
                 onClick={() => {
-                  window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+                  (async () => {
+                    if (window?.experro_utis?.logout) {
+                      await window?.experro_utis?.logout();
+                    }
+                    window.location.href = `${window.location.origin}/login/`;
+                  })();
                 }}
               >
                 {b3Lang('global.B3MainHeader.signIn')}

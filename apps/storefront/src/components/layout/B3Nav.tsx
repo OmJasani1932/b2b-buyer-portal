@@ -10,6 +10,7 @@ import { getAllowedRoutes } from '@/shared/routes';
 import { useAppSelector } from '@/store';
 import { B3SStorage } from '@/utils';
 
+declare let window: any;
 
 interface B3NavProps {
   closeSidebar?: (x: boolean) => void;
@@ -27,9 +28,11 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
   const { state: globalState } = useContext(GlobalContext);
   const { quoteDetailHasNewMessages } = globalState;
 
-
-  const jumpRegister = () => {
-    window.location.href = `${window.location.origin}/login/?logoutFromB2b=true/`
+  const jumpRegister = async () => {
+    if (window?.experro_utis?.logout) {
+      await window?.experro_utis?.logout();
+    }
+    window.location.href = `${window.location.origin}/login/`;
     dispatch({
       type: 'common',
       payload: {
@@ -75,8 +78,12 @@ export default function B3Nav({ closeSidebar }: B3NavProps) {
     const showQuote = sessionStorage.getItem('showQuote') === 'true';
     const showCustomQuote = sessionStorage.getItem('showCustomQuote') === 'true';
 
-    let filteredRoutes = showQuote ? newRoutes : newRoutes?.filter((elem: any) => elem.path !== '/quotes');
-    filteredRoutes = showCustomQuote ? filteredRoutes : filteredRoutes?.filter((elem: any) => elem.path !== '/custom-quote');
+    let filteredRoutes = showQuote
+      ? newRoutes
+      : newRoutes?.filter((elem: any) => elem.path !== '/quotes');
+    filteredRoutes = showCustomQuote
+      ? filteredRoutes
+      : filteredRoutes?.filter((elem: any) => elem.path !== '/custom-quote');
 
     return filteredRoutes;
   };

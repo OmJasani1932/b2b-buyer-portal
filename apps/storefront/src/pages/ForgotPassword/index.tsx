@@ -17,6 +17,8 @@ import { getForgotPasswordFields, LoginConfig, sendEmail } from '../Login/config
 import { B3ResetPassWordButton, LoginImage } from '../Login/styled';
 import { type PageProps } from '../PageProps';
 
+declare let window: any
+
 interface ForgotPasswordProps extends PageProps {
   logo?: string;
   isEnabledOnStorefront: boolean;
@@ -66,7 +68,10 @@ export function ForgotPassword({
       if (isEnabledOnStorefront && captchaKey) {
         try {
           await requestResetPassword(captchaKey, emailAddressReset);
-          window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+          if (window?.experro_utis?.logout) {
+            await window?.experro_utis?.logout();
+          }
+          window.location.href = `${window.location.origin}/login/`;
           setLoading(false);
         } catch (e) {
           b2bLogger.error(e);
@@ -76,7 +81,10 @@ export function ForgotPassword({
       if (!isEnabledOnStorefront) {
         await sendEmail(emailAddress);
         setLoading(false);
-        window.location.href = `${window.location.origin}/login/?logoutFromB2b=true`;
+        if (window?.experro_utis?.logout) {
+          await window?.experro_utis?.logout();
+        }
+        window.location.href = `${window.location.origin}/login/`;
       }
     } catch (e) {
       b2bLogger.error(e);
