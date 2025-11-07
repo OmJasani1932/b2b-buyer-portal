@@ -233,10 +233,10 @@ function CustomQuote() {
         isValid = false;
       }
 
-      if (!item.images.length || !item.images.some((img) => img.url && !img.uploading)) {
-        errors.images = 'Image is required';
-        isValid = false;
-      }
+      // if (!item.images.length || !item.images.some((img) => img.url && !img.uploading)) {
+      //   errors.images = 'Image is required';
+      //   isValid = false;
+      // }
 
       if (!item.quantity || parseInt(item.quantity, 10) <= 0) {
         errors.quantity = 'Quantity is required';
@@ -249,7 +249,7 @@ function CustomQuote() {
     setItems(updatedItems);
     return isValid;
   };
-
+  
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
