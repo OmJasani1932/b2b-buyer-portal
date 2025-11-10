@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { TextField, Typography, Skeleton } from '@mui/material';
+import { TextField, Typography, Skeleton, Box, Tabs, Tab } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import CustomButton from '@/components/button/CustomButton';
@@ -8,6 +8,7 @@ import { useAppSelector } from '@/store';
 import { snackbar } from '@/utils';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import { IconCross } from '@/components/experro/assets/icons/icon-cross';
+import CustomQuoteList from './CustomQuoteList';
 declare const window: any;
 const RemoveIconBlock = styled('div')({
   cursor: 'pointer',
@@ -70,6 +71,11 @@ function CustomQuote() {
     { name: '', description: '', images: [], quantity: '', errors: {} },
   ]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<number>(0);
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
 
   const handleNameChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     const updatedItems = [...items];
@@ -406,20 +412,30 @@ function CustomQuote() {
           </div>
         </div>
       )}
-      <div className="[&_.quote-items+.quote-items]:mt-8 [&_.quote-items+.quote-items]:pt-8 [&_.quote-items+.quote-items]:border-t [&_.quote-items+.quote-items]:border-[#ccc4c1]">
-        <Typography variant="h4" sx={{ marginBottom: '10px' }}>
+      <Box>
+        <Typography variant="h4" sx={{ marginBottom: '20px' }}>
           Custom Quote
         </Typography>
-        <InfoText>
-          Use the fields below to thoroughly detail the product(s) for which you are requesting a
-          quote. <br /> Files can be uploaded in the following formats: .png, .jpg, .jpeg, .webp.
-          File size max 10MB.
-        </InfoText>
 
-        <div>
-          {items.map((item, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div className="flex w-full md:items-start quote-items">
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '20px' }}>
+          <Tabs value={activeTab} onChange={handleTabChange}>
+            <Tab className='[&.Mui-selected]:hover:text-white hover:text-primary' label="Create Quote" />
+            <Tab className='[&.Mui-selected]:hover:text-white hover:text-primary' label="My Quotes" />
+          </Tabs>
+        </Box>
+
+        {activeTab === 0 && (
+          <div className="[&_.quote-items+.quote-items]:mt-8 [&_.quote-items+.quote-items]:pt-8 [&_.quote-items+.quote-items]:border-t [&_.quote-items+.quote-items]:border-[#ccc4c1]">
+            <InfoText>
+              Use the fields below to thoroughly detail the product(s) for which you are requesting a
+              quote. <br /> Files can be uploaded in the following formats: .png, .jpg, .jpeg, .webp.
+              File size max 10MB.
+            </InfoText>
+
+            <div>
+              {items.map((item, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={index} className="flex w-full md:items-start quote-items">
               <div className="mt-[31px]">
                 <RemoveIconBlock
                   className={`${
@@ -684,32 +700,36 @@ function CustomQuote() {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+              ))}
+            </div>
 
-        <div className="pl-[54px] mt-6 flex">
-          <div className="flex flex-wrap lg:w-[calc(100%_-_300px)] md:w-[calc(100%_-_200px)] w-full md:pr-6">
-            <CustomButton
-              onClick={handleSubmit}
-              type="button"
-              variant="contained"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit Quote'}
-            </CustomButton>
+            <div className="pl-[54px] mt-6 flex">
+              <div className="flex flex-wrap lg:w-[calc(100%_-_300px)] md:w-[calc(100%_-_200px)] w-full md:pr-6">
+                <CustomButton
+                  onClick={handleSubmit}
+                  type="button"
+                  variant="contained"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Quote'}
+                </CustomButton>
+              </div>
+              <div className="lg:w-[300px] md:w-[200px] w-full relative flex md:justify-start justify-end">
+                <CustomButton
+                  onClick={handleAddRow}
+                  type="button"
+                  variant="outlined"
+                  className="w-[140px]"
+                >
+                  + Add Row
+                </CustomButton>
+              </div>
+            </div>
           </div>
-          <div className="lg:w-[300px] md:w-[200px] w-full relative flex md:justify-start justify-end">
-            <CustomButton
-              onClick={handleAddRow}
-              type="button"
-              variant="outlined"
-              className="w-[140px]"
-            >
-              + Add Row
-            </CustomButton>
-          </div>
-        </div>
-      </div>
+        )}
+
+        {activeTab === 1 && <CustomQuoteList />}
+      </Box>
     </>
   );
 }

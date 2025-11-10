@@ -33,6 +33,7 @@ const ShippingLists = lazy(() => import('@/pages/ShoppingLists'));
 const ShoppingListDetails = lazy(() => import('@/pages/ShoppingListDetails'));
 const UserManagement = lazy(() => import('@/pages/UserManagement'));
 const CustomQuote = lazy(() => import('@/pages/CustomQuote'));
+const CustomQuoteDetail = lazy(() => import('@/pages/CustomQuoteDetail'));
 
 interface RouteItemBasic {
   component: FC<PageProps>;
@@ -239,6 +240,16 @@ const routes: RouteItem[] = [
     permissions: [0, 1, 2, 3, 99],
     isTokenLogin: true,
     idLang: 'Custom quote',
+  },
+  {
+    path: '/custom-quote/:id',
+    name: 'Custom Quote Detail',
+    wsKey: 'customQuoteDetail',
+    isMenuItem: false,
+    component: CustomQuoteDetail,
+    permissions: [0, 1, 2, 3, 99],
+    isTokenLogin: true,
+    idLang: 'Custom quote detail',
   }
 ];
 
