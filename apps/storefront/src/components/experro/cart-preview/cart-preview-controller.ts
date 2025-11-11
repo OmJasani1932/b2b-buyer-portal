@@ -131,9 +131,9 @@ const ExpCartPreviewController = (props: ExpCartPreviewControllerProps) => {
           (item: any) => item?.provider_id_esi === elem?.toString(),
         );
         products[elem] = {
-          brand_esi: productFromSearchApi.brand_esi,
-          brand_page_slug_esi: productFromSearchApi.brand_page_slug_esi,
-          sku_esi: productFromSearchApi.sku_esi,
+          brand_esi: productFromSearchApi?.brand_esi,
+          brand_page_slug_esi: productFromSearchApi?.brand_page_slug_esi,
+          sku_esi:  productFromSearchApi?.sku_esi || productFromSearchApi?.sku_eti,
           categories_esai: productFromSearchApi?.categories_esai,
           sku_for_analytics_esli: productFromSearchApi?.sku_for_analytics_esli,
           category_ids_esai: productFromSearchApi?.category_ids_esai,
@@ -147,8 +147,8 @@ const ExpCartPreviewController = (props: ExpCartPreviewControllerProps) => {
       body.data.customer_group = userGroup ? JSON.parse(userGroup) : 'Default';
       updatedCartObj.line_items.physical_items?.forEach((item: any) => {
         body.data.line_items.push({
-          sku: item.sku,
-          product_id: item.product_id,
+          sku: item?.sku,
+          product_id: item?.product_id,
           category: item?.categories_esai,
         });
       });
