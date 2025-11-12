@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import ExpGetContentModel from '../api/get-content-model';
-
+declare const window: any;
 const ExpMenuController = () => {
   const [menuData, setMenuData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -11,8 +11,10 @@ const ExpMenuController = () => {
   const getBlogs = async () => {
     setIsLoadingForBlogs(true);
     try {
-      const API_URL =
-        'https://dev-bigcom-customer-service.cookandboardman.io/apis/customer-service/v1/blogs/posts?state__contains=PUBLISHED&sort=-publishDate&limit=2';
+      const userDetails = window.__PING_DETAILS__;
+      const API_URL = userDetails?.environmentType.toLowerCase().includes('dev')
+        ? 'https://dev-bigcom-customer-service.cookandboardman.io/apis/customer-service/external/v1/blogs/posts?state__contains=PUBLISHED&sort=-publishDate&limit=2'
+        : 'https://bigcom-customer-service.cookandboardman.io/apis/customer-service/external/v1/blogs/posts?state__contains=PUBLISHED&sort=-publishDate&limit=2';
 
       const data = await fetch(API_URL, {
         headers: {
@@ -58,14 +60,14 @@ const ExpMenuController = () => {
 
   useEffect(() => {
     getMenuData();
-    getBlogs()
+    getBlogs();
   }, []);
 
   return {
     isLoading,
     menuData,
     isLoadingForBlogs,
-    posts
+    posts,
   };
 };
 
