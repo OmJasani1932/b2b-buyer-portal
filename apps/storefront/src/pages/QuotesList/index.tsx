@@ -209,7 +209,7 @@ function QuotesList() {
     if (+status === 0) {
       navigate('/quoteDraft');
     } else {
-      navigate(`/quoteDetail/${item.id}?date=${item.createdAt}`);
+      navigate(`/quoteDetail/${item.id}?date=${item.createdAt}&redirect=false`);
     }
   };
 

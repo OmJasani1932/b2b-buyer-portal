@@ -19,6 +19,7 @@ import {
   setDraftQuoteList,
   useAppDispatch,
   useAppSelector,
+  setDraftQuoteInfo,
 } from '@/store';
 import { setB2BToken } from '@/store/slices/company';
 import { QuoteItem } from '@/types/quotes';
@@ -78,6 +79,7 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
   const productList = useAppSelector(formattedQuoteDraftListSelector);
   const B2BToken = useAppSelector(({ company }) => company.tokens.B2BToken);
   const quoteProducts = useAppSelector(({ quoteInfo }) => quoteInfo?.draftQuoteList);
+  const quoteinfo = useAppSelector(({ quoteInfo }) => quoteInfo.draftQuoteInfo);
   const isAgenting = useAppSelector(({ b2bFeatures }) => b2bFeatures.masqueradeCompany.isAgenting);
 
   const {
@@ -156,7 +158,9 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
           deleteProductFromQuoteFromId: (id: any) =>
             storeDispatch(deleteProductFromDraftQuoteList(id)),
           getDrafQuoteProducts: () => ({ quoteProducts }),
+          getDraftQuoteInfo: () => ({ quoteinfo }),
           setQuoteProducts: (quoteList: any) => storeDispatch(setDraftQuoteList(quoteList)),
+          setDraftQuoteInfo: (quoteInfo: any) => storeDispatch(setDraftQuoteInfo(quoteInfo)),
           setDraftProduct: (product: any, id: any) =>
             storeDispatch(setDraftProduct({ product: { node: product }, id: id })),
         },

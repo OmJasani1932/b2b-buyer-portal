@@ -47,7 +47,9 @@ declare interface Window {
         getButtonInfoAddAllFromCartToQuote: () => import('@/shared/customStyleButton/context/config').BtnProperties;
         deleteProductFromQuoteFromId: any;
         getDrafQuoteProducts: any;
+        getDraftQuoteInfo: any;
         setQuoteProducts: any;
+        setDraftQuoteInfo: any;
         setDraftProduct: any;
       };
       user: {

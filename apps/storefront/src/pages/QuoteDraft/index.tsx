@@ -415,7 +415,7 @@ function QuoteDraft({ setOpenPage }: PageProps) {
 
     if (currentQuoteId) {
       handleReset();
-      navigate(`/quoteDetail/${currentQuoteId}?date=${createdAt}`, {
+      navigate(`/quoteDetail/${currentQuoteId}?date=${createdAt}&redirect=false`, {
         state: {
           to: 'draft',
         },
