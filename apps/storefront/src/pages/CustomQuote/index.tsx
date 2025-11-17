@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { TextField, Typography, Skeleton, Box, Tabs, Tab } from '@mui/material';
+import { TextField, Typography, Skeleton, Box, Tabs, Tab, Checkbox, FormControlLabel } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import CustomButton from '@/components/button/CustomButton';
@@ -51,6 +51,7 @@ interface CustomQuoteItem {
   description: string;
   images: ImageItem[];
   quantity: string;
+  addProductToStore: boolean;
   errors?: {
     name?: string;
     description?: string;
@@ -68,7 +69,7 @@ const CUSTOM_QUOTE_API = {
 function CustomQuote() {
   const customerId = useAppSelector(({ company }) => company.customer.id);
   const [items, setItems] = useState<CustomQuoteItem[]>([
-    { name: '', description: '', images: [], quantity: '', errors: {} },
+    { name: '', description: '', images: [], quantity: '', addProductToStore: false, errors: {} },
   ]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -206,8 +207,14 @@ function CustomQuote() {
     setItems(updatedItems);
   };
 
+  const handleAddProductToStoreChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
+    const updatedItems = [...items];
+    updatedItems[index].addProductToStore = e.target.checked;
+    setItems(updatedItems);
+  };
+
   const handleAddRow = () => {
-    setItems([...items, { name: '', description: '', images: [], quantity: '', errors: {} }]);
+    setItems([...items, { name: '', description: '', images: [], quantity: '', addProductToStore: false, errors: {} }]);
   };
 
   const handleDeleteRow = (index: number) => {
@@ -219,7 +226,7 @@ function CustomQuote() {
   };
 
   const resetForm = () => {
-    setItems([{ name: '', description: '', images: [], quantity: '', errors: {} }]);
+    setItems([{ name: '', description: '', images: [], quantity: '', addProductToStore: false, errors: {} }]);
   };
 
   const validateItems = (): boolean => {
@@ -270,6 +277,7 @@ function CustomQuote() {
       description: item.description,
       url: item.images.filter((img) => img.url && !img.uploading).map((img) => img.url), // Multiple image URLs
       quantity: parseInt(item.quantity, 10),
+      addProductToStore: item.addProductToStore,
     }));
 
     const requestBody = {
@@ -559,6 +567,30 @@ function CustomQuote() {
                           {item.errors.description}
                         </Typography>
                       )} */}
+                    </div>
+
+                    <div className="w-full relative md:pt-6 pt-4 md:order-4 order-5">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={item.addProductToStore}
+                            onChange={(e: any) => handleAddProductToStoreChange(index, e)}
+                            sx={{
+                              color: '#808285',
+                              '&.Mui-checked': {
+                                color: '#004270',
+                              },
+                            }}
+                          />
+                        }
+                        label="Do you want this product to add to your store?"
+                        sx={{
+                          '& .MuiFormControlLabel-label': {
+                            fontSize: '16px',
+                            color: '#808285',
+                          },
+                        }}
+                      />
                     </div>
 
                     <div className="w-11 relative md:hidden flex items-end md:order-1 order-4 pl-4">
