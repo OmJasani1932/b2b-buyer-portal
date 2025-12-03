@@ -1,6 +1,15 @@
 import { ChangeEvent, useState } from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { TextField, Typography, Skeleton, Box, Tabs, Tab, Checkbox, FormControlLabel } from '@mui/material';
+import {
+  TextField,
+  Typography,
+  Skeleton,
+  Box,
+  Tabs,
+  Tab,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import CustomButton from '@/components/button/CustomButton';
@@ -9,6 +18,7 @@ import { snackbar } from '@/utils';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import { IconCross } from '@/components/experro/assets/icons/icon-cross';
 import CustomQuoteList from './CustomQuoteList';
+import { CustomerRole } from '@/types';
 declare const window: any;
 const RemoveIconBlock = styled('div')({
   cursor: 'pointer',
@@ -66,7 +76,21 @@ const CUSTOM_QUOTE_API = {
   ACCESS_KEY: '11afb7c2-7381-4a74-ac55-9728ad6205b6',
 };
 
+// Helper function to convert numeric role to enum name
+const getRoleNameFromValue = (roleValue: number): string => {
+  const roleMap: Record<number, string> = {
+    [CustomerRole.ADMIN]: 'admin',
+    [CustomerRole.SENIOR_BUYER]: 'senior buyer',
+    [CustomerRole.JUNIOR_BUYER]: 'junior buyer',
+    [CustomerRole.SUPER_ADMIN]: 'super admin',
+    [CustomerRole.B2C]: 'b2c',
+    [CustomerRole.GUEST]: 'guest',
+  };
+  return roleMap[roleValue] || 'GUEST';
+};
+
 function CustomQuote() {
+  const role = useAppSelector((state) => state.company.customer.role);
   const customerId = useAppSelector(({ company }) => company.customer.id);
   const [items, setItems] = useState<CustomQuoteItem[]>([
     { name: '', description: '', images: [], quantity: '', addProductToStore: false, errors: {} },
@@ -214,7 +238,10 @@ function CustomQuote() {
   };
 
   const handleAddRow = () => {
-    setItems([...items, { name: '', description: '', images: [], quantity: '', addProductToStore: false, errors: {} }]);
+    setItems([
+      ...items,
+      { name: '', description: '', images: [], quantity: '', addProductToStore: false, errors: {} },
+    ]);
   };
 
   const handleDeleteRow = (index: number) => {
@@ -226,7 +253,9 @@ function CustomQuote() {
   };
 
   const resetForm = () => {
-    setItems([{ name: '', description: '', images: [], quantity: '', addProductToStore: false, errors: {} }]);
+    setItems([
+      { name: '', description: '', images: [], quantity: '', addProductToStore: false, errors: {} },
+    ]);
   };
 
   const validateItems = (): boolean => {
@@ -262,7 +291,7 @@ function CustomQuote() {
     setItems(updatedItems);
     return isValid;
   };
-  
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
@@ -280,8 +309,25 @@ function CustomQuote() {
       addProductToStore: item.addProductToStore,
     }));
 
+    const getCookie = (name: any) => {
+      const nameEQ = `${name}=`;
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        const c = ca[i].trim();
+        if (c.indexOf(nameEQ) === 0) {
+          return c.substring(nameEQ.length, c.length);
+        }
+      }
+      return null;
+    };
+
+    const companyId = getCookie('companyId');
+    const roleName = getRoleNameFromValue(role);
+
     const requestBody = {
       customerId: parseInt(customerId?.toString() || '0', 10),
+      companyId: companyId ? companyId : 0,
+      role: roleName,
       products,
     };
     const userDetails = window.__PING_DETAILS__;
@@ -427,61 +473,67 @@ function CustomQuote() {
 
         <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '20px' }}>
           <Tabs value={activeTab} onChange={handleTabChange}>
-            <Tab className='[&.Mui-selected]:hover:text-white hover:text-primary' label="Create Quote" />
-            <Tab className='[&.Mui-selected]:hover:text-white hover:text-primary' label="My Quotes" />
+            <Tab
+              className="[&.Mui-selected]:hover:text-white hover:text-primary"
+              label="Create Quote"
+            />
+            <Tab
+              className="[&.Mui-selected]:hover:text-white hover:text-primary"
+              label="My Quotes"
+            />
           </Tabs>
         </Box>
 
         {activeTab === 0 && (
           <div className="[&_.quote-items+.quote-items]:mt-8 [&_.quote-items+.quote-items]:pt-8 [&_.quote-items+.quote-items]:border-t [&_.quote-items+.quote-items]:border-[#ccc4c1]">
             <InfoText>
-              Use the fields below to thoroughly detail the product(s) for which you are requesting a
-              quote. <br /> Files can be uploaded in the following formats: .png, .jpg, .jpeg, .webp.
-              File size max 10MB.
+              Use the fields below to thoroughly detail the product(s) for which you are requesting
+              a quote. <br /> Files can be uploaded in the following formats: .png, .jpg, .jpeg,
+              .webp. File size max 10MB.
             </InfoText>
 
             <div>
               {items.map((item, index) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <div key={index} className="flex w-full md:items-start quote-items">
-              <div className="mt-[31px]">
-                <RemoveIconBlock
-                  className={`${
-                    items.length <= 1 ? 'opacity-50 pointer-events-none' : ''
-                  } w-[44px] h-[44px]`}
-                  onClick={() => handleDeleteRow(index)}
-                >
-                  <RemoveIcon />
-                </RemoveIconBlock>
-              </div>
+                  <div className="mt-[31px]">
+                    <RemoveIconBlock
+                      className={`${
+                        items.length <= 1 ? 'opacity-50 pointer-events-none' : ''
+                      } w-[44px] h-[44px]`}
+                      onClick={() => handleDeleteRow(index)}
+                    >
+                      <RemoveIcon />
+                    </RemoveIconBlock>
+                  </div>
 
-              <div className="w-full">
-                <div className="flex items-start flex-wrap">
-                  <div className="flex flex-wrap lg:w-[calc(100%_-_300px)] md:w-[calc(100%_-_200px)] w-full md:pr-6">
-                    <div className="md:w-[calc(100%_-_120px)] md:pr-6 w-full md:order-1 order-1">
-                      <div className="relative [&_.MuiFormLabel-root]:max-w-full">
-                        <TextField
-                          label={
-                            <span className="flex justify-between">
-                              <span>
-                                Name/sku <span style={{ color: '#d32f2f' }}>*</span>
-                              </span>
-                              <span>{item.name.replace(/\s/g, '').length}/255</span>
-                            </span>
-                          }
-                          variant="filled"
-                          autoComplete="off"
-                          size="small"
-                          fullWidth
-                          value={item.name}
-                          onChange={(e: any) => handleNameChange(index, e)}
-                          error={!!item.errors?.name}
-                          className="w-full [&_.Mui-error]:border-[#d32f2f]"
-                          inputProps={{ maxLength: 255 }}
-                        />
-                        <span className="absolute right-0 top-0"></span>
-                      </div>
-                      {/* {item.errors?.name && (
+                  <div className="w-full">
+                    <div className="flex items-start flex-wrap">
+                      <div className="flex flex-wrap lg:w-[calc(100%_-_300px)] md:w-[calc(100%_-_200px)] w-full md:pr-6">
+                        <div className="md:w-[calc(100%_-_120px)] md:pr-6 w-full md:order-1 order-1">
+                          <div className="relative [&_.MuiFormLabel-root]:max-w-full">
+                            <TextField
+                              label={
+                                <span className="flex justify-between">
+                                  <span>
+                                    Name/sku <span style={{ color: '#d32f2f' }}>*</span>
+                                  </span>
+                                  <span>{item.name.replace(/\s/g, '').length}/255</span>
+                                </span>
+                              }
+                              variant="filled"
+                              autoComplete="off"
+                              size="small"
+                              fullWidth
+                              value={item.name}
+                              onChange={(e: any) => handleNameChange(index, e)}
+                              error={!!item.errors?.name}
+                              className="w-full [&_.Mui-error]:border-[#d32f2f]"
+                              inputProps={{ maxLength: 255 }}
+                            />
+                            <span className="absolute right-0 top-0"></span>
+                          </div>
+                          {/* {item.errors?.name && (
                         <Typography
                           className="absolute top-full bottom-auto left-0"
                           color="error"
@@ -491,36 +543,36 @@ function CustomQuote() {
                           {item.errors.name}
                         </Typography>
                       )} */}
-                    </div>
-                    <div className="relative md:w-[120px] w-[calc(100%_-_60px)] md:order-2 order-3 md:pt-0 pt-4">
-                      <TextField
-                        label={
-                          <span>
-                            Qty <span style={{ color: '#d32f2f' }}>*</span>
-                          </span>
-                        }
-                        inputProps={{ className: 'qty-pad' }}
-                        hiddenLabel
-                        type="number"
-                        variant="filled"
-                        size="small"
-                        autoComplete="off"
-                        value={item.quantity}
-                        onChange={(e: any) => handleQuantityChange(index, e)}
-                        error={!!item.errors?.quantity}
-                        className="[&_.Mui-error]:border-[#d32f2f]"
-                        sx={{
-                          '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button':
-                            {
-                              display: 'none',
-                            },
-                          '& input[type=number]': {
-                            MozAppearance: 'textfield',
-                          },
-                          width: '100%',
-                        }}
-                      />
-                      {/* {item.errors?.quantity && (
+                        </div>
+                        <div className="relative md:w-[120px] w-[calc(100%_-_60px)] md:order-2 order-3 md:pt-0 pt-4">
+                          <TextField
+                            label={
+                              <span>
+                                Qty <span style={{ color: '#d32f2f' }}>*</span>
+                              </span>
+                            }
+                            inputProps={{ className: 'qty-pad' }}
+                            hiddenLabel
+                            type="number"
+                            variant="filled"
+                            size="small"
+                            autoComplete="off"
+                            value={item.quantity}
+                            onChange={(e: any) => handleQuantityChange(index, e)}
+                            error={!!item.errors?.quantity}
+                            className="[&_.Mui-error]:border-[#d32f2f]"
+                            sx={{
+                              '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button':
+                                {
+                                  display: 'none',
+                                },
+                              '& input[type=number]': {
+                                MozAppearance: 'textfield',
+                              },
+                              width: '100%',
+                            }}
+                          />
+                          {/* {item.errors?.quantity && (
                         <Typography
                           className="absolute top-full bottom-auto left-0"
                           color="error"
@@ -530,34 +582,34 @@ function CustomQuote() {
                           {item.errors.quantity}
                         </Typography>
                       )} */}
-                    </div>
-                    <div className="w-full relative md:pt-6 pt-4 [&_.MuiFormLabel-root]:max-w-full md:order-3 order-2">
-                      <TextField
-                        label={
-                          <span className="flex justify-between">
-                            <span>
-                              Description <span style={{ color: '#d32f2f' }}>*</span>
-                            </span>
-                            <span>{item.description.replace(/\s/g, '').length}/2000</span>
-                          </span>
-                        }
-                        variant="filled"
-                        autoComplete="off"
-                        size="small"
-                        fullWidth
-                        multiline
-                        minRows={5}
-                        value={item.description}
-                        onChange={(e: any) => handleDescriptionChange(index, e)}
-                        error={!!item.errors?.description}
-                        className={`w-full [&_.Mui-error]:border-[#d32f2f] [&_.MuiInputBase-multiline]:h-[80px] [&_.MuiInputBase-multiline]:flex [&_.MuiInputBase-multiline]:items-start ${
-                          item.description.replace(/\s/g, '').length > 206
-                            ? '[&_.MuiInputBase-multiline]:overflow-y-auto'
-                            : ''
-                        }`}
-                        inputProps={{ maxLength: 2000 }}
-                      />
-                      {/* {item.errors?.description && (
+                        </div>
+                        <div className="w-full relative md:pt-6 pt-4 [&_.MuiFormLabel-root]:max-w-full md:order-3 order-2">
+                          <TextField
+                            label={
+                              <span className="flex justify-between">
+                                <span>
+                                  Description <span style={{ color: '#d32f2f' }}>*</span>
+                                </span>
+                                <span>{item.description.replace(/\s/g, '').length}/2000</span>
+                              </span>
+                            }
+                            variant="filled"
+                            autoComplete="off"
+                            size="small"
+                            fullWidth
+                            multiline
+                            minRows={5}
+                            value={item.description}
+                            onChange={(e: any) => handleDescriptionChange(index, e)}
+                            error={!!item.errors?.description}
+                            className={`w-full [&_.Mui-error]:border-[#d32f2f] [&_.MuiInputBase-multiline]:h-[80px] [&_.MuiInputBase-multiline]:flex [&_.MuiInputBase-multiline]:items-start ${
+                              item.description.replace(/\s/g, '').length > 206
+                                ? '[&_.MuiInputBase-multiline]:overflow-y-auto'
+                                : ''
+                            }`}
+                            inputProps={{ maxLength: 2000 }}
+                          />
+                          {/* {item.errors?.description && (
                         <Typography
                           className="absolute top-full bottom-auto left-0"
                           color="error"
@@ -567,50 +619,50 @@ function CustomQuote() {
                           {item.errors.description}
                         </Typography>
                       )} */}
-                    </div>
+                        </div>
 
-                    <div className="w-full relative md:pt-6 pt-4 md:order-4 order-5">
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={item.addProductToStore}
-                            onChange={(e: any) => handleAddProductToStoreChange(index, e)}
+                        <div className="w-full relative md:pt-6 pt-4 md:order-4 order-5">
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={item.addProductToStore}
+                                onChange={(e: any) => handleAddProductToStoreChange(index, e)}
+                                sx={{
+                                  color: '#808285',
+                                  '&.Mui-checked': {
+                                    color: '#004270',
+                                  },
+                                }}
+                              />
+                            }
+                            label="Do you want this product to add to your store?"
                             sx={{
-                              color: '#808285',
-                              '&.Mui-checked': {
-                                color: '#004270',
+                              '& .MuiFormControlLabel-label': {
+                                fontSize: '16px',
+                                color: '#808285',
                               },
                             }}
                           />
-                        }
-                        label="Do you want this product to add to your store?"
-                        sx={{
-                          '& .MuiFormControlLabel-label': {
-                            fontSize: '16px',
-                            color: '#808285',
-                          },
-                        }}
-                      />
-                    </div>
+                        </div>
 
-                    <div className="w-11 relative md:hidden flex items-end md:order-1 order-4 pl-4">
-                      <input
-                        type="file"
-                        accept=".png,.jpg,.webp,.jpeg"
-                        multiple
-                        id={`image-upload-${index}`}
-                        onChange={(e: any) => handleImageChange(index, e)}
-                        style={{ display: 'none' }}
-                      />
-                      <label className="relative" htmlFor={`image-upload-${index}`}>
-                        <span
-                          className={`p-0 line-clamp-1 text-center w-[44px] h-[44px] flex items-center justify-center border cursor-pointer hover:bg-primary hover:border-primary hover:text-white ${
-                            item.errors?.images ? 'border-[#d32f2f]' : ''
-                          }`}
-                        >
-                          <CloudUploadOutlinedIcon />
-                        </span>
-                        {/* {item.errors?.images && (
+                        <div className="w-11 relative md:hidden flex items-end md:order-1 order-4 pl-4">
+                          <input
+                            type="file"
+                            accept=".png,.jpg,.webp,.jpeg"
+                            multiple
+                            id={`image-upload-${index}`}
+                            onChange={(e: any) => handleImageChange(index, e)}
+                            style={{ display: 'none' }}
+                          />
+                          <label className="relative" htmlFor={`image-upload-${index}`}>
+                            <span
+                              className={`p-0 line-clamp-1 text-center w-[44px] h-[44px] flex items-center justify-center border cursor-pointer hover:bg-primary hover:border-primary hover:text-white ${
+                                item.errors?.images ? 'border-[#d32f2f]' : ''
+                              }`}
+                            >
+                              <CloudUploadOutlinedIcon />
+                            </span>
+                            {/* {item.errors?.images && (
                             <Typography
                               className="absolute top-full bottom-auto left-0"
                               color="error"
@@ -620,43 +672,43 @@ function CustomQuote() {
                               {item.errors.images}
                             </Typography>
                           )} */}
-                      </label>
-                    </div>
-                  </div>
+                          </label>
+                        </div>
+                      </div>
 
-                  <div className="lg:w-[300px] md:w-[200px] w-full relative md:pt-[31px]">
-                    <input
-                      type="file"
-                      accept=".png,.jpg,.webp,.jpeg"
-                      multiple
-                      id={`image-upload-${index}`}
-                      onChange={(e: any) => handleImageChange(index, e)}
-                      style={{ display: 'none' }}
-                    />
-                    <label
-                      className="relative w-full flex justify-start md:flex block hidden"
-                      htmlFor={`image-upload-${index}`}
-                    >
-                      <span
-                        className={`p-0 text-center w-[140px] h-[44px] flex items-center justify-center border cursor-pointer hover:bg-primary hover:border-primary hover:text-white relative group/tooltip ${
-                          item.errors?.images ? 'border-[#d32f2f]' : ''
-                        }`}
-                      >
-                        <span className="absolute top-auto bottom-full left-1/2 -translate-x-1/2 bg-black text-white text-sm py-2 px-4 w-[200px] group-hover/tooltip:opacity-100 opacity-0 transition-opacity mb-3 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-r-[6px] after:border-t-[6px] after:border-l-transparent after:border-r-transparent after:border-t-black">
-                          You can upload multiple image here
-                        </span>
-                        {item.images.some((img) => img.uploading) ? (
-                          <Skeleton
-                            variant="circular"
-                            width={24}
-                            height={24}
-                            className="animate-pulse"
-                          />
-                        ) : (
-                          <CloudUploadOutlinedIcon />
-                        )}
-                      </span>
-                      {/* {item.errors?.images && (
+                      <div className="lg:w-[300px] md:w-[200px] w-full relative md:pt-[31px]">
+                        <input
+                          type="file"
+                          accept=".png,.jpg,.webp,.jpeg"
+                          multiple
+                          id={`image-upload-${index}`}
+                          onChange={(e: any) => handleImageChange(index, e)}
+                          style={{ display: 'none' }}
+                        />
+                        <label
+                          className="relative w-full flex justify-start md:flex block hidden"
+                          htmlFor={`image-upload-${index}`}
+                        >
+                          <span
+                            className={`p-0 text-center w-[140px] h-[44px] flex items-center justify-center border cursor-pointer hover:bg-primary hover:border-primary hover:text-white relative group/tooltip ${
+                              item.errors?.images ? 'border-[#d32f2f]' : ''
+                            }`}
+                          >
+                            <span className="absolute top-auto bottom-full left-1/2 -translate-x-1/2 bg-black text-white text-sm py-2 px-4 w-[200px] group-hover/tooltip:opacity-100 opacity-0 transition-opacity mb-3 after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-r-[6px] after:border-t-[6px] after:border-l-transparent after:border-r-transparent after:border-t-black">
+                              You can upload multiple image here
+                            </span>
+                            {item.images.some((img) => img.uploading) ? (
+                              <Skeleton
+                                variant="circular"
+                                width={24}
+                                height={24}
+                                className="animate-pulse"
+                              />
+                            ) : (
+                              <CloudUploadOutlinedIcon />
+                            )}
+                          </span>
+                          {/* {item.errors?.images && (
                         <Typography
                           className="absolute top-full bottom-auto left-0"
                           color="error"
@@ -666,72 +718,72 @@ function CustomQuote() {
                           {item.errors.images}
                         </Typography>
                       )} */}
-                    </label>
-
-                    {/* Display uploaded images */}
-                    {item.images.length > 0 && (
-                      <div className="mt-6">
-                        <label
-                          className="text-base text-gray-200 mb-2 block"
-                          htmlFor="image-upload-{index}"
-                        >
-                          Uploaded Images ({item.images.length}):
                         </label>
-                        <div className="flex flex-wrap -mx-2 -mt-4">
-                          {item.images.map((image, imageIndex) => (
-                            <div className=" lg:w-4/12 md:w-6/12 w-4/12 px-2 pt-[15px]">
-                              <div
-                                // key={imageIndex}
-                                className="relative border border-[#dddddd] p-1 h-full"
-                              >
-                                {image.uploading ? (
-                                  <div className="flex flex-col gap-2">
-                                    <Skeleton
-                                      variant="rectangular"
-                                      width="100%"
-                                      height={44}
-                                      className="aspect-[1/0.7]"
-                                    />
-                                    <Skeleton variant="text" width="80%" height={16} />
-                                  </div>
-                                ) : (
-                                  <>
-                                    <div
-                                      className="flex flex-col gap-2 overflow-hidden"
-                                      title={image.name}
-                                    >
-                                      <span>
-                                        <img
-                                          className="w-full h-full object-cover max-h-[44px] aspect-[1/0.7]"
-                                          width={80}
+
+                        {/* Display uploaded images */}
+                        {item.images.length > 0 && (
+                          <div className="mt-6">
+                            <label
+                              className="text-base text-gray-200 mb-2 block"
+                              htmlFor="image-upload-{index}"
+                            >
+                              Uploaded Images ({item.images.length}):
+                            </label>
+                            <div className="flex flex-wrap -mx-2 -mt-4">
+                              {item.images.map((image, imageIndex) => (
+                                <div className=" lg:w-4/12 md:w-6/12 w-4/12 px-2 pt-[15px]">
+                                  <div
+                                    // key={imageIndex}
+                                    className="relative border border-[#dddddd] p-1 h-full"
+                                  >
+                                    {image.uploading ? (
+                                      <div className="flex flex-col gap-2">
+                                        <Skeleton
+                                          variant="rectangular"
+                                          width="100%"
                                           height={44}
-                                          alt=""
-                                          src={image.url}
+                                          className="aspect-[1/0.7]"
                                         />
-                                      </span>
-                                      <span className="text-xs">
-                                        {image.name?.substring(0, 15)}
-                                        {image.name && image.name.length > 15 ? '...' : ''}
-                                      </span>
-                                    </div>
-                                    <span
-                                      className="w-5 h-5 p-1 bg-primary rounded-full flex items-center justify-center absolute -top-2 -right-2 cursor-pointer text-white hover:opacity-70"
-                                      onClick={() => handleRemoveImage(index, imageIndex)}
-                                    >
-                                      <IconCross />
-                                    </span>
-                                  </>
-                                )}
-                              </div>
+                                        <Skeleton variant="text" width="80%" height={16} />
+                                      </div>
+                                    ) : (
+                                      <>
+                                        <div
+                                          className="flex flex-col gap-2 overflow-hidden"
+                                          title={image.name}
+                                        >
+                                          <span>
+                                            <img
+                                              className="w-full h-full object-cover max-h-[44px] aspect-[1/0.7]"
+                                              width={80}
+                                              height={44}
+                                              alt=""
+                                              src={image.url}
+                                            />
+                                          </span>
+                                          <span className="text-xs">
+                                            {image.name?.substring(0, 15)}
+                                            {image.name && image.name.length > 15 ? '...' : ''}
+                                          </span>
+                                        </div>
+                                        <span
+                                          className="w-5 h-5 p-1 bg-primary rounded-full flex items-center justify-center absolute -top-2 -right-2 cursor-pointer text-white hover:opacity-70"
+                                          onClick={() => handleRemoveImage(index, imageIndex)}
+                                        >
+                                          <IconCross />
+                                        </span>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
               ))}
             </div>
 
