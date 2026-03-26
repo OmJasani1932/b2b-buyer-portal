@@ -53,6 +53,8 @@ declare interface Window {
         setDraftProduct: any;
       };
       user: {
+        getSalesRepCompanyName: anyl;
+        getCompanyInfo: any;
         getProfile: () => Record<string, string | number>;
         getMasqueradeState: () => Promise<{
           current_company_id: number;

@@ -81,6 +81,10 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
   const quoteProducts = useAppSelector(({ quoteInfo }) => quoteInfo?.draftQuoteList);
   const quoteinfo = useAppSelector(({ quoteInfo }) => quoteInfo.draftQuoteInfo);
   const isAgenting = useAppSelector(({ b2bFeatures }) => b2bFeatures.masqueradeCompany.isAgenting);
+  const companyInfo = useAppSelector(({ company }) => company);
+  const salesRepCompanyName = useAppSelector(
+    ({ b2bFeatures }) => b2bFeatures.masqueradeCompany.companyName,
+  );
 
   const {
     state: { addQuoteBtn, shoppingListBtn, addToAllQuoteBtn },
@@ -165,6 +169,8 @@ export default function HeadlessController({ setOpenPage }: HeadlessControllerPr
             storeDispatch(setDraftProduct({ product: { node: product }, id: id })),
         },
         user: {
+          getSalesRepCompanyName: () => salesRepCompanyName,
+          getCompanyInfo: () => companyInfo,
           getProfile: () => ({ ...customerRef.current, role }),
           getMasqueradeState: async () => {
             if (typeof customerRef.current.b2bId !== 'number') {
